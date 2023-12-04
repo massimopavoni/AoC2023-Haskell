@@ -1,0 +1,18 @@
+name: AoC2023-Haskell
+version: 1.0
+copyright: Massimo Pavoni 2023
+author: Massimo Pavoni
+github: massimopavoni/AoC2023-Haskell
+
+dependencies:
+  - base
+
+library:
+  exposed-modules: Main
+  source-dirs: src
+  ghc-options: -Wall
+  dependencies:
+    - containers
+    - extra
+    - ghc
+    - megaparsec
