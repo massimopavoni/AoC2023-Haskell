@@ -1,5 +1,6 @@
 module CubeConundrum (CubeColor (..), fewestCubes, possibleGame) where
 
+import Control.Category ((>>>))
 import Control.Monad (guard, (>=>))
 import Data.Map.Strict (assocs, fromListWith)
 import Data.Maybe (fromJust)
@@ -16,7 +17,10 @@ data CubeColor = Blue | Green | Red
 possibleGame :: [(CubeColor, Int)] -> String -> Maybe Int
 possibleGame bag =
   either (error . errorBundlePretty) Just . parse gameParser ""
-    >=> \(g, b) -> guard (all (\(c, n) -> fromJust (lookup c bag) >= n) b) >> return g
+    >=> \(g, es) -> guard (all possibleExtraction es) >> return g
+  where
+    possibleExtraction :: (CubeColor, Int) -> Bool
+    possibleExtraction (c, n) = fromJust (lookup c bag) >= n
 
 type Parser = Parsec Void String
 
@@ -38,8 +42,6 @@ extraction =
 -- The second part of the problem is even simpler.
 fewestCubes :: String -> [(CubeColor, Int)]
 fewestCubes =
-  assocs
-    . fromListWith max
-    . snd
-    . either (error . errorBundlePretty) id
-    . parse gameParser ""
+  either (error . errorBundlePretty) id . parse gameParser ""
+    >>> fromListWith max . snd
+    >>> assocs
