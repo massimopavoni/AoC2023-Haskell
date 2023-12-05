@@ -16,9 +16,7 @@ data CubeColor = Blue | Green | Red
 possibleGame :: [(CubeColor, Int)] -> String -> Maybe Int
 possibleGame bag =
   either (error . errorBundlePretty) Just . parse gameParser ""
-    >=> \(g, b) -> do
-      guard (all (\(c, n) -> fromJust (lookup c bag) >= n) b)
-      return g
+    >=> \(g, b) -> guard (all (\(c, n) -> fromJust (lookup c bag) >= n) b) >> return g
 
 type Parser = Parsec Void String
 
@@ -26,16 +24,16 @@ type Parser = Parsec Void String
 -- compared to the first challenge; this time the parser is also very simple,
 -- probably partly because I'm learning more about the library as I go.
 gameParser :: Parser (Int, [(CubeColor, Int)])
-gameParser = do
-  game <- string "Game " *> decimal <* string ": "
-  extractions <- some extraction
-  return (game, extractions)
+gameParser =
+  (,)
+    <$> (string "Game " *> decimal <* string ": ")
+    <*> some extraction
 
 extraction :: Parser (CubeColor, Int)
-extraction = do
-  count <- decimal <* space
-  color <- read . capitalise <$> some letterChar <* (string ", " <|> string "; " <|> (eof >> return ""))
-  return (color, count)
+extraction =
+  flip (,)
+    <$> (decimal <* space)
+    <*> (read . capitalise <$> some letterChar <* (string ", " <|> string "; " <|> (eof >> return "")))
 
 -- The second part of the problem is even simpler.
 fewestCubes :: String -> [(CubeColor, Int)]
