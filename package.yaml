@@ -15,4 +15,5 @@ library:
     - containers
     - extra
     - ghc
+    - matrix
     - megaparsec

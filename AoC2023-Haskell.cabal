@@ -35,5 +35,6 @@ library
     , containers
     , extra
     , ghc
+    , matrix
     , megaparsec
   default-language: Haskell2010
