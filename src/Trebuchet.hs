@@ -41,7 +41,7 @@ reverseDigit = digit reverseDigitWords
 
 -- The digit parsers are quite simple, and they mainly rely on the choice between a digit word or character.
 digit :: [String] -> Parser Integer
-digit ds = stringToDigit <$> choice (map string ds) <|> read . pure <$> digitChar
+digit ds = stringToDigit <$> choice (string <$> ds) <|> read . pure <$> digitChar
 
 stringToDigit :: String -> Integer
 stringToDigit = fromJust . flip lookup digitsMap
@@ -53,4 +53,4 @@ digitWords :: [String]
 digitWords = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
 
 reverseDigitWords :: [String]
-reverseDigitWords = map reverse digitWords
+reverseDigitWords = reverse <$> digitWords
