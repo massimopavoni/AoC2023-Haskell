@@ -22,7 +22,7 @@ import Text.Megaparsec.Char (digitChar, newline)
 -- it made me learn many more things, and it doesn't look too bad.
 
 -- The first part is the most important, as I had to find a way of dealing with the grid-like input.
-partNumbers :: String -> [Integer]
+partNumbers :: String -> [Int]
 partNumbers =
   either (error . errorBundlePretty) id
     . ( flip parse ""
@@ -34,17 +34,17 @@ type Parser = Parsec Void String
 -- I used megaparsec again, just because in my mind there was no way
 -- I was gonna be able to correcly parse the parts numbers and
 -- the near symbols positions without graually working through the matrix.
-enginePartsParser :: Matrix Char -> Parser [Integer]
+enginePartsParser :: Matrix Char -> Parser [Int]
 enginePartsParser m = catMaybes <$> someTill (maybePart m) eof
 
 -- The maybePart parser searches for a sequence of digits between dots and other symbols,
 -- then uses the provided function to decide if the number is a part number.
 -- The one thing that allows this is checking every neighbor of every digit,
 -- and that's only possible thanks to the position function.
-maybePart :: Matrix Char -> Parser (Maybe Integer)
+maybePart :: Matrix Char -> Parser (Maybe Int)
 maybePart m = betweenSymbols nearSymbol
   where
-    nearSymbol :: Maybe [((Int, Int), Char)] -> Maybe Integer
+    nearSymbol :: Maybe [((Int, Int), Char)] -> Maybe Int
     nearSymbol = maybe Nothing $ \z -> do
       guard $ any (any symbolNeighbor . neighbors m . fst) z
       Just . read $ snd <$> z
@@ -85,7 +85,7 @@ neighbors m = mapMaybe safeNeighbor . positions
 
 ------------------------------------------------------------------------------------------------
 -- The second part was quite a lot easier, considering the amount of hours I spent on the first one.
-gearRatios :: String -> [Integer]
+gearRatios :: String -> [Int]
 gearRatios =
   either (error . errorBundlePretty) id
     . ( flip parse ""
@@ -100,7 +100,7 @@ gearRatios =
 -- 2. creates a Map with gears positions to lists of their near parts (effectively grouping the parts to be then multiplied)
 -- 3. filters out all gears that could not result in a ratio (the ones that don't have exactly two near parts)
 -- 4. gets the values of the Map
-engineGearsParser :: Matrix Char -> Parser [[Integer]]
+engineGearsParser :: Matrix Char -> Parser [[Int]]
 engineGearsParser m =
   someTill (maybeGears m) eof
     <&> ( catMaybes
@@ -113,10 +113,10 @@ engineGearsParser m =
 -- just for the second part of the problem.
 -- Nothing too strange here, other than the final result not containing just one part number,
 -- but a list of gear positions (to later use for grouping) and corresponding part numbers.
-maybeGears :: Matrix Char -> Parser (Maybe [((Int, Int), Integer)])
+maybeGears :: Matrix Char -> Parser (Maybe [((Int, Int), Int)])
 maybeGears m = betweenSymbols nearGear
   where
-    nearGear :: Maybe [((Int, Int), Char)] -> Maybe [((Int, Int), Integer)]
+    nearGear :: Maybe [((Int, Int), Char)] -> Maybe [((Int, Int), Int)]
     nearGear = maybe Nothing $ \z -> do
       let gears = gearNeighbors z
       guard . not . null $ gears

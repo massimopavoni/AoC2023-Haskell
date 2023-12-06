@@ -9,7 +9,7 @@ import Text.Megaparsec.Char.Lexer (decimal)
 -- I guess I'm taking this first Advent of Code instance of mine as a megaparsec exploration, lol.
 
 -- The first part is again quite straightforward, provided a good simple parser is written.
-scratchcardPoints :: String -> Integer
+scratchcardPoints :: String -> Int
 scratchcardPoints =
   either (error . errorBundlePretty) id . parse scratchcardParser ""
     >>> \(ws, ns) -> 2 ^ length (filter (`elem` ws) ns) `div` 2
@@ -29,7 +29,7 @@ scratchcardParser = do
 -- Therefore, we can just start from the end of the list, since we know for sure that
 -- all the previous scratchcards are gonna have clones only of the ones we already considered,
 -- and sum the first values of the subsequent scratchcards, depending on the current one's win count.
-scratchcardsClonesCounts :: String -> [Integer]
+scratchcardsClonesCounts :: String -> [Int]
 scratchcardsClonesCounts =
   lines
     >>> fmap (either (error . errorBundlePretty) id . parse scratchcardParser "")
