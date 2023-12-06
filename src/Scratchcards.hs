@@ -2,7 +2,7 @@ module Scratchcards (scratchcardPoints, scratchcardsClonesCounts) where
 
 import Control.Category ((>>>))
 import Data.Void (Void)
-import Text.Megaparsec (MonadParsec (eof), Parsec, errorBundlePretty, parse, some)
+import Text.Megaparsec (MonadParsec (eof), Parsec, errorBundlePretty, notFollowedBy, parse, sepBy1, try)
 import Text.Megaparsec.Char (char, space, string)
 import Text.Megaparsec.Char.Lexer (decimal)
 
@@ -19,8 +19,8 @@ type Parser = Parsec Void String
 scratchcardParser :: Parser ([Int], [Int])
 scratchcardParser = do
   _ <- string "Card" *> space *> decimal <* char ':' <* space :: Parser Int
-  ws <- some (decimal <* space) <* char '|' <* space
-  ns <- some (decimal <* space) <* eof
+  ws <- sepBy1 decimal (try $ space <* notFollowedBy (char '|')) <* string " |" <* space
+  ns <- sepBy1 decimal space <* eof
   return (ws, ns)
 
 ------------------------------------------------------------------------------------------------

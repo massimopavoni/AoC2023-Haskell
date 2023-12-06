@@ -6,7 +6,7 @@ import Data.Map.Strict (assocs, fromListWith)
 import Data.Maybe (fromJust)
 import Data.Void (Void)
 import GHC.Utils.Misc (capitalise)
-import Text.Megaparsec (MonadParsec (eof), Parsec, errorBundlePretty, parse, some, (<|>))
+import Text.Megaparsec (MonadParsec (eof), Parsec, errorBundlePretty, parse, sepBy1, some, (<|>))
 import Text.Megaparsec.Char (letterChar, space, string)
 import Text.Megaparsec.Char.Lexer (decimal)
 
@@ -31,13 +31,13 @@ gameParser :: Parser (Int, [(CubeColor, Int)])
 gameParser =
   (,)
     <$> (string "Game " *> decimal <* string ": ")
-    <*> some extraction
+    <*> sepBy1 extraction (string ", " <|> string "; " <|> (eof >> return ""))
 
 extraction :: Parser (CubeColor, Int)
 extraction =
   flip (,)
     <$> (decimal <* space)
-    <*> (read . capitalise <$> some letterChar <* (string ", " <|> string "; " <|> (eof >> return "")))
+    <*> (read . capitalise <$> some letterChar)
 
 ------------------------------------------------------------------------------------------------
 -- The second part of the problem is even simpler.
