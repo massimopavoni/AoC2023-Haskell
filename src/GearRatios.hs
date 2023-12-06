@@ -17,11 +17,11 @@ import Text.Megaparsec (Parsec, between, eof, errorBundlePretty, getSourcePos, m
 import Text.Megaparsec.Char (digitChar, newline)
 
 -- This problem was...oh so much more challenging.
--- Took me three days, with all the time I could spare, to get it right.
+-- I took me three days, with all the time I could spare, to get it right.
 -- It might not be the most elegant solution, but it's mine, I like it,
 -- it made me learn many more things, and it doesn't look too bad.
 
--- The first part is the most important, I had to find a way of dealing with the grid-like input.
+-- The first part is the most important, as I had to find a way of dealing with the grid-like input.
 partNumbers :: String -> [Integer]
 partNumbers =
   either (error . errorBundlePretty) id
@@ -65,14 +65,14 @@ noDigit = noneOf $ '\n' : ['0' .. '9']
 -- In all seriousness, the position function could be a bit of a controversial choice,
 -- since it's supposedly "not cheap", in terms of computation time.
 -- It's true that I don't call it on every single character, and that it's necessary
--- for way I represented the engine and solve the entire problem,
+-- for the way I represented the engine and solve the entire problem,
 -- but I'm sure there's a better solution.
 position :: Parser (Int, Int)
 position = both unPos . (sourceLine &&& sourceColumn) <$> getSourcePos
 
 -- Neighbors is maybe the least complex function of all of this,
 -- and it got slightly better once I decided to go back to the Matrix type,
--- instead of using an Array, since the first one had consistent indexing bounds
+-- instead of using an Array, since the first one has consistent indexing bounds
 -- in relation to the way megaparsec gives you the current source position.
 neighbors :: Matrix Char -> (Int, Int) -> [((Int, Int), Char)]
 neighbors m = mapMaybe safeNeighbor . positions
