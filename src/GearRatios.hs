@@ -13,7 +13,7 @@ import Data.Maybe (catMaybes, mapMaybe)
 import Data.Set (fromList, toList)
 import Data.Tuple.Extra (both)
 import Data.Void (Void)
-import Text.Megaparsec (Parsec, between, eof, errorBundlePretty, getInput, getSourcePos, many, noneOf, optional, parse, some, someTill, sourceColumn, sourceLine, unPos)
+import Text.Megaparsec (Parsec, between, eof, errorBundlePretty, getSourcePos, many, noneOf, optional, parse, some, someTill, sourceColumn, sourceLine, unPos)
 import Text.Megaparsec.Char (digitChar, newline)
 
 -- This problem was...oh so much more challenging.
@@ -23,17 +23,19 @@ import Text.Megaparsec.Char (digitChar, newline)
 
 -- The first part is the most important, I had to find a way of dealing with the grid-like input.
 partNumbers :: String -> [Integer]
-partNumbers = either (error . errorBundlePretty) id . parse enginePartsParser ""
+partNumbers =
+  either (error . errorBundlePretty) id
+    . ( flip parse ""
+          =<< enginePartsParser . fromLists . lines
+      )
 
 type Parser = Parsec Void String
 
 -- I used megaparsec again, just because in my mind there was no way
 -- I was gonna be able to correcly parse the parts numbers and
 -- the near symbols positions without graually working through the matrix.
-enginePartsParser :: Parser [Integer]
-enginePartsParser = do
-  m <- fromLists . lines <$> getInput
-  catMaybes <$> someTill (maybePart m) eof
+enginePartsParser :: Matrix Char -> Parser [Integer]
+enginePartsParser m = catMaybes <$> someTill (maybePart m) eof
 
 -- The maybePart parser searches for a sequence of digits between dots and other symbols,
 -- then uses the provided function to decide if the number is a part number.
@@ -81,10 +83,14 @@ neighbors m = mapMaybe safeNeighbor . positions
     positions :: (Int, Int) -> [(Int, Int)]
     positions (x, y) = [(l, c) | l <- [x - 1 .. x + 1], c <- [y - 1 .. y + 1], (l, c) /= (x, y)]
 
+------------------------------------------------------------------------------------------------
 -- The second part was quite a lot easier, considering the amount of hours I spent on the first one.
 gearRatios :: String -> [Integer]
 gearRatios =
-  either (error . errorBundlePretty) id . parse engineGearsParser ""
+  either (error . errorBundlePretty) id
+    . ( flip parse ""
+          =<< engineGearsParser . fromLists . lines
+      )
     >>> map product
 
 -- The engineGearsParser does a tiny bit more than what the above enginePartsParser does.
@@ -94,9 +100,8 @@ gearRatios =
 -- 2. creates a Map with gears positions to lists of their near parts (effectively grouping the parts to be then multiplied)
 -- 3. filters out all gears that could not result in a ratio (the ones that don't have exactly two near parts)
 -- 4. gets the values of the Map
-engineGearsParser :: Parser [[Integer]]
-engineGearsParser = do
-  m <- fromLists . lines <$> getInput
+engineGearsParser :: Matrix Char -> Parser [[Integer]]
+engineGearsParser m =
   someTill (maybeGears m) eof
     <&> ( catMaybes
             >>> fromListWith (++) . map (pure <$>) . concat

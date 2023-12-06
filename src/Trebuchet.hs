@@ -16,6 +16,7 @@ firstLast [] = []
 firstLast [x] = [x, x]
 firstLast (x : xs) = [x, last xs]
 
+------------------------------------------------------------------------------------------------
 -- The second part saw my first few attempts fail under the desire to not use many complex external packages.
 -- But I ended up using a parsing library anyway, and still learned a lot in the process.
 retrieveCalibrationFixed :: String -> Integer

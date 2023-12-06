@@ -39,6 +39,7 @@ extraction =
     <$> (decimal <* space)
     <*> (read . capitalise <$> some letterChar <* (string ", " <|> string "; " <|> (eof >> return "")))
 
+------------------------------------------------------------------------------------------------
 -- The second part of the problem is even simpler.
 fewestCubes :: String -> [(CubeColor, Int)]
 fewestCubes =
