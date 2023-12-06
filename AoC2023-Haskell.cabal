@@ -25,6 +25,7 @@ library
   other-modules:
       CubeConundrum
       GearRatios
+      Scratchcards
       Trebuchet
       Paths_AoC2023_Haskell
   hs-source-dirs:

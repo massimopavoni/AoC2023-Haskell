@@ -1,9 +1,17 @@
-module Main (main, trebuchetSolution, cubeConundrumSolution, gearRatiosSolution) where
+module Main
+  ( main,
+    trebuchetSolution,
+    cubeConundrumSolution,
+    gearRatiosSolution,
+    scratchcardsSolution,
+  )
+where
 
 import Control.Exception (assert)
 import CubeConundrum (CubeColor (..), fewestCubes, possibleGame)
 import Data.Maybe (mapMaybe)
 import GearRatios (gearRatios, partNumbers)
+import Scratchcards (scratchcardPoints, scratchcardsClonesCounts)
 import Trebuchet (retrieveCalibration, retrieveCalibrationFixed)
 
 main :: IO ()
@@ -12,6 +20,7 @@ main = do
   trebuchetSolution
   cubeConundrumSolution
   gearRatiosSolution
+  scratchcardsSolution
 
 trebuchetSolution :: IO ()
 trebuchetSolution = do
@@ -47,6 +56,18 @@ gearRatiosSolution = do
     ("GearRatios", 2)
     (sum . gearRatios, 75519888)
     "src/resources/GearRatios.in"
+  putStrLn ""
+
+scratchcardsSolution :: IO ()
+scratchcardsSolution = do
+  solutionPretty
+    ("Scratchcards", 1)
+    (sum . map scratchcardPoints . lines, 20117)
+    "src/resources/Scratchcards.in"
+  solutionPretty
+    ("Scratchcards", 2)
+    (sum . scratchcardsClonesCounts, 13768818)
+    "src/resources/Scratchcards.in"
   putStrLn ""
 
 solutionPretty :: (Show b, Eq b) => (String, Int) -> (String -> b, b) -> FilePath -> IO ()
