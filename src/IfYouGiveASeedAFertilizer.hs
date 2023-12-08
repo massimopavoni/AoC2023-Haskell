@@ -1,7 +1,7 @@
 {-# LANGUAGE InstanceSigs #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module IfYouGiveASeedAFertilizer (nearestSeed, nearestSeedFixed) where
+module IfYouGiveASeedAFertilizer (nearestSeed, nearestSeedRange) where
 
 import Control.Category ((>>>))
 import Control.Monad (void)
@@ -66,8 +66,8 @@ nearestSeed =
 -- The main function just uses the same parser (with a different seed function),
 -- but then does not pass the single seed through the maps, but rather whole seed ranges,
 -- to then just pick the minimum of their starts, since that's always the smallest value in the range.
-nearestSeedFixed :: String -> Int
-nearestSeedFixed =
+nearestSeedRange :: String -> Int
+nearestSeedRange =
   either (error . errorBundlePretty) id . parse (almanacParser seedsToRanges) ""
     >>> uncurry (foldl' passRangeThroughRangeMap)
     >>> map start
