@@ -108,7 +108,7 @@ engineGearsParser m =
 betweenSymbols :: (Maybe [((Int, Int), Char)] -> Maybe b) -> Parser (Maybe b)
 betweenSymbols f =
   between (many noDigit) (many noDigit <* optional newline) $
-    f <$> optional (some $ (,) <$> position <*> digitChar)
+    f <$> optional (some $ liftA2 (,) position digitChar)
   where
     noDigit :: Parser Char
     noDigit = noneOf $ '\n' : ['0' .. '9']

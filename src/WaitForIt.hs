@@ -51,7 +51,7 @@ racesParser sr = do
 ------------------------------------------------------------------------------------------------
 -- Functions
 
--- The problem is very simply solved in a closed-form way by solving the inequation (t-x)x > d.
+-- The problem is very simply solved in a closed-form way by the inequation (t - x) * x > d.
 inequationBoundsSize :: (Integral a) => (a, a) -> a
 inequationBoundsSize (t, d) =
   1
