@@ -15,6 +15,7 @@ import GearRatios (gearRatios, partNumbers)
 import IfYouGiveASeedAFertilizer (nearestSeed, nearestSeedFixed)
 import Scratchcards (scratchcardPoints, scratchcardsClonesCounts)
 import Trebuchet (retrieveCalibration, retrieveCalibrationFixed)
+import WaitForIt (waysToRecord, waysToRecordFullRace)
 
 main :: IO ()
 main = do
@@ -24,6 +25,7 @@ main = do
   gearRatiosSolution
   scratchcardsSolution
   ifYouGiveASeedAFertilizerSolution
+  waitForItSolution
 
 trebuchetSolution :: IO ()
 trebuchetSolution = do
@@ -83,6 +85,18 @@ ifYouGiveASeedAFertilizerSolution = do
     ("IfYouGiveASeedAFertilizer", 2)
     (nearestSeedFixed, 28580589)
     "src/resources/IfYouGiveASeedAFertilizer.in"
+  putStrLn ""
+
+waitForItSolution :: IO ()
+waitForItSolution = do
+  solutionPretty
+    ("WaitForIt", 1)
+    (product . waysToRecord, 4403592)
+    "src/resources/WaitForIt.in"
+  solutionPretty
+    ("WaitForIt", 2)
+    (waysToRecordFullRace, 38017587)
+    "src/resources/WaitForIt.in"
   putStrLn ""
 
 solutionPretty :: (Show b, Eq b) => (String, Int) -> (String -> b, b) -> FilePath -> IO ()

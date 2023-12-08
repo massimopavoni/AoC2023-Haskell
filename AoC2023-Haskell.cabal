@@ -28,6 +28,7 @@ library
       IfYouGiveASeedAFertilizer
       Scratchcards
       Trebuchet
+      WaitForIt
       Paths_AoC2023_Haskell
   hs-source-dirs:
       src

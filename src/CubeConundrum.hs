@@ -1,4 +1,4 @@
-module CubeConundrum (CubeColor (..), fewestCubes, possibleGame) where
+module CubeConundrum (CubeColor (..), possibleGame, fewestCubes) where
 
 import Control.Category ((>>>))
 import Control.Monad (guard, (>=>))
