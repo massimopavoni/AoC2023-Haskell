@@ -4,6 +4,7 @@ module Main
     cubeConundrumSolution,
     gearRatiosSolution,
     scratchcardsSolution,
+    ifYouGiveASeedAFertilizerSolution,
   )
 where
 
@@ -11,6 +12,7 @@ import Control.Exception (assert)
 import CubeConundrum (CubeColor (..), fewestCubes, possibleGame)
 import Data.Maybe (mapMaybe)
 import GearRatios (gearRatios, partNumbers)
+import IfYouGiveASeedAFertilizer (nearestSeed, nearestSeedFixed)
 import Scratchcards (scratchcardPoints, scratchcardsClonesCounts)
 import Trebuchet (retrieveCalibration, retrieveCalibrationFixed)
 
@@ -21,6 +23,7 @@ main = do
   cubeConundrumSolution
   gearRatiosSolution
   scratchcardsSolution
+  ifYouGiveASeedAFertilizerSolution
 
 trebuchetSolution :: IO ()
 trebuchetSolution = do
@@ -68,6 +71,18 @@ scratchcardsSolution = do
     ("Scratchcards", 2)
     (sum . scratchcardsClonesCounts, 13768818)
     "src/resources/Scratchcards.in"
+  putStrLn ""
+
+ifYouGiveASeedAFertilizerSolution :: IO ()
+ifYouGiveASeedAFertilizerSolution = do
+  solutionPretty
+    ("IfYouGiveASeedAFertilizer", 1)
+    (nearestSeed, 240320250)
+    "src/resources/IfYouGiveASeedAFertilizer.in"
+  solutionPretty
+    ("IfYouGiveASeedAFertilizer", 2)
+    (nearestSeedFixed, 28580589)
+    "src/resources/IfYouGiveASeedAFertilizer.in"
   putStrLn ""
 
 solutionPretty :: (Show b, Eq b) => (String, Int) -> (String -> b, b) -> FilePath -> IO ()

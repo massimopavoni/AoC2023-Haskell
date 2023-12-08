@@ -25,6 +25,7 @@ library
   other-modules:
       CubeConundrum
       GearRatios
+      IfYouGiveASeedAFertilizer
       Scratchcards
       Trebuchet
       Paths_AoC2023_Haskell

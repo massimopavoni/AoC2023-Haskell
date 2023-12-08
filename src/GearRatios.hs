@@ -72,11 +72,11 @@ enginePartsParser m = catMaybes <$> someTill maybePart eof
 
 -- The engineGearsParser does a tiny bit more than what the above enginePartsParser does.
 -- It's a crucial part of the problem, which I actually solved quite elegantly, in my opinion:
--- the function applied to the tokens parsed by multiple maybeGears is essentially a pipeline that
--- 1. filters out all the Nothing values (the numbers that are not parts or the parts that are not near gears)
--- 2. creates a Map with gears positions to lists of their near parts (effectively grouping the parts to be then multiplied)
--- 3. filters out all gears that could not result in a ratio (the ones that don't have exactly two near parts)
--- 4. gets the values of the Map
+-- the function applied to the tokens parsed by multiple maybeGears is essentially a pipeline that;
+-- 1. filters out all the Nothing values (the numbers that are not parts or the parts that are not near gears);
+-- 2. creates a Map with gears positions to lists of their near parts (effectively grouping the parts to be then multiplied);
+-- 3. filters out all gears that could not result in a ratio (the ones that don't have exactly two near parts);
+-- 4. gets the values of the Map.
 engineGearsParser :: Matrix Char -> Parser [[Int]]
 engineGearsParser m =
   someTill maybeGears eof
