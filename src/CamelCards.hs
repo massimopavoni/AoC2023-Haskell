@@ -52,9 +52,7 @@ handWinningsJokers = handWinnings handTypeTransform "J23456789TQKA"
         -- 3. a two pair can have 2 jokers at most, and the pairs can either be two normal pairs,
         -- in which case the one joker is adding to one of them to make a full house, or there could be a pair of jokers,
         -- making the two pair a four of a kind;
-        -- 4. a three of a kind can have 3 jokers at most, and in both cases, the 3 cards being jokers or not,
-        -- it becomes a four of a kind, while if there are exactly 2 jokers they can add to
-        -- the other 3 cards to become a five of a kind;
+        -- 4. a three of a kind can 1 or 3 jokers, but not 2, and in both cases it becomes a four of a kind;
         -- 5. a full house can have 2 or 3 jokers, but not 1, and both cases make it a five of a kind
         -- (either 2 jokers added to the other 3 cards, or 3 jokers added to the pair);
         -- 6. a four of a kind can only have 1 or 4 jokers, and both cases result in a five of kind
@@ -65,7 +63,7 @@ handWinningsJokers = handWinnings handTypeTransform "J23456789TQKA"
           HighCard -> OnePair
           OnePair -> ThreeOfAKind
           TwoPair -> if length firstCardsGroup == 1 then FullHouse else FourOfAKind
-          ThreeOfAKind -> if length firstCardsGroup == 2 then FiveOfAKind else FourOfAKind
+          ThreeOfAKind -> FourOfAKind
           FullHouse -> if length firstCardsGroup > 1 then FiveOfAKind else FullHouse
           FourOfAKind -> FiveOfAKind
           FiveOfAKind -> FiveOfAKind
