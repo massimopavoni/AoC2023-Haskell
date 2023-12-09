@@ -7,15 +7,17 @@ module Main
     ifYouGiveASeedAFertilizerSolution,
     waitForItSolution,
     camelCardsSolution,
+    hauntedWastelandSolution,
   )
 where
 
-import CamelCards (handWinningsNormal, handWinningsJokers)
+import CamelCards (handWinningsJokers, handWinningsNormal)
 import Control.Exception (assert)
 import CubeConundrum (CubeColor (..), fewestCubes, possibleGame)
 import Data.List (intersperse)
 import Data.Maybe (mapMaybe)
 import GearRatios (gearRatios, partNumbers)
+import HauntedWasteland (camelEscapeTime, ghostEscapeTime)
 import IfYouGiveASeedAFertilizer (nearestSeed, nearestSeedRange)
 import Scratchcards (scratchcardPoints, scratchcardsClonesCounts)
 import Trebuchet (retrieveCalibration, retrieveCalibrationFixed)
@@ -36,7 +38,8 @@ main = do
         scratchcardsSolution,
         ifYouGiveASeedAFertilizerSolution,
         waitForItSolution,
-        camelCardsSolution
+        camelCardsSolution,
+        hauntedWastelandSolution
       ]
 
 trebuchetSolution :: IO ()
@@ -115,6 +118,17 @@ camelCardsSolution = do
     ("CamelCards", 2)
     (sum . handWinningsJokers, 251037509)
     "src/resources/CamelCards.in"
+
+hauntedWastelandSolution :: IO ()
+hauntedWastelandSolution = do
+  solutionPretty
+    ("HauntedWasteland", 1)
+    (camelEscapeTime, 15989)
+    "src/resources/HauntedWasteland.in"
+  solutionPretty
+    ("HauntedWasteland", 2)
+    (ghostEscapeTime, 13830919117339)
+    "src/resources/HauntedWasteland.in"
 
 ------------------------------------------------------------------------------------------------
 -- Functions
