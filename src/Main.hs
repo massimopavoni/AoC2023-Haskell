@@ -5,27 +5,39 @@ module Main
     gearRatiosSolution,
     scratchcardsSolution,
     ifYouGiveASeedAFertilizerSolution,
+    waitForItSolution,
+    camelCardsSolution,
   )
 where
 
+import CamelCards (handWinningsNormal, handWinningsJokers)
 import Control.Exception (assert)
 import CubeConundrum (CubeColor (..), fewestCubes, possibleGame)
+import Data.List (intersperse)
 import Data.Maybe (mapMaybe)
 import GearRatios (gearRatios, partNumbers)
-import IfYouGiveASeedAFertilizer (nearestSeed, nearestSeedFixed)
+import IfYouGiveASeedAFertilizer (nearestSeed, nearestSeedRange)
 import Scratchcards (scratchcardPoints, scratchcardsClonesCounts)
 import Trebuchet (retrieveCalibration, retrieveCalibrationFixed)
 import WaitForIt (waysToRecord, waysToRecordFullRace)
 
+------------------------------------------------------------------------------------------------
+-- Exports
+
 main :: IO ()
 main = do
   putStrLn "All solutions:\n"
-  trebuchetSolution
-  cubeConundrumSolution
-  gearRatiosSolution
-  scratchcardsSolution
-  ifYouGiveASeedAFertilizerSolution
-  waitForItSolution
+  sequence_ $
+    intersperse
+      (putStrLn "")
+      [ trebuchetSolution,
+        cubeConundrumSolution,
+        gearRatiosSolution,
+        scratchcardsSolution,
+        ifYouGiveASeedAFertilizerSolution,
+        waitForItSolution,
+        camelCardsSolution
+      ]
 
 trebuchetSolution :: IO ()
 trebuchetSolution = do
@@ -37,7 +49,6 @@ trebuchetSolution = do
     ("Trebuchet", 2)
     (sum . map retrieveCalibrationFixed . lines, 53515)
     "src/resources/Trebuchet.in"
-  putStrLn ""
 
 cubeConundrumSolution :: IO ()
 cubeConundrumSolution = do
@@ -49,7 +60,6 @@ cubeConundrumSolution = do
     ("CubeConundrum", 2)
     (sum . map (product . map snd . fewestCubes) . lines, 67953)
     "src/resources/CubeConundrum.in"
-  putStrLn ""
 
 gearRatiosSolution :: IO ()
 gearRatiosSolution = do
@@ -61,7 +71,6 @@ gearRatiosSolution = do
     ("GearRatios", 2)
     (sum . gearRatios, 75519888)
     "src/resources/GearRatios.in"
-  putStrLn ""
 
 scratchcardsSolution :: IO ()
 scratchcardsSolution = do
@@ -73,7 +82,6 @@ scratchcardsSolution = do
     ("Scratchcards", 2)
     (sum . scratchcardsClonesCounts, 13768818)
     "src/resources/Scratchcards.in"
-  putStrLn ""
 
 ifYouGiveASeedAFertilizerSolution :: IO ()
 ifYouGiveASeedAFertilizerSolution = do
@@ -83,9 +91,8 @@ ifYouGiveASeedAFertilizerSolution = do
     "src/resources/IfYouGiveASeedAFertilizer.in"
   solutionPretty
     ("IfYouGiveASeedAFertilizer", 2)
-    (nearestSeedFixed, 28580589)
+    (nearestSeedRange, 28580589)
     "src/resources/IfYouGiveASeedAFertilizer.in"
-  putStrLn ""
 
 waitForItSolution :: IO ()
 waitForItSolution = do
@@ -97,7 +104,20 @@ waitForItSolution = do
     ("WaitForIt", 2)
     (waysToRecordFullRace, 38017587)
     "src/resources/WaitForIt.in"
-  putStrLn ""
+
+camelCardsSolution :: IO ()
+camelCardsSolution = do
+  solutionPretty
+    ("CamelCards", 1)
+    (sum . handWinningsNormal, 250602641)
+    "src/resources/CamelCards.in"
+  solutionPretty
+    ("CamelCards", 2)
+    (sum . handWinningsJokers, 251037509)
+    "src/resources/CamelCards.in"
+
+------------------------------------------------------------------------------------------------
+-- Functions
 
 solutionPretty :: (Show b, Eq b) => (String, Int) -> (String -> b, b) -> FilePath -> IO ()
 solutionPretty (puzzle, part) (solution, expectedResult) source = do
