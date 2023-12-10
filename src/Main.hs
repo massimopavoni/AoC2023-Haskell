@@ -1,14 +1,14 @@
 module Main
   ( main,
-    trebuchetSolution,
-    cubeConundrumSolution,
-    gearRatiosSolution,
-    scratchcardsSolution,
-    ifYouGiveASeedAFertilizerSolution,
-    waitForItSolution,
-    camelCardsSolution,
-    hauntedWastelandSolution,
-    mirageMaintenanceSolution,
+    trebuchetSolutions,
+    cubeConundrumSolutions,
+    gearRatiosSolutions,
+    scratchcardsSolutions,
+    ifYouGiveASeedAFertilizerSolutions,
+    waitForItSolutions,
+    camelCardsSolutions,
+    hauntedWastelandSolutions,
+    mirageMaintenanceSolutions,
   )
 where
 
@@ -34,19 +34,19 @@ main = do
   sequence_ $
     intersperse
       (putStrLn "")
-      [ trebuchetSolution,
-        cubeConundrumSolution,
-        gearRatiosSolution,
-        scratchcardsSolution,
-        ifYouGiveASeedAFertilizerSolution,
-        waitForItSolution,
-        camelCardsSolution,
-        hauntedWastelandSolution,
-        mirageMaintenanceSolution
+      [ trebuchetSolutions,
+        cubeConundrumSolutions,
+        gearRatiosSolutions,
+        scratchcardsSolutions,
+        ifYouGiveASeedAFertilizerSolutions,
+        waitForItSolutions,
+        camelCardsSolutions,
+        hauntedWastelandSolutions,
+        mirageMaintenanceSolutions
       ]
 
-trebuchetSolution :: IO ()
-trebuchetSolution = do
+trebuchetSolutions :: IO ()
+trebuchetSolutions = do
   solutionPretty
     ("Trebuchet", 1)
     (sum . map retrieveCalibration . lines, 54388)
@@ -56,8 +56,8 @@ trebuchetSolution = do
     (sum . map retrieveCalibrationFixed . lines, 53515)
     "src/resources/Trebuchet.in"
 
-cubeConundrumSolution :: IO ()
-cubeConundrumSolution = do
+cubeConundrumSolutions :: IO ()
+cubeConundrumSolutions = do
   solutionPretty
     ("CubeConundrum", 1)
     (sum . mapMaybe (possibleGame [(Blue, 14), (Green, 13), (Red, 12)]) . lines, 2278)
@@ -67,8 +67,8 @@ cubeConundrumSolution = do
     (sum . map (product . map snd . fewestCubes) . lines, 67953)
     "src/resources/CubeConundrum.in"
 
-gearRatiosSolution :: IO ()
-gearRatiosSolution = do
+gearRatiosSolutions :: IO ()
+gearRatiosSolutions = do
   solutionPretty
     ("GearRatios", 1)
     (sum . partNumbers, 520019)
@@ -78,8 +78,8 @@ gearRatiosSolution = do
     (sum . gearRatios, 75519888)
     "src/resources/GearRatios.in"
 
-scratchcardsSolution :: IO ()
-scratchcardsSolution = do
+scratchcardsSolutions :: IO ()
+scratchcardsSolutions = do
   solutionPretty
     ("Scratchcards", 1)
     (sum . map scratchcardPoints . lines, 20117)
@@ -89,8 +89,8 @@ scratchcardsSolution = do
     (sum . scratchcardsClonesCounts, 13768818)
     "src/resources/Scratchcards.in"
 
-ifYouGiveASeedAFertilizerSolution :: IO ()
-ifYouGiveASeedAFertilizerSolution = do
+ifYouGiveASeedAFertilizerSolutions :: IO ()
+ifYouGiveASeedAFertilizerSolutions = do
   solutionPretty
     ("IfYouGiveASeedAFertilizer", 1)
     (nearestSeed, 240320250)
@@ -100,8 +100,8 @@ ifYouGiveASeedAFertilizerSolution = do
     (nearestSeedRange, 28580589)
     "src/resources/IfYouGiveASeedAFertilizer.in"
 
-waitForItSolution :: IO ()
-waitForItSolution = do
+waitForItSolutions :: IO ()
+waitForItSolutions = do
   solutionPretty
     ("WaitForIt", 1)
     (product . waysToRecord, 4403592)
@@ -111,8 +111,8 @@ waitForItSolution = do
     (waysToRecordFullRace, 38017587)
     "src/resources/WaitForIt.in"
 
-camelCardsSolution :: IO ()
-camelCardsSolution = do
+camelCardsSolutions :: IO ()
+camelCardsSolutions = do
   solutionPretty
     ("CamelCards", 1)
     (sum . handWinningsNormal, 250602641)
@@ -122,8 +122,8 @@ camelCardsSolution = do
     (sum . handWinningsJokers, 251037509)
     "src/resources/CamelCards.in"
 
-hauntedWastelandSolution :: IO ()
-hauntedWastelandSolution = do
+hauntedWastelandSolutions :: IO ()
+hauntedWastelandSolutions = do
   solutionPretty
     ("HauntedWasteland", 1)
     (camelEscapeTime, 15989)
@@ -133,8 +133,8 @@ hauntedWastelandSolution = do
     (ghostEscapeTime, 13830919117339)
     "src/resources/HauntedWasteland.in"
 
-mirageMaintenanceSolution :: IO ()
-mirageMaintenanceSolution = do
+mirageMaintenanceSolutions :: IO ()
+mirageMaintenanceSolutions = do
   solutionPretty
     ("MirageMaintenance", 1)
     (sum . map nextValuePrediction . lines, 1702218515)

@@ -1,3 +1,5 @@
+{-# LANGUAGE TupleSections #-}
+
 module MirageMaintenance (nextValuePrediction, initialValuePrediction) where
 
 import Control.Category ((>>>))
@@ -32,14 +34,15 @@ initialValuePrediction =
 -- Functions
 
 predictValue :: (Eq a, Num a) => ([a] -> a) -> ([a] -> a) -> [a] -> a
-predictValue f r = go []
+predictValue f r =
+  ([],)
+    >>> until
+      (all (== 0) . snd)
+      (\(ls, xs) -> (f xs : ls, differences xs))
+    >>> r . fst
   where
-    go ls xs
-      | all (== 0) xs = r ls
-      | otherwise = go (f xs : ls) (differences xs)
-      where
-        differences :: (Num a) => [a] -> [a]
-        differences = zipWith (-) =<< tail
+    differences :: (Num a) => [a] -> [a]
+    differences = zipWith (-) =<< tail
 
 ------------------------------------------------------------------------------------------------
 -- Parsers
