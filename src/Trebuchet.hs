@@ -58,11 +58,8 @@ valueParser = do
     digitsMap :: [(String, Int)]
     digitsMap = zip (digitWords ++ reverseDigitWords) $ cycle [1 .. 9]
 
-------------------------------------------------------------------------------------------------
--- Functions
+    digitWords :: [String]
+    digitWords = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
 
-digitWords :: [String]
-digitWords = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
-
-reverseDigitWords :: [String]
-reverseDigitWords = reverse <$> digitWords
+    reverseDigitWords :: [String]
+    reverseDigitWords = reverse <$> digitWords

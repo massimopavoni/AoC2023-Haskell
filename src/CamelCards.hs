@@ -1,5 +1,3 @@
-{-# LANGUAGE InstanceSigs #-}
-
 module CamelCards (handWinningsNormal, handWinningsJokers) where
 
 import Control.Category ((>>>))
@@ -67,17 +65,6 @@ handWinningsJokers = handWinnings handTypeTransform "J23456789TQKA"
           FiveOfAKind -> FiveOfAKind
 
 ------------------------------------------------------------------------------------------------
--- Parsers
-
-handsParser :: Parser [Hand]
-handsParser =
-  sepBy1
-    (liftA2 Hand (count 5 $ oneOf "23456789TJQKA") (char ' ' *> decimal))
-    (try $ newline <* notFollowedBy eof)
-    <* newline
-    <* eof
-
-------------------------------------------------------------------------------------------------
 -- Functions
 
 -- The handWinnings function takes the cards order and a function that potentially changes the hand type,
@@ -137,3 +124,14 @@ handWinnings httf cso =
       where
         cardValue :: Char -> Int
         cardValue = fromJust . flip lookup (zip cso [2 .. 14])
+
+------------------------------------------------------------------------------------------------
+-- Parsers
+
+handsParser :: Parser [Hand]
+handsParser =
+  sepBy1
+    (liftA2 Hand (count 5 $ oneOf "23456789TJQKA") (char ' ' *> decimal))
+    (try $ newline <* notFollowedBy eof)
+    <* newline
+    <* eof

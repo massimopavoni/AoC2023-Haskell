@@ -48,6 +48,25 @@ ghostEscapeTime =
     nodes (Maps ns _) = ns
 
 ------------------------------------------------------------------------------------------------
+-- Functions
+
+-- The followInstructions function folds over the maps' instructions starting from begin until end true.
+-- The important parts here are:
+-- 1. the next step function (fst of the next tuple), which applies the instruction to
+-- the tuple of the current node one;
+-- 2. the end condition itself, as a normal fold would want to fold over the entire list,
+-- which in this case will always be infinite because of the cycle function
+-- (and the result cannot be short-circuited with a lazy fold either,
+-- as we need to count the amount of steps taken).
+followInstructions :: (Num a, Ord b) => (b -> Bool) -> Maps b c -> b -> a
+followInstructions end (Maps ns is) begin = go (begin, 0) (cycle is)
+  where
+    go (n, c) (i : ris)
+      | end n = c
+      | otherwise = go (i $ ns ! n, c + 1) ris
+    go _ _ = error "Instructions folding went wrong"
+
+------------------------------------------------------------------------------------------------
 -- Parsers
 
 -- This parser is slightly funnier compared to previous ones, as I wanted to try and
@@ -71,22 +90,3 @@ mapsParser = do
   where
     node :: Parser String
     node = count 3 letterChar
-
-------------------------------------------------------------------------------------------------
--- Functions
-
--- The followInstructions function folds over the maps' instructions starting from begin until end true.
--- The important parts here are:
--- 1. the next step function (fst of the next tuple), which applies the instruction to
--- the tuple of the current node one;
--- 2. the end condition itself, as a normal fold would want to fold over the entire list,
--- which in this case will always be infinite because of the cycle function
--- (and the result cannot be short-circuited with a lazy fold either,
--- as we need to count the amount of steps taken).
-followInstructions :: (Num a, Ord b) => (b -> Bool) -> Maps b c -> b -> a
-followInstructions end (Maps ns is) begin = go (begin, 0) (cycle is)
-  where
-    go (n, c) (i : ris)
-      | end n = c
-      | otherwise = go (i $ ns ! n, c + 1) ris
-    go _ _ = error "Instructions folding went wrong"
