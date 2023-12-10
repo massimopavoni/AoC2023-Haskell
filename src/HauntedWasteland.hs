@@ -2,12 +2,12 @@
 
 module HauntedWasteland (camelEscapeTime, ghostEscapeTime) where
 
+import CommonUtils (Parser, parseInput)
 import Control.Applicative (liftA3)
 import Control.Category ((>>>))
 import Data.List (foldl1')
 import Data.Map.Strict (Map, fromList, keys, (!))
-import Data.Void (Void)
-import Text.Megaparsec (Parsec, count, eof, errorBundlePretty, notFollowedBy, parse, sepBy1, some, try, (<|>))
+import Text.Megaparsec (count, eof, notFollowedBy, sepBy1, some, try, (<|>))
 import Text.Megaparsec.Char (char, letterChar, newline, string)
 
 ------------------------------------------------------------------------------------------------
@@ -18,16 +18,12 @@ import Text.Megaparsec.Char (char, letterChar, newline, string)
 -- while the list of instructions is a list of functions that choose from those nodes.
 data Maps a b = Maps (Map a b) [b -> a]
 
-type Parser = Parsec Void String
-
 ------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part uses the followInstructions function with the ZZZ node end condition, starting from AAA.
 camelEscapeTime :: String -> Int
-camelEscapeTime =
-  either (error . errorBundlePretty) id . parse mapsParser ""
-    >>> flip (followInstructions (== "ZZZ")) "AAA"
+camelEscapeTime = parseInput mapsParser $ flip (followInstructions (== "ZZZ")) "AAA"
 
 -- The second part uses the followInstructions function with any Z ending node end condition,
 -- starting from all A ending nodes.
@@ -39,12 +35,12 @@ camelEscapeTime =
 -- count the length of those paths, and then find the least common multiple of those lengths.
 ghostEscapeTime :: String -> Int
 ghostEscapeTime =
-  either (error . errorBundlePretty) id . parse mapsParser ""
-    >>> liftA2
+  parseInput mapsParser $
+    liftA2
       fmap
       (followInstructions ((== 'Z') . last))
       (filter ((== 'A') . last) . keys . nodes)
-    >>> foldl1' lcm
+      >>> foldl1' lcm
   where
     nodes :: Maps a b -> Map a b
     nodes (Maps ns _) = ns

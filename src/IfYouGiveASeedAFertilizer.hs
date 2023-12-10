@@ -3,14 +3,14 @@
 
 module IfYouGiveASeedAFertilizer (nearestSeed, nearestSeedRange) where
 
+import CommonUtils (Parser, parseInput)
 import Control.Category ((>>>))
 import Control.Monad (void)
 import Data.Foldable (find, foldl')
 import Data.List (sort)
 import Data.List.Extra (chunksOf)
 import Data.Maybe (fromJust, isJust)
-import Data.Void (Void)
-import Text.Megaparsec (MonadParsec (notFollowedBy), Parsec, anySingle, between, count, eof, errorBundlePretty, parse, sepBy1, someTill, try, (<|>))
+import Text.Megaparsec (anySingle, between, count, eof, notFollowedBy, sepBy1, someTill, try, (<|>))
 import Text.Megaparsec.Char (char, newline, string)
 import Text.Megaparsec.Char.Lexer (decimal)
 
@@ -39,8 +39,6 @@ instance (Eq a, Ord a) => Ord (Range a) where
 
 data MapRange a = MapRange {range :: Range a, offset :: a}
 
-type Parser = Parsec Void String
-
 ------------------------------------------------------------------------------------------------
 -- Exports
 
@@ -48,12 +46,12 @@ type Parser = Parsec Void String
 -- and they can simply be passed through every almanac map without any slowdown.
 nearestSeed :: String -> Int
 nearestSeed =
-  either (error . errorBundlePretty) id . parse (almanacParser id) ""
-    >>> liftA2
+  parseInput (almanacParser id) $
+    liftA2
       fmap
       (flip (foldl' passSingleThroughRangeMap) . snd)
       fst
-    >>> minimum
+      >>> minimum
   where
     -- Funny thing: this one function gave me the opportuninty to better understand
     -- how functions can become incredily beautiful in their point-free versions,
@@ -76,10 +74,10 @@ nearestSeed =
 -- to then just pick the minimum of their starts, since that's always the smallest value in the range.
 nearestSeedRange :: String -> Int
 nearestSeedRange =
-  either (error . errorBundlePretty) id . parse (almanacParser seedsToRanges) ""
-    >>> uncurry (foldl' passRangeThroughRangeMap)
-    >>> map start
-    >>> minimum
+  parseInput (almanacParser seedsToRanges) $
+    uncurry (foldl' passRangeThroughRangeMap)
+      >>> map start
+      >>> minimum
   where
     seedsToRanges :: [Int] -> [Range Int]
     seedsToRanges = map listToRange . chunksOf 2

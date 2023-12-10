@@ -2,6 +2,7 @@
 
 module GearRatios (partNumbers, gearRatios) where
 
+import CommonUtils (Parser, parseInput)
 import Control.Arrow ((&&&))
 import Control.Category ((>>>))
 import Control.Monad (guard)
@@ -12,8 +13,7 @@ import Data.Matrix (Matrix, fromLists, safeGet)
 import Data.Maybe (catMaybes, mapMaybe)
 import Data.Set (fromList, toList)
 import Data.Tuple.Extra (both)
-import Data.Void (Void)
-import Text.Megaparsec (Parsec, between, eof, errorBundlePretty, getSourcePos, many, noneOf, optional, parse, some, someTill, sourceColumn, sourceLine, unPos)
+import Text.Megaparsec (between, eof, getSourcePos, many, noneOf, optional, some, someTill, sourceColumn, sourceLine, unPos)
 import Text.Megaparsec.Char (digitChar, newline)
 
 -- This problem was...oh so much more challenging.
@@ -22,29 +22,15 @@ import Text.Megaparsec.Char (digitChar, newline)
 -- it made me learn many more things, and it doesn't look too bad.
 
 ------------------------------------------------------------------------------------------------
--- Data types
-
-type Parser = Parsec Void String
-
-------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part is the most important, as I had to find a way of dealing with the grid-like input.
 partNumbers :: String -> [Int]
-partNumbers =
-  either (error . errorBundlePretty) id
-    . ( flip parse ""
-          =<< enginePartsParser . fromLists . lines
-      )
+partNumbers = enginePartsParser . fromLists . lines >>= flip parseInput id
 
 -- The second part was quite a lot easier, considering the amount of hours I spent on the first one.
 gearRatios :: String -> [Int]
-gearRatios =
-  either (error . errorBundlePretty) id
-    . ( flip parse ""
-          =<< engineGearsParser . fromLists . lines
-      )
-    >>> map product
+gearRatios = engineGearsParser . fromLists . lines >>= flip parseInput (map product)
 
 ------------------------------------------------------------------------------------------------
 -- Parsers

@@ -9,6 +9,7 @@ module Main
     camelCardsSolutions,
     hauntedWastelandSolutions,
     mirageMaintenanceSolutions,
+    pipeMazeSolutions,
   )
 where
 
@@ -42,7 +43,8 @@ main = do
         waitForItSolutions,
         camelCardsSolutions,
         hauntedWastelandSolutions,
-        mirageMaintenanceSolutions
+        mirageMaintenanceSolutions,
+        pipeMazeSolutions
       ]
 
 trebuchetSolutions :: IO ()
@@ -143,6 +145,17 @@ mirageMaintenanceSolutions = do
     ("MirageMaintenance", 2)
     (sum . map initialValuePrediction . lines, 925)
     "src/resources/MirageMaintenance.in"
+
+pipeMazeSolutions :: IO ()
+pipeMazeSolutions = do
+  solutionPretty
+    ("PipeMaze", 1)
+    (const (), ())
+    "src/resources/PipeMaze.in"
+  solutionPretty
+    ("PipeMaze", 2)
+    (const (), ())
+    "src/resources/PipeMaze.in"
 
 ------------------------------------------------------------------------------------------------
 -- Functions

@@ -1,11 +1,11 @@
 module CamelCards (handWinningsNormal, handWinningsJokers) where
 
+import CommonUtils (Parser, parseInput)
 import Control.Category ((>>>))
 import Data.Function (on)
 import Data.List (group, sortBy)
 import Data.Maybe (fromJust)
-import Data.Void (Void)
-import Text.Megaparsec (Parsec, count, eof, errorBundlePretty, notFollowedBy, oneOf, parse, sepBy1, try)
+import Text.Megaparsec (count, eof, notFollowedBy, oneOf, sepBy1, try)
 import Text.Megaparsec.Char (char, newline)
 import Text.Megaparsec.Char.Lexer (decimal)
 
@@ -16,8 +16,6 @@ data Hand = Hand {cards :: String, bid :: Int}
 
 data HandType = HighCard | OnePair | TwoPair | ThreeOfAKind | FullHouse | FourOfAKind | FiveOfAKind
   deriving (Eq, Ord)
-
-type Parser = Parsec Void String
 
 ------------------------------------------------------------------------------------------------
 -- Exports
@@ -73,10 +71,10 @@ handWinningsJokers = handWinnings handTypeTransform "J23456789TQKA"
 -- then we apply the transformation (which is sort of an id if we're not playing with jokers).
 handWinnings :: ((HandType, Hand, [String]) -> (HandType, Hand)) -> String -> String -> [Int]
 handWinnings httf cso =
-  either (error . errorBundlePretty) id . parse handsParser ""
-    >>> map (httf . addHandType . addCardsGroups)
-    >>> map snd . sortBy compareRanks
-    >>> zipWith (curry (liftA2 (*) fst (bid . snd))) [1 ..]
+  parseInput handsParser $
+    map (httf . addHandType . addCardsGroups)
+      >>> map snd . sortBy compareRanks
+      >>> zipWith (curry (liftA2 (*) fst (bid . snd))) [1 ..]
   where
     addCardsGroups :: Hand -> (Hand, [String])
     addCardsGroups = liftA2 (,) id $ group . sortBy compareCards . cards

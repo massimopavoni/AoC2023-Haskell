@@ -1,16 +1,11 @@
 module Trebuchet (retrieveCalibration, retrieveCalibrationFixed) where
 
+import CommonUtils (Parser, parseInput)
 import Control.Monad (void)
 import Data.Char (isDigit)
 import Data.Maybe (fromJust, fromMaybe)
-import Data.Void (Void)
-import Text.Megaparsec (Parsec, anySingle, choice, eof, errorBundlePretty, getInput, lookAhead, manyTill, optional, parse, setInput, (<|>))
+import Text.Megaparsec (anySingle, choice, eof, getInput, lookAhead, manyTill, optional, setInput, (<|>))
 import Text.Megaparsec.Char (digitChar, string)
-
-------------------------------------------------------------------------------------------------
--- Data types
-
-type Parser = Parsec Void String
 
 ------------------------------------------------------------------------------------------------
 -- Exports
@@ -27,7 +22,7 @@ retrieveCalibration = read . firstLast . filter isDigit
 -- The second part saw my first few attempts fail under the desire to not use many complex external packages.
 -- But I ended up using a parsing library anyway, and still learned a lot in the process.
 retrieveCalibrationFixed :: String -> Int
-retrieveCalibrationFixed = either (error . errorBundlePretty) id . parse valueParser ""
+retrieveCalibrationFixed = parseInput valueParser id
 
 ------------------------------------------------------------------------------------------------
 -- Parsers

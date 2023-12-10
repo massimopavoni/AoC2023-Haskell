@@ -24,11 +24,13 @@ library
       Main
   other-modules:
       CamelCards
+      CommonUtils
       CubeConundrum
       GearRatios
       HauntedWasteland
       IfYouGiveASeedAFertilizer
       MirageMaintenance
+      PipeMaze
       Scratchcards
       Trebuchet
       WaitForIt

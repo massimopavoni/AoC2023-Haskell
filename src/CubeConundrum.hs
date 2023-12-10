@@ -1,12 +1,12 @@
 module CubeConundrum (CubeColor (..), possibleGame, fewestCubes) where
 
+import CommonUtils (Parser, parseInput)
 import Control.Category ((>>>))
 import Control.Monad (guard, (>=>))
 import Data.Map.Strict (assocs, fromListWith)
 import Data.Maybe (fromJust)
-import Data.Void (Void)
 import GHC.Utils.Misc (capitalise)
-import Text.Megaparsec (MonadParsec (eof), Parsec, errorBundlePretty, parse, sepBy1, some, (<|>))
+import Text.Megaparsec (eof, sepBy1, some, (<|>))
 import Text.Megaparsec.Char (char, letterChar, string)
 import Text.Megaparsec.Char.Lexer (decimal)
 
@@ -16,15 +16,13 @@ import Text.Megaparsec.Char.Lexer (decimal)
 data CubeColor = Blue | Green | Red
   deriving (Eq, Ord, Read, Show)
 
-type Parser = Parsec Void String
-
 ------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part is very easy, once the parser for the input is properly set up.
 possibleGame :: [(CubeColor, Int)] -> String -> Maybe Int
 possibleGame bag =
-  either (error . errorBundlePretty) Just . parse gameParser ""
+  parseInput gameParser Just
     >=> liftA2
       (>>)
       (guard . all possibleExtraction . snd)
@@ -36,9 +34,11 @@ possibleGame bag =
 -- The second part of the problem is even simpler.
 fewestCubes :: String -> [(CubeColor, Int)]
 fewestCubes =
-  either (error . errorBundlePretty) id . parse gameParser ""
-    >>> fromListWith max . snd
-    >>> assocs
+  parseInput
+    gameParser
+    ( fromListWith max . snd
+        >>> assocs
+    )
 
 ------------------------------------------------------------------------------------------------
 -- Parsers
