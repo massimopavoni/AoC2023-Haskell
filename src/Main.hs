@@ -8,6 +8,7 @@ module Main
     waitForItSolution,
     camelCardsSolution,
     hauntedWastelandSolution,
+    mirageMaintenanceSolution,
   )
 where
 
@@ -19,6 +20,7 @@ import Data.Maybe (mapMaybe)
 import GearRatios (gearRatios, partNumbers)
 import HauntedWasteland (camelEscapeTime, ghostEscapeTime)
 import IfYouGiveASeedAFertilizer (nearestSeed, nearestSeedRange)
+import MirageMaintenance (initialValuePrediction, nextValuePrediction)
 import Scratchcards (scratchcardPoints, scratchcardsClonesCounts)
 import Trebuchet (retrieveCalibration, retrieveCalibrationFixed)
 import WaitForIt (waysToRecord, waysToRecordFullRace)
@@ -39,7 +41,8 @@ main = do
         ifYouGiveASeedAFertilizerSolution,
         waitForItSolution,
         camelCardsSolution,
-        hauntedWastelandSolution
+        hauntedWastelandSolution,
+        mirageMaintenanceSolution
       ]
 
 trebuchetSolution :: IO ()
@@ -129,6 +132,17 @@ hauntedWastelandSolution = do
     ("HauntedWasteland", 2)
     (ghostEscapeTime, 13830919117339)
     "src/resources/HauntedWasteland.in"
+
+mirageMaintenanceSolution :: IO ()
+mirageMaintenanceSolution = do
+  solutionPretty
+    ("MirageMaintenance", 1)
+    (sum . map nextValuePrediction . lines, 1702218515)
+    "src/resources/MirageMaintenance.in"
+  solutionPretty
+    ("MirageMaintenance", 2)
+    (sum . map initialValuePrediction . lines, 925)
+    "src/resources/MirageMaintenance.in"
 
 ------------------------------------------------------------------------------------------------
 -- Functions
