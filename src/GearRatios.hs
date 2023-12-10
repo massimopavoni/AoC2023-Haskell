@@ -63,9 +63,12 @@ enginePartsParser m = catMaybes <$> someTill maybePart eof
     maybePart = betweenSymbols nearSymbol
 
     nearSymbol :: Maybe [((Int, Int), Char)] -> Maybe Int
-    nearSymbol = maybe Nothing $ \z -> do
-      guard $ any (any symbolNeighbor . neighbors m . fst) z
-      Just . read $ snd <$> z
+    nearSymbol =
+      maybe Nothing $
+        liftA2
+          (>>)
+          (guard . any (any symbolNeighbor . neighbors m . fst))
+          (Just . read . fmap snd)
 
     symbolNeighbor :: ((Int, Int), Char) -> Bool
     symbolNeighbor = (`notElem` '\n' : '.' : ['0' .. '9']) . snd

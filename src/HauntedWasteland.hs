@@ -39,7 +39,7 @@ ghostEscapeTime :: String -> Int
 ghostEscapeTime =
   either (error . errorBundlePretty) id . parse mapsParser ""
     >>> liftA2
-      (<$>)
+      fmap
       (followInstructions ((== 'Z') . last))
       (filter ((== 'A') . last) . keys . nodes)
     >>> foldl1' lcm
@@ -86,7 +86,7 @@ mapsParser = do
       (try $ newline <* notFollowedBy eof)
       <* newline
       <* eof
-  return $ Maps (fromList ns) is
+  pure $ Maps (fromList ns) is
   where
     node :: Parser String
     node = count 3 letterChar

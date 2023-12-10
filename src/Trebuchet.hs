@@ -40,7 +40,7 @@ valueParser = do
   tens <- manyTill anySingle (lookAhead forwardDigit) >> forwardDigit
   getInput >>= setInput . reverse
   units <- manyTill anySingle (lookAhead $ void reverseDigit <|> eof) >> optional reverseDigit
-  return $ tens * 10 + fromMaybe tens units
+  pure $ tens * 10 + fromMaybe tens units
   where
     forwardDigit :: Parser Int
     forwardDigit = digit digitWords

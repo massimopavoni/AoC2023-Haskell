@@ -43,7 +43,7 @@ scratchcardParser = do
   _ <- string "Card" *> space *> decimal <* char ':' <* space :: Parser Int
   ws <- sepBy1 decimal (try $ space <* notFollowedBy (char '|')) <* string " |" <* space
   ns <- sepBy1 decimal space <* eof
-  return (ws, ns)
+  pure (ws, ns)
   where
     space :: Parser String
     space = some $ char ' '

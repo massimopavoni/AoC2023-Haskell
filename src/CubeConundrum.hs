@@ -25,7 +25,10 @@ type Parser = Parsec Void String
 possibleGame :: [(CubeColor, Int)] -> String -> Maybe Int
 possibleGame bag =
   either (error . errorBundlePretty) Just . parse gameParser ""
-    >=> \(g, es) -> guard (all possibleExtraction es) >> return g
+    >=> liftA2
+      (>>)
+      (guard . all possibleExtraction . snd)
+      (pure . fst)
   where
     possibleExtraction :: (CubeColor, Int) -> Bool
     possibleExtraction (c, n) = fromJust (lookup c bag) >= n
@@ -45,12 +48,14 @@ fewestCubes =
 -- probably partly because I'm learning more about the library as I go.
 gameParser :: Parser (Int, [(CubeColor, Int)])
 gameParser =
-  (,)
-    <$> (string "Game " *> decimal <* string ": ")
-    <*> sepBy1 extraction (string ", " <|> string "; " <|> (eof >> return ""))
+  liftA2
+    (,)
+    (string "Game " *> decimal <* string ": ")
+    (sepBy1 extraction (string ", " <|> string "; " <|> (eof >> pure "")))
   where
     extraction :: Parser (CubeColor, Int)
     extraction =
-      flip (,)
-        <$> (decimal <* char ' ')
-        <*> (read . capitalise <$> some letterChar)
+      liftA2
+        (flip (,))
+        (decimal <* char ' ')
+        (read . capitalise <$> some letterChar)

@@ -56,7 +56,7 @@ racesParser :: Bool -> Parser [(Int, Int)]
 racesParser sr = do
   tls <- between (string "Time:" <* space) newline numbers
   drs <- between (string "Distance:" <* space) newline numbers <* eof
-  return $ zip tls drs
+  pure $ zip tls drs
   where
     space :: Parser String
     space = some $ char ' '

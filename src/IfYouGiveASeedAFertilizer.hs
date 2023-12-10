@@ -49,7 +49,10 @@ type Parser = Parsec Void String
 nearestSeed :: String -> Int
 nearestSeed =
   either (error . errorBundlePretty) id . parse (almanacParser id) ""
-    >>> (\(ss, ms) -> flip (foldl' passSingleThroughRangeMap) ms <$> ss)
+    >>> liftA2
+      fmap
+      (flip (foldl' passSingleThroughRangeMap) . snd)
+      fst
     >>> minimum
   where
     -- Funny thing: this one function gave me the opportuninty to better understand
@@ -58,7 +61,12 @@ nearestSeed =
     -- in the context of Applicatives (also appreciating the evident connection between liftA2 and <*>).
     passSingleThroughRangeMap :: (Num a, Ord a) => a -> [MapRange a] -> a
     passSingleThroughRangeMap i =
-      find (liftA2 (&&) ((<= i) . start . range) ((i <=) . stop . range))
+      find
+        ( liftA2
+            (&&)
+            ((<= i) . start . range)
+            ((i <=) . stop . range)
+        )
         >>> maybe i ((i +) . offset)
 
 -- The second part was a nightmare at the beginning, but it eventually grew on me,
@@ -93,7 +101,7 @@ nearestSeedRange =
         -- Map seed range has three cases:
         -- 1. the seed range is fully contained in a map range, so it can just use that map's offset;
         -- 2. the seed range has some overlap with one or more map ranges, so it has to be split;
-        -- 3. the seed range has no kind of match with any map range, so it can just be returned as is
+        -- 3. the seed range has no kind of match with any map range, so it can just be pureed as is
         -- (but inside a list, since the concat above will use a list).
         -- The splitting case is the most complex, and in this function it uses a fold to subtract
         -- the map ranges (only the ones that overlap with the given range) from the seed range;
@@ -148,7 +156,7 @@ almanacParser :: (Num a) => ([a] -> b) -> Parser (b, [[MapRange Int]])
 almanacParser st = do
   ss <- st <$> between (string "seeds: ") (count 2 newline) (sepBy1 decimal (char ' '))
   ms <- sepByEnd mapParser (count 2 newline) eof
-  return (ss, ms)
+  pure (ss, ms)
   where
     mapParser :: Parser [MapRange Int]
     mapParser = do
