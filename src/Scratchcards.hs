@@ -24,7 +24,7 @@ scratchcardPoints = parseInput scratchcardParser $
 scratchcardsClonesCounts :: String -> [Int]
 scratchcardsClonesCounts =
   lines
-    >>> fmap (parseInput scratchcardParser id)
+    >>> map (parseInput scratchcardParser id)
     >>> foldr (\sc l -> 1 + sum (take (wins sc) l) : l) []
   where
     wins (ws, ns) = length $ filter (`elem` ws) ns

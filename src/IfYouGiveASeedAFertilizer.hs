@@ -48,7 +48,7 @@ nearestSeed :: String -> Int
 nearestSeed =
   parseInput (almanacParser id) $
     liftA2
-      fmap
+      map
       (flip (foldl' passSingleThroughRangeMap) . snd)
       fst
       >>> minimum

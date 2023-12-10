@@ -37,7 +37,7 @@ ghostEscapeTime :: String -> Int
 ghostEscapeTime =
   parseInput mapsParser $
     liftA2
-      fmap
+      map
       (followInstructions ((== 'Z') . last))
       (filter ((== 'A') . last) . keys . nodes)
       >>> foldl1' lcm

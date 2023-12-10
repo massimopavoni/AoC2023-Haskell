@@ -54,7 +54,7 @@ enginePartsParser m = catMaybes <$> someTill maybePart eof
         liftA2
           (>>)
           (guard . any (any symbolNeighbor . neighbors m . fst))
-          (Just . read . fmap snd)
+          (Just . read . map snd)
 
     symbolNeighbor :: ((Int, Int), Char) -> Bool
     symbolNeighbor = (`notElem` '\n' : '.' : ['0' .. '9']) . snd
@@ -92,7 +92,7 @@ engineGearsParser m =
     gearNeighbors =
       concatMap (neighbors m . fst)
         >>> toList . fromList
-        >>> fmap fst . filter ((== '*') . snd)
+        >>> map fst . filter ((== '*') . snd)
 
 betweenSymbols :: (Maybe [((Int, Int), Char)] -> Maybe b) -> Parser (Maybe b)
 betweenSymbols f =
