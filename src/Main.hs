@@ -22,6 +22,7 @@ import GearRatios (gearRatios, partNumbers)
 import HauntedWasteland (camelEscapeTime, ghostEscapeTime)
 import IfYouGiveASeedAFertilizer (nearestSeed, nearestSeedRange)
 import MirageMaintenance (initialValuePrediction, nextValuePrediction)
+import PipeMaze (farthestPipeSteps, nestPipesCount)
 import Scratchcards (scratchcardPoints, scratchcardsClonesCounts)
 import Trebuchet (retrieveCalibration, retrieveCalibrationFixed)
 import WaitForIt (waysToRecord, waysToRecordFullRace)
@@ -150,11 +151,11 @@ pipeMazeSolutions :: IO ()
 pipeMazeSolutions = do
   solutionPretty
     ("PipeMaze", 1)
-    (const (), ())
+    (farthestPipeSteps, 7102)
     "src/resources/PipeMaze.in"
   solutionPretty
     ("PipeMaze", 2)
-    (const (), ())
+    (nestPipesCount, 363)
     "src/resources/PipeMaze.in"
 
 ------------------------------------------------------------------------------------------------
