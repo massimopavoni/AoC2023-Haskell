@@ -1,6 +1,7 @@
 module CamelCards (handWinningsNormal, handWinningsJokers) where
 
 import CommonUtils (Parser, parseInput)
+import Control.Arrow ((&&&))
 import Control.Category ((>>>))
 import Data.Function (on)
 import Data.List (group, sortBy)
@@ -77,7 +78,7 @@ handWinnings httf cso =
       >>> zipWith (curry (liftA2 (*) fst (bid . snd))) [1 ..]
   where
     addCardsGroups :: Hand -> (Hand, [String])
-    addCardsGroups = liftA2 (,) id $ group . sortBy compareCards . cards
+    addCardsGroups = id &&& group . sortBy compareCards . cards
 
     -- Detecting the hand type is another important thing, and it's done by analyzing the
     -- number of groups of equal cards:
