@@ -6,7 +6,7 @@ import Control.Monad (guard, (>=>))
 import Data.Map.Strict (assocs, fromListWith)
 import Data.Maybe (fromJust)
 import GHC.Utils.Misc (capitalise)
-import Text.Megaparsec (eof, sepBy1, some, (<|>))
+import Text.Megaparsec (choice, eof, sepBy1, some)
 import Text.Megaparsec.Char (char, letterChar, string)
 import Text.Megaparsec.Char.Lexer (decimal)
 
@@ -51,7 +51,7 @@ gameParser =
   liftA2
     (,)
     (string "Game " *> decimal <* string ": ")
-    (sepBy1 extraction (string ", " <|> string "; " <|> (eof >> pure "")))
+    (sepBy1 extraction (choice [string ", ", string "; ", eof >> pure ""]))
   where
     extraction :: Parser (CubeColor, Int)
     extraction =
