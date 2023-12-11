@@ -80,7 +80,7 @@ mapsParser = do
   ns <-
     sepBy1
       ( liftA3
-          (\a b c -> (a, (b, c)))
+          (\n l r -> (n, (l, r)))
           (node <* string " = ")
           (char '(' *> node <* string ", ")
           (node <* char ')')
