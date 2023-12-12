@@ -29,11 +29,8 @@ predictValue f r =
   ([],)
     >>> until
       (all (== 0) . snd)
-      (\(ls, xs) -> (f xs : ls, differences xs))
+      (\(ls, xs) -> (f xs : ls, (zipWith (-) =<< tail) xs))
     >>> r . fst
-  where
-    differences :: (Num a) => [a] -> [a]
-    differences = zipWith (-) =<< tail
 
 ------------------------------------------------------------------------------------------------
 -- Parsers

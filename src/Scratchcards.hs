@@ -27,6 +27,7 @@ scratchcardsClonesCounts =
     >>> map (parseInput scratchcardParser id)
     >>> foldr (\sc l -> 1 + sum (take (wins sc) l) : l) []
   where
+    wins :: ([Int], [Int]) -> Int
     wins (ws, ns) = length $ filter (`elem` ws) ns
 
 ------------------------------------------------------------------------------------------------

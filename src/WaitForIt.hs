@@ -31,11 +31,8 @@ inequationBoundsSize (t, d) =
     t' :: (Floating a) => a
     t' = fromIntegral t
 
-    d' :: (Floating a) => a
-    d' = fromIntegral d
-
     discriminant :: Double
-    discriminant = sqrt (t' ** 2 - 4 * d')
+    discriminant = sqrt (t' ** 2 - 4 * fromIntegral d)
 
 ------------------------------------------------------------------------------------------------
 -- Parsers

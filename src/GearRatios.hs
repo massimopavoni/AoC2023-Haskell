@@ -38,16 +38,13 @@ gearRatios = engineGearsParser . fromLists . lines >>= flip parseInput (map prod
 -- I used megaparsec again, just because in my mind there was no way
 -- I was gonna be able to correcly parse the parts numbers and
 -- the near symbols positions without graually working through the matrix.
+-- The maybePart parser searches for a sequence of digits between dots and other symbols,
+-- then uses the provided function to decide if the number is a part number.
+-- The one thing that allows this is checking every neighbor of every digit,
+-- and that's only possible thanks to the position function.
 enginePartsParser :: Matrix Char -> Parser [Int]
-enginePartsParser m = catMaybes <$> someTill maybePart eof
+enginePartsParser m = catMaybes <$> someTill (betweenSymbols nearSymbol) eof
   where
-    -- The maybePart parser searches for a sequence of digits between dots and other symbols,
-    -- then uses the provided function to decide if the number is a part number.
-    -- The one thing that allows this is checking every neighbor of every digit,
-    -- and that's only possible thanks to the position function.
-    maybePart :: Parser (Maybe Int)
-    maybePart = betweenSymbols nearSymbol
-
     nearSymbol :: Maybe [((Int, Int), Char)] -> Maybe Int
     nearSymbol =
       maybe Nothing $
@@ -66,22 +63,19 @@ enginePartsParser m = catMaybes <$> someTill maybePart eof
 -- 2. creates a Map with gears positions to lists of their near parts (effectively grouping the parts to be then multiplied);
 -- 3. filters out all gears that could not result in a ratio (the ones that don't have exactly two near parts);
 -- 4. gets the values of the Map.
+-- The maybeGears parser is the equivalent of the maybePart parser,
+-- just for the second part of the problem.
+-- Nothing too strange here, other than the final result not containing just one part number,
+-- but a list of gear positions (to later use for grouping) and corresponding part numbers.
 engineGearsParser :: Matrix Char -> Parser [[Int]]
 engineGearsParser m =
-  someTill maybeGears eof
+  someTill (betweenSymbols nearGear) eof
     <&> ( catMaybes
             >>> fromListWith (++) . map (pure <$>) . concat
             >>> Map.filter ((== 2) . length)
             >>> elems
         )
   where
-    -- The maybeGears parser is the equivalent of the maybePart parser,
-    -- just for the second part of the problem.
-    -- Nothing too strange here, other than the final result not containing just one part number,
-    -- but a list of gear positions (to later use for grouping) and corresponding part numbers.
-    maybeGears :: Parser (Maybe [((Int, Int), Int)])
-    maybeGears = betweenSymbols nearGear
-
     nearGear :: Maybe [((Int, Int), Char)] -> Maybe [((Int, Int), Int)]
     nearGear = maybe Nothing $ \z -> do
       let gears = gearNeighbors z

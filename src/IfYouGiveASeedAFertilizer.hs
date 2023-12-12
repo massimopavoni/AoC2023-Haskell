@@ -65,7 +65,7 @@ nearestSeed =
             ((<= i) . start . range)
             ((i <=) . stop . range)
         )
-        >>> maybe i ((i +) . offset)
+        >>> maybe i ((+ i) . offset)
 
 -- The second part was a nightmare at the beginning, but it eventually grew on me,
 -- and in the end solving it was, as I've already said, very satisfying.
@@ -74,14 +74,11 @@ nearestSeed =
 -- to then just pick the minimum of their starts, since that's always the smallest value in the range.
 nearestSeedRange :: String -> Int
 nearestSeedRange =
-  parseInput (almanacParser seedsToRanges) $
+  parseInput (almanacParser (map listToRange . chunksOf 2)) $
     uncurry (foldl' passRangeThroughRangeMap)
       >>> map start
       >>> minimum
   where
-    seedsToRanges :: [Int] -> [Range Int]
-    seedsToRanges = map listToRange . chunksOf 2
-
     -- Using bounds-inclusive ranges makes it difficult to mess up range subtraction,
     -- but I guess I could have done something slightly different in the other functions so that
     -- I didn't have to use bounds-inclusive ranges and so many -1s and +1s.

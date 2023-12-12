@@ -51,7 +51,7 @@ nestPipesCount =
       (-)
       (abs . shoelaceSum)
       length
-    >>> (1 +) . (`div` 2)
+    >>> (+ 1) . (`div` 2)
   where
     shoelaceSum :: [Position] -> Int
     shoelaceSum ps =
@@ -73,7 +73,7 @@ nestPipesCount =
 walkPipeLoop :: Matrix Pipe -> [Position]
 walkPipeLoop maze =
   until
-    ((Start ==) . (maze !) . pos . head)
+    ((== Start) . (maze !) . pos . head)
     (liftA2 (:) (moveThroughPipe . head) id)
     [startPipe, start]
   where
@@ -86,14 +86,14 @@ walkPipeLoop maze =
       start
         & ( (flip map [North ..] . Pos . pos)
               >>> map (moveThroughPipe . (movePos <*> dir))
-              >>> head . filter (((0, 0) /=) . pos)
+              >>> head . filter ((/= (0, 0)) . pos)
           )
 
     start :: Position
     start =
       flip Pos North . fromJust $
         find
-          ((Start ==) . (maze !))
+          ((== Start) . (maze !))
           [(x, y) | x <- [1 .. nrows maze], y <- [1 .. ncols maze]]
 
     -- The moveThroughPipe function makes the pipe maze walk possible: it takes a position and returns the next one,

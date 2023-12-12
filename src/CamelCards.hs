@@ -24,10 +24,7 @@ data HandType = HighCard | OnePair | TwoPair | ThreeOfAKind | FullHouse | FourOf
 -- The first part is simple because it's just about using the hand winnings function with
 -- a tuple reduction sort of identity and the normal order of cards.
 handWinningsNormal :: String -> [Int]
-handWinningsNormal = handWinnings trash3 "23456789TJQKA"
-  where
-    trash3 :: (a, b, c) -> (a, b)
-    trash3 (a, b, _) = (a, b)
+handWinningsNormal = handWinnings (\(ht, h, _) -> (ht, h)) "23456789TJQKA"
 
 -- The second part had me call the elf a m*****f***** for the rest of the puzzle, ahah,
 -- because the joker change was a funny one; and so we just gotta use a different cards order and

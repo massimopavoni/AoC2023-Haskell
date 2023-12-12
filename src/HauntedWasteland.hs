@@ -39,11 +39,8 @@ ghostEscapeTime =
     liftA2
       map
       (followInstructions ((== 'Z') . last))
-      (filter ((== 'A') . last) . keys . nodes)
+      (filter ((== 'A') . last) . keys . (\(Maps ns _) -> ns))
       >>> foldl1' lcm
-  where
-    nodes :: Maps a b -> Map a b
-    nodes (Maps ns _) = ns
 
 ------------------------------------------------------------------------------------------------
 -- Functions
