@@ -10,11 +10,13 @@ module Main
     hauntedWastelandSolutions,
     mirageMaintenanceSolutions,
     pipeMazeSolutions,
+    cosmicExpansionSolutions,
   )
 where
 
 import CamelCards (handWinningsJokers, handWinningsNormal)
 import Control.Exception (assert)
+import CosmicExpansion (hugeExpansionGalaxyPaths, shortestGalaxyPaths)
 import CubeConundrum (CubeColor (..), fewestCubes, possibleGame)
 import Data.List (intersperse)
 import Data.Maybe (mapMaybe)
@@ -45,7 +47,8 @@ main = do
         camelCardsSolutions,
         hauntedWastelandSolutions,
         mirageMaintenanceSolutions,
-        pipeMazeSolutions
+        pipeMazeSolutions,
+        cosmicExpansionSolutions
       ]
 
 trebuchetSolutions :: IO ()
@@ -157,6 +160,17 @@ pipeMazeSolutions = do
     ("PipeMaze", 2)
     (nestPipesCount, 363)
     "src/resources/PipeMaze.in"
+
+cosmicExpansionSolutions :: IO ()
+cosmicExpansionSolutions = do
+  solutionPretty
+    ("CosmicExpansion", 1)
+    (sum . shortestGalaxyPaths, 9556712)
+    "src/resources/CosmicExpansion.in"
+  solutionPretty
+    ("CosmicExpansion", 2)
+    (sum . hugeExpansionGalaxyPaths, 678626199476)
+    "src/resources/CosmicExpansion.in"
 
 ------------------------------------------------------------------------------------------------
 -- Functions

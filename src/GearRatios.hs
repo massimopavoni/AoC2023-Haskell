@@ -26,11 +26,11 @@ import Text.Megaparsec.Char (digitChar, newline)
 
 -- The first part is the most important, as I had to find a way of dealing with the grid-like input.
 partNumbers :: String -> [Int]
-partNumbers = enginePartsParser . fromLists . lines >>= flip parseInput id
+partNumbers = enginePartsParser . fromLists . lines >>= (`parseInput` id)
 
 -- The second part was quite a lot easier, considering the amount of hours I spent on the first one.
 gearRatios :: String -> [Int]
-gearRatios = engineGearsParser . fromLists . lines >>= flip parseInput (map product)
+gearRatios = engineGearsParser . fromLists . lines >>= (`parseInput` map product)
 
 ------------------------------------------------------------------------------------------------
 -- Parsers

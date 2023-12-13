@@ -48,7 +48,7 @@ valueParser = do
     digit ds = stringToDigit <$> choice (string <$> ds) <|> read . pure <$> digitChar
 
     stringToDigit :: String -> Int
-    stringToDigit = fromJust . flip lookup digitsMap
+    stringToDigit = fromJust . (`lookup` digitsMap)
 
     digitsMap :: [(String, Int)]
     digitsMap = zip (digitWords ++ reverseDigitWords) $ cycle [1 .. 9]

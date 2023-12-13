@@ -17,3 +17,5 @@ library:
     - ghc
     - matrix
     - megaparsec
+    - safe
+    - vector

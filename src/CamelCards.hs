@@ -119,7 +119,7 @@ handWinnings httf cso =
     compareCards = compare `on` cardValue
       where
         cardValue :: Char -> Int
-        cardValue = fromJust . flip lookup (zip cso [2 .. 14])
+        cardValue = fromJust . (`lookup` zip cso [2 .. 14])
 
 ------------------------------------------------------------------------------------------------
 -- Parsers

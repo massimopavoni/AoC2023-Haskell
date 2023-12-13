@@ -84,14 +84,14 @@ walkPipeLoop maze =
     startPipe :: Position
     startPipe =
       start
-        & ( (flip map [North ..] . Pos . pos)
+        & ( ((`map` [North ..]) . Pos . pos)
               >>> map (moveThroughPipe . (movePos <*> dir))
               >>> head . filter ((/= (0, 0)) . pos)
           )
 
     start :: Position
     start =
-      flip Pos North . fromJust $
+      (`Pos` North) . fromJust $
         find
           ((== Start) . (maze !))
           [(x, y) | x <- [1 .. nrows maze], y <- [1 .. ncols maze]]
@@ -121,7 +121,7 @@ walkPipeLoop maze =
           | otherwise = invalidPos
 
     movePos :: Position -> Direction -> Position
-    movePos (Pos (x, y) _) dt = flip Pos (oppositeDir dt) $ case dt of
+    movePos (Pos (x, y) _) dt = (`Pos` oppositeDir dt) $ case dt of
       North -> (x - 1, y)
       South -> (x + 1, y)
       West -> (x, y - 1)
@@ -141,4 +141,4 @@ parseMaze :: String -> Matrix Pipe
 parseMaze = fromLists . map (map charToPipe) . lines
   where
     charToPipe :: Char -> Pipe
-    charToPipe = fromJust . flip lookup (zip ".S|-7FJL" [Ground ..])
+    charToPipe = fromJust . (`lookup` zip ".S|-7FJL" [Ground ..])
