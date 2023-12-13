@@ -12,10 +12,13 @@ library:
   source-dirs: src
   ghc-options: -Wall
   dependencies:
+    - array
+    - bytestring
     - containers
     - extra
     - ghc
     - matrix
     - megaparsec
     - safe
+    - split
     - vector

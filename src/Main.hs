@@ -11,6 +11,7 @@ module Main
     mirageMaintenanceSolutions,
     pipeMazeSolutions,
     cosmicExpansionSolutions,
+    hotSpringsSolutions,
   )
 where
 
@@ -22,6 +23,7 @@ import Data.List (intersperse)
 import Data.Maybe (mapMaybe)
 import GearRatios (gearRatios, partNumbers)
 import HauntedWasteland (camelEscapeTime, ghostEscapeTime)
+import HotSprings (possibleCombinations, possibleCombinationsUnfolded)
 import IfYouGiveASeedAFertilizer (nearestSeed, nearestSeedRange)
 import MirageMaintenance (initialValuePrediction, nextValuePrediction)
 import PipeMaze (farthestPipeSteps, nestPipesCount)
@@ -48,7 +50,8 @@ main = do
         hauntedWastelandSolutions,
         mirageMaintenanceSolutions,
         pipeMazeSolutions,
-        cosmicExpansionSolutions
+        cosmicExpansionSolutions,
+        hotSpringsSolutions
       ]
 
 trebuchetSolutions :: IO ()
@@ -171,6 +174,17 @@ cosmicExpansionSolutions = do
     ("CosmicExpansion", 2)
     (sum . hugeExpansionGalaxyPaths, 678626199476)
     "src/resources/CosmicExpansion.in"
+
+hotSpringsSolutions :: IO ()
+hotSpringsSolutions = do
+  solutionPretty
+    ("HotSprings", 1)
+    (sum . map possibleCombinations . lines, 7653)
+    "src/resources/HotSprings.in"
+  solutionPretty
+    ("HotSprings", 2)
+    (sum . map (possibleCombinationsUnfolded 5) . lines, 60681419004564)
+    "src/resources/HotSprings.in"
 
 ------------------------------------------------------------------------------------------------
 -- Functions
