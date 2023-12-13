@@ -150,13 +150,13 @@ nearestSeedRange =
 almanacParser :: (Num a) => ([a] -> b) -> Parser (b, [[MapRange Int]])
 almanacParser st = do
   ss <- st <$> between (string "seeds: ") (count 2 newline) (sepBy1 decimal (char ' '))
-  ms <- sepByEnd mapParser (count 2 newline) eof
+  ms <- sepBy1End mapParser (count 2 newline) eof
   pure (ss, ms)
   where
     mapParser :: Parser [MapRange Int]
     mapParser = do
       _ <- someTill anySingle (string "map:" <* newline)
-      sepByEnd
+      sepBy1End
         (listToRange <$> sepBy1 decimal (char ' '))
         newline
         (void newline <|> eof)
@@ -169,5 +169,5 @@ almanacParser st = do
     -- which variates on sepBy1 for cases that could have something different after the last separator.
     -- I'm not 100% sure this was necessary, but I was having some problems with the way the input is formatted,
     -- and thought about this way of using negative lookahead to deal with it.
-    sepByEnd :: Parser a -> Parser b -> Parser c -> Parser [a]
-    sepByEnd p sep end = sepBy1 p (try $ sep <* notFollowedBy end)
+    sepBy1End :: Parser a -> Parser b -> Parser c -> Parser [a]
+    sepBy1End p sep end = sepBy1 p (try $ sep <* notFollowedBy end)

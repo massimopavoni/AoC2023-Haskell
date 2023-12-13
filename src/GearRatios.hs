@@ -8,7 +8,7 @@ import Control.Category ((>>>))
 import Control.Monad (guard)
 import Data.Functor ((<&>))
 import Data.Map.Strict (elems, fromListWith)
-import qualified Data.Map.Strict as Map (filter)
+import qualified Data.Map.Strict as MapS (filter)
 import Data.Matrix (Matrix, fromLists, safeGet)
 import Data.Maybe (catMaybes, mapMaybe)
 import Data.Set (fromList, toList)
@@ -72,7 +72,7 @@ engineGearsParser m =
   someTill (betweenSymbols nearGear) eof
     <&> ( catMaybes
             >>> fromListWith (++) . map (pure <$>) . concat
-            >>> Map.filter ((== 2) . length)
+            >>> MapS.filter ((== 2) . length)
             >>> elems
         )
   where

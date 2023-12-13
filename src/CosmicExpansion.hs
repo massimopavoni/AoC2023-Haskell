@@ -6,7 +6,7 @@ import Data.List (tails)
 import Data.Matrix (Matrix, fromLists, getCol, getRow, matrix, ncols, nrows, unsafeGet)
 import Data.Tuple.Extra (both)
 import Data.Vector (Vector, fromList, scanl', unsafeIndex)
-import qualified Data.Vector as Vector (all)
+import qualified Data.Vector as Vect (all)
 import Safe (tailSafe)
 
 ------------------------------------------------------------------------------------------------
@@ -77,7 +77,7 @@ analyzeImage e m =
             (fromList [1 .. sf m])
 
         spaces :: [Int]
-        spaces = filter (Vector.all (== Space) . (`gf` m)) [1 .. sf m]
+        spaces = filter (Vect.all (== Space) . (`gf` m)) [1 .. sf m]
 
 ------------------------------------------------------------------------------------------------
 -- Parsers
