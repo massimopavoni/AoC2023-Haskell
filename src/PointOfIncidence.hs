@@ -42,12 +42,11 @@ reflectionLineScore smudgeCount =
     >>> uncurry (+)
   where
     -- The function above makes use of lineReflectionDifferences to find the numbers of different symbols
-    -- between the possible sub-lines left and right of the potential reflection line.
+    -- between the sub-lines left and right of the potential reflection line.
     lineReflectionDifferences :: String -> [Int]
-    lineReflectionDifferences l = map (length . filter not) $ zipWith (zipWith (==)) left right
-      where
-        left :: [String]
-        left = map reverse . tail $ inits l
-
-        right :: [String]
-        right = init . tail $ tails l
+    lineReflectionDifferences =
+      liftA2
+        (zipWith (zipWith (==)))
+        (map reverse . tail . inits)
+        (init . tail . tails)
+        >>> map (length . filter not)
