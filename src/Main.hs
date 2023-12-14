@@ -12,6 +12,7 @@ module Main
     pipeMazeSolutions,
     cosmicExpansionSolutions,
     hotSpringsSolutions,
+    pointOfIncidenceSolutions,
   )
 where
 
@@ -20,6 +21,7 @@ import Control.Exception (assert)
 import CosmicExpansion (hugeExpansionGalaxyPaths, shortestGalaxyPaths)
 import CubeConundrum (CubeColor (..), fewestCubes, possibleGame)
 import Data.List (intersperse)
+import Data.List.Split (splitOn)
 import Data.Maybe (mapMaybe)
 import GearRatios (gearRatios, partNumbers)
 import HauntedWasteland (camelEscapeTime, ghostEscapeTime)
@@ -27,6 +29,7 @@ import HotSprings (possibleCombinations, possibleCombinationsUnfolded)
 import IfYouGiveASeedAFertilizer (nearestSeed, nearestSeedRange)
 import MirageMaintenance (initialValuePrediction, nextValuePrediction)
 import PipeMaze (farthestPipeSteps, nestPipesCount)
+import PointOfIncidence (mirrorScore, mirrorSmudgeScore)
 import Scratchcards (scratchcardPoints, scratchcardsClonesCounts)
 import Trebuchet (retrieveCalibration, retrieveCalibrationFixed)
 import WaitForIt (waysToRecord, waysToRecordFullRace)
@@ -51,7 +54,8 @@ main = do
         mirageMaintenanceSolutions,
         pipeMazeSolutions,
         cosmicExpansionSolutions,
-        hotSpringsSolutions
+        hotSpringsSolutions,
+        pointOfIncidenceSolutions
       ]
 
 trebuchetSolutions :: IO ()
@@ -185,6 +189,17 @@ hotSpringsSolutions = do
     ("HotSprings", 2)
     (sum . map (possibleCombinationsUnfolded 5) . lines, 60681419004564)
     "src/resources/HotSprings.in"
+
+pointOfIncidenceSolutions :: IO ()
+pointOfIncidenceSolutions = do
+  solutionPretty
+    ("PointOfIncidence", 1)
+    (sum . map mirrorScore . splitOn "\n\n", 29846)
+    "src/resources/PointOfIncidence.in"
+  solutionPretty
+    ("PointOfIncidence", 2)
+    (sum . map mirrorSmudgeScore . splitOn "\n\n", 25401)
+    "src/resources/PointOfIncidence.in"
 
 ------------------------------------------------------------------------------------------------
 -- Functions
