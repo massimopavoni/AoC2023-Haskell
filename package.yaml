@@ -10,7 +10,7 @@ dependencies:
 library:
   exposed-modules: Main
   source-dirs: src
-  ghc-options: -Wall
+  ghc-options: -Wall -Werror -O2 -threaded
   dependencies:
     - array
     - bytestring
@@ -21,4 +21,5 @@ library:
     - megaparsec
     - safe
     - split
+    - unordered-containers
     - vector

@@ -32,6 +32,7 @@ library
       HotSprings
       IfYouGiveASeedAFertilizer
       MirageMaintenance
+      ParabolicReflectorDish
       PipeMaze
       PointOfIncidence
       Scratchcards
@@ -40,7 +41,7 @@ library
       Paths_AoC2023_Haskell
   hs-source-dirs:
       src
-  ghc-options: -Wall
+  ghc-options: -Wall -Werror -O2 -threaded
   build-depends:
       array
     , base
@@ -52,5 +53,6 @@ library
     , megaparsec
     , safe
     , split
+    , unordered-containers
     , vector
   default-language: Haskell2010

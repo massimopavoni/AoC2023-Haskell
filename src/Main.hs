@@ -13,6 +13,7 @@ module Main
     cosmicExpansionSolutions,
     hotSpringsSolutions,
     pointOfIncidenceSolutions,
+    parabolicReflectorDishSolutions,
   )
 where
 
@@ -28,6 +29,7 @@ import HauntedWasteland (camelEscapeTime, ghostEscapeTime)
 import HotSprings (possibleCombinations, possibleCombinationsUnfolded)
 import IfYouGiveASeedAFertilizer (nearestSeed, nearestSeedRange)
 import MirageMaintenance (initialValuePrediction, nextValuePrediction)
+import ParabolicReflectorDish (platformBeamLoads, spinningPlatformBeamLoads)
 import PipeMaze (farthestPipeSteps, nestPipesCount)
 import PointOfIncidence (mirrorScore, mirrorSmudgeScore)
 import Scratchcards (scratchcardPoints, scratchcardsClonesCounts)
@@ -55,7 +57,8 @@ main = do
         pipeMazeSolutions,
         cosmicExpansionSolutions,
         hotSpringsSolutions,
-        pointOfIncidenceSolutions
+        pointOfIncidenceSolutions,
+        parabolicReflectorDishSolutions
       ]
 
 trebuchetSolutions :: IO ()
@@ -200,6 +203,17 @@ pointOfIncidenceSolutions = do
     ("PointOfIncidence", 2)
     (sum . map mirrorSmudgeScore . splitOn "\n\n", 25401)
     "src/resources/PointOfIncidence.in"
+
+parabolicReflectorDishSolutions :: IO ()
+parabolicReflectorDishSolutions = do
+  solutionPretty
+    ("ParabolicReflectorDish", 1)
+    (sum . platformBeamLoads, 110677)
+    "src/resources/ParabolicReflectorDish.in"
+  solutionPretty
+    ("ParabolicReflectorDish", 2)
+    (sum . spinningPlatformBeamLoads 1000000000, 90551)
+    "src/resources/ParabolicReflectorDish.in"
 
 ------------------------------------------------------------------------------------------------
 -- Functions

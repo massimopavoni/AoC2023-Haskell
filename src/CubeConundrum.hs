@@ -14,7 +14,7 @@ import Text.Megaparsec.Char.Lexer (decimal)
 -- Data types
 
 data CubeColor = Blue | Green | Red
-  deriving (Eq, Ord, Read, Show)
+  deriving (Eq, Ord, Read)
 
 ------------------------------------------------------------------------------------------------
 -- Exports
