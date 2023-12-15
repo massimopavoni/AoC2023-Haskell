@@ -31,6 +31,7 @@ library
       HauntedWasteland
       HotSprings
       IfYouGiveASeedAFertilizer
+      LensLibrary
       MirageMaintenance
       ParabolicReflectorDish
       PipeMaze
@@ -41,7 +42,7 @@ library
       Paths_AoC2023_Haskell
   hs-source-dirs:
       src
-  ghc-options: -Wall -Werror -O2 -threaded
+  ghc-options: -Wall -Werror -O2
   build-depends:
       array
     , base
@@ -51,6 +52,7 @@ library
     , ghc
     , matrix
     , megaparsec
+    , ordered-containers
     , safe
     , split
     , unordered-containers

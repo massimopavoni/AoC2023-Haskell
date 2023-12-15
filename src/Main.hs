@@ -14,6 +14,7 @@ module Main
     hotSpringsSolutions,
     pointOfIncidenceSolutions,
     parabolicReflectorDishSolutions,
+    lensLibrarySolutions,
   )
 where
 
@@ -28,6 +29,7 @@ import GearRatios (gearRatios, partNumbers)
 import HauntedWasteland (camelEscapeTime, ghostEscapeTime)
 import HotSprings (possibleCombinations, possibleCombinationsUnfolded)
 import IfYouGiveASeedAFertilizer (nearestSeed, nearestSeedRange)
+import LensLibrary (initSequenceHashes, lensBoxFocusingPowers)
 import MirageMaintenance (initialValuePrediction, nextValuePrediction)
 import ParabolicReflectorDish (platformBeamLoads, spinningPlatformBeamLoads)
 import PipeMaze (farthestPipeSteps, nestPipesCount)
@@ -58,7 +60,8 @@ main = do
         cosmicExpansionSolutions,
         hotSpringsSolutions,
         pointOfIncidenceSolutions,
-        parabolicReflectorDishSolutions
+        parabolicReflectorDishSolutions,
+        lensLibrarySolutions
       ]
 
 trebuchetSolutions :: IO ()
@@ -214,6 +217,17 @@ parabolicReflectorDishSolutions = do
     ("ParabolicReflectorDish", 2)
     (sum . spinningPlatformBeamLoads 1000000000, 90551)
     "src/resources/ParabolicReflectorDish.in"
+
+lensLibrarySolutions :: IO ()
+lensLibrarySolutions = do
+  solutionPretty
+    ("LensLibrary", 1)
+    (sum . initSequenceHashes, 517965)
+    "src/resources/LensLibrary.in"
+  solutionPretty
+    ("LensLibrary", 2)
+    (sum . lensBoxFocusingPowers, 267372)
+    "src/resources/LensLibrary.in"
 
 ------------------------------------------------------------------------------------------------
 -- Functions
