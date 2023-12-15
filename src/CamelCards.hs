@@ -88,7 +88,7 @@ handWinnings httf cso =
     -- 5. 1 means they're all the same, so it's a five of a kind.
     addHandType :: (Hand, [String]) -> (HandType, Hand, [String])
     addHandType (h, csg) =
-      let csgl = map length csg
+      let csgl = length <$> csg
        in ( case length csg of
               5 -> HighCard
               4 -> OnePair

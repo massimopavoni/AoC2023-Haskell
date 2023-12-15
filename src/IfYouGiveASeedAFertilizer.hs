@@ -115,7 +115,7 @@ nearestSeedRange =
             inRangeMap = find ((`containsRange` sr) . range) mrs
 
             filteredOverlappingMapRanges :: [Range a]
-            filteredOverlappingMapRanges = filter (overlappingRange sr) $ map range mrs
+            filteredOverlappingMapRanges = filter (overlappingRange sr) $ range <$> mrs
 
         -- Range A is overlapping with range B if A contains B or if B contains any of A's bounds.
         overlappingRange :: Range a -> Range a -> Bool

@@ -84,7 +84,7 @@ walkPipeLoop maze =
     startPipe :: Position
     startPipe =
       start
-        & ( ((`map` [North ..]) . Pos . pos)
+        & ( ((<$> [North ..]) . Pos . pos)
               >>> map (moveThroughPipe . (movePos <*> dir))
               >>> head . filter ((/= (0, 0)) . pos)
           )

@@ -71,7 +71,7 @@ engineGearsParser :: Matrix Char -> Parser [[Int]]
 engineGearsParser m =
   someTill (betweenSymbols nearGear) eof
     <&> ( catMaybes
-            >>> fromListWith (++) . map (pure <$>) . concat
+            >>> fromListWith (++) . map (fmap pure) . concat
             >>> MapS.filter ((== 2) . length)
             >>> elems
         )
