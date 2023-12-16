@@ -10,21 +10,15 @@ import qualified Data.Vector as Vect (all)
 import Safe (tailSafe)
 
 ------------------------------------------------------------------------------------------------
--- Data types
-
-data Quadrant = Space | Galaxy
-  deriving (Eq)
-
-------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part finds the shortest paths using an expanding factor of 2 for empty rows/columns.
 shortestGalaxyPaths :: String -> [Int]
-shortestGalaxyPaths = parseImage >>> analyzeImage 2
+shortestGalaxyPaths = fromLists . lines >>> analyzeImage 2
 
 -- The second part finds the shortest paths using an expanding factor of 1000000 for empty rows/columns.
 hugeExpansionGalaxyPaths :: String -> [Int]
-hugeExpansionGalaxyPaths = parseImage >>> analyzeImage 1000000
+hugeExpansionGalaxyPaths = fromLists . lines >>> analyzeImage 1000000
 
 ------------------------------------------------------------------------------------------------
 -- Functions
@@ -41,9 +35,9 @@ hugeExpansionGalaxyPaths = parseImage >>> analyzeImage 1000000
 -- without checking out other solutions which I know are very much cleaner and faster.
 -- As a small reflection, I do know I'm probably over-engineering most of the solutions,
 -- but I'm also having fun learning and doing almost entirely everything on my own.
-analyzeImage :: Int -> Matrix Quadrant -> [Int]
+analyzeImage :: Int -> Matrix Char -> [Int]
 analyzeImage e m =
-  [(x, y) | x <- [1 .. nrows m], y <- [1 .. ncols m], unsafeGet x y m == Galaxy]
+  [(x, y) | x <- [1 .. nrows m], y <- [1 .. ncols m], unsafeGet x y m == '#']
     & ( tails
           >>> concatMap
             ( liftA2 map ((,) . head) tailSafe
@@ -66,7 +60,7 @@ analyzeImage e m =
     spaceColsDiffs :: Matrix Int
     spaceColsDiffs = spaceDiffs ncols getCol
 
-    spaceDiffs :: (Matrix Quadrant -> Int) -> (Int -> Matrix Quadrant -> Vector Quadrant) -> Matrix Int
+    spaceDiffs :: (Matrix Char -> Int) -> (Int -> Matrix Char -> Vector Char) -> Matrix Int
     spaceDiffs sf gf = matrix (sf m) (sf m) (uncurry (flip (-)) . both (spacesCounts `unsafeIndex`))
       where
         spacesCounts :: Vector Int
@@ -77,16 +71,4 @@ analyzeImage e m =
             (fromList [1 .. sf m])
 
         spaces :: [Int]
-        spaces = filter (Vect.all (== Space) . (`gf` m)) [1 .. sf m]
-
-------------------------------------------------------------------------------------------------
--- Parsers
-
-parseImage :: String -> Matrix Quadrant
-parseImage = fromLists . map (map charToQuadrant) . lines
-  where
-    charToQuadrant :: Char -> Quadrant
-    charToQuadrant c = case c of
-      '.' -> Space
-      '#' -> Galaxy
-      _ -> error "Invalid character in image"
+        spaces = filter (Vect.all (== '.') . (`gf` m)) [1 .. sf m]
