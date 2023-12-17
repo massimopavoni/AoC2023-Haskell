@@ -20,10 +20,13 @@ possibleCombinations = uncurry validArrangementsMemoized . parseRecord
 
 -- The second part is instead quite much slower, and needing at least some memoization.
 possibleCombinationsUnfolded :: Int -> String -> Int
-possibleCombinationsUnfolded uf = uncurry validArrangementsMemoized . unfold . parseRecord
+possibleCombinationsUnfolded unfoldFactor = uncurry validArrangementsMemoized . unfold . parseRecord
   where
     unfold :: (ByteString, Vector Int) -> (ByteString, Vector Int)
-    unfold (drs, udrs) = (intercalate "?" $ replicate uf drs, Vect.concat $ replicate uf udrs)
+    unfold (drs, udrs) =
+      ( intercalate "?" $ replicate unfoldFactor drs,
+        Vect.concat $ replicate unfoldFactor udrs
+      )
 
 ------------------------------------------------------------------------------------------------
 -- Functions

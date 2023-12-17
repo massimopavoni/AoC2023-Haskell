@@ -51,7 +51,7 @@ spinningPlatformBeamLoads cycles =
       id
       ((\(b, e) -> b + (cycles - b) `rem` (e - b)) . spinCycle empty 0)
     >>> transpose
-    >>> map load
+    >>> map calculateLoad
   where
     -- Once we find an already seen platform pattern, we can stop spinnning
     -- and just yield the indices of the first cycle.
@@ -96,7 +96,7 @@ spinningPlatformBeamLoads cycles =
     -- as they were already part of the earlier spinning), but that doesn't make any sense to me,
     -- for how the problem is described. I guess it could just be me being tired and not really
     -- understanding the funny story context of the reflector dish weird rock device.
-    load :: ByteString -> Int
-    load rs =
+    calculateLoad :: ByteString -> Int
+    calculateLoad rs =
       let l = BSC8.length rs
        in sum [l - i | i <- elemIndices 'O' rs]

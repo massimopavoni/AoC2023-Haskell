@@ -74,7 +74,7 @@ hash = BStr.foldl' (\h c -> ((h + fromIntegral c) * 17) `rem` 256) 0
 parseInitSequence :: String -> [ByteString]
 parseInitSequence = splitWith (== ',') . BSC8.init . pack
 
--- The unsnoc has a very funny name, but it's very usefl in this specific instance,
+-- The unsnoc has a very funny name, but it's very useful in this specific instance,
 -- for parsing the lens operations depending on the last character,
 -- everything else about it is quite self-explanatory
 -- (and we're returning a triple so that we already have all
