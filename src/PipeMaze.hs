@@ -19,7 +19,7 @@ import Data.Tuple.Extra (both)
 data Pipe = Ground | Start | NS | WE | NW | NE | SW | SE
   deriving (Bounded, Enum, Eq)
 
-data Direction = North | South | West | East
+data Direction = N | S | W | E
   deriving (Bounded, Enum, Eq)
 
 data Position = Pos {pos :: (Int, Int), dir :: Direction}
@@ -84,14 +84,14 @@ walkPipeLoop maze =
     startPipe :: Position
     startPipe =
       start
-        & ( ((<$> [North ..]) . Pos . pos)
+        & ( ((<$> [N ..]) . Pos . pos)
               >>> map (moveThroughPipe . (movePos <*> dir))
               >>> head . filter ((/= (0, 0)) . pos)
           )
 
     start :: Position
     start =
-      (`Pos` North) . fromJust $
+      (`Pos` N) . fromJust $
         find
           ((== Start) . (maze !))
           [(x, y) | x <- [1 .. nrows maze], y <- [1 .. ncols maze]]
@@ -104,15 +104,15 @@ walkPipeLoop maze =
       Just d -> case d of
         Ground -> invalidPos
         Start -> invalidPos
-        NS -> move (North, South)
-        WE -> move (West, East)
-        NW -> move (South, West)
-        NE -> move (South, East)
-        SW -> move (North, West)
-        SE -> move (North, East)
+        NS -> move (N, S)
+        WE -> move (W, E)
+        NW -> move (S, W)
+        NE -> move (S, E)
+        SW -> move (N, W)
+        SE -> move (N, E)
       where
         invalidPos :: Position
-        invalidPos = Pos (0, 0) North
+        invalidPos = Pos (0, 0) N
 
         move :: (Direction, Direction) -> Position
         move (d1, d2)
@@ -122,16 +122,16 @@ walkPipeLoop maze =
 
     movePos :: Position -> Direction -> Position
     movePos (Pos (x, y) _) dt = (`Pos` oppositeDir dt) $ case dt of
-      North -> (x - 1, y)
-      South -> (x + 1, y)
-      West -> (x, y - 1)
-      East -> (x, y + 1)
+      N -> (x - 1, y)
+      S -> (x + 1, y)
+      W -> (x, y - 1)
+      E -> (x, y + 1)
 
     oppositeDir :: Direction -> Direction
-    oppositeDir North = South
-    oppositeDir South = North
-    oppositeDir West = East
-    oppositeDir East = West
+    oppositeDir N = S
+    oppositeDir S = N
+    oppositeDir W = E
+    oppositeDir E = W
 
 ------------------------------------------------------------------------------------------------
 -- Parsers
