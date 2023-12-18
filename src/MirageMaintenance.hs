@@ -2,7 +2,7 @@
 
 module MirageMaintenance (nextValuePrediction, initialValuePrediction) where
 
-import CommonUtils (Parser, parseInput)
+import RandomUtils (Parser, parseInput)
 import Control.Category ((>>>))
 import Data.List (foldl1')
 import Text.Megaparsec (eof, sepBy1)

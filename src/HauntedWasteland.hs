@@ -2,7 +2,7 @@
 
 module HauntedWasteland (camelEscapeTime, ghostEscapeTime) where
 
-import CommonUtils (Parser, parseInput)
+import RandomUtils (Parser, parseInput)
 import Control.Applicative (liftA3)
 import Control.Category ((>>>))
 import Data.List (foldl1')

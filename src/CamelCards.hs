@@ -1,6 +1,6 @@
 module CamelCards (handWinningsNormal, handWinningsJokers) where
 
-import CommonUtils (Parser, parseInput)
+import RandomUtils (Parser, parseInput)
 import Control.Arrow ((&&&))
 import Control.Category ((>>>))
 import Data.Function (on)

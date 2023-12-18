@@ -24,7 +24,6 @@ executable AoC2023-Haskell
   other-modules:
       CamelCards
       ClumsyCrucible
-      CommonUtils
       CosmicExpansion
       CubeConundrum
       GearRatios
@@ -36,6 +35,7 @@ executable AoC2023-Haskell
       ParabolicReflectorDish
       PipeMaze
       PointOfIncidence
+      RandomUtils
       Scratchcards
       TheFloorWillBeLava
       Trebuchet

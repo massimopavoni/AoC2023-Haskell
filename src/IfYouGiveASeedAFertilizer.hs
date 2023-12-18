@@ -3,7 +3,7 @@
 
 module IfYouGiveASeedAFertilizer (nearestSeed, nearestSeedRange) where
 
-import CommonUtils (Parser, parseInput)
+import RandomUtils (Parser, parseInput)
 import Control.Category ((>>>))
 import Control.Monad (void)
 import Data.Foldable (find, foldl')

@@ -1,5 +1,6 @@
 module CosmicExpansion (shortestGalaxyPaths, hugeExpansionGalaxyPaths) where
 
+import RandomUtils (manhattanDistance)
 import Control.Category ((>>>))
 import Data.Function ((&))
 import Data.List (tails)
@@ -47,8 +48,7 @@ analyzeImage e m =
   where
     expandedManhattanDistance :: ((Int, Int), (Int, Int)) -> Int
     expandedManhattanDistance ((a, b), (c, d)) =
-      abs (a - c)
-        + abs (b - d)
+      manhattanDistance (a, b) (c, d)
         + (e - 1)
           * ( unsafeGet (min a c) (max a c) spaceRowsDiffs
                 + unsafeGet (min b d) (max b d) spaceColsDiffs

@@ -2,7 +2,7 @@
 
 module GearRatios (partNumbers, gearRatios) where
 
-import CommonUtils (Parser, parseInput)
+import RandomUtils (Parser, parseInput)
 import Control.Arrow ((&&&))
 import Control.Category ((>>>))
 import Control.Monad (guard)

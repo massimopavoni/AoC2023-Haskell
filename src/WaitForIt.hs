@@ -1,6 +1,6 @@
 module WaitForIt (waysToRecord, waysToRecordFullRace) where
 
-import CommonUtils (Parser, parseInput, space)
+import RandomUtils (Parser, parseInput, space)
 import Text.Megaparsec (between, eof, sepBy1, some)
 import Text.Megaparsec.Char (digitChar, newline, string)
 import Text.Megaparsec.Char.Lexer (decimal)

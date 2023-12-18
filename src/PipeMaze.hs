@@ -3,7 +3,7 @@
 
 module PipeMaze (farthestPipeSteps, nestPipesCount) where
 
-import CommonUtils (Direction (..), movePos, oppositeDir)
+import RandomUtils (Direction (..), movePos, oppositeDir)
 import Control.Arrow ((&&&))
 import Control.Category ((>>>))
 import Data.Foldable (find)

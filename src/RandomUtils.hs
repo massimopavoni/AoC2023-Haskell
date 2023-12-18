@@ -1,4 +1,4 @@
-module CommonUtils where
+module RandomUtils where
 
 import Data.Void (Void)
 import Text.Megaparsec (Parsec, errorBundlePretty, parse, some)
@@ -30,6 +30,9 @@ movePos (x, y) d = case d of
   S -> (x + 1, y)
   W -> (x, y - 1)
   E -> (x, y + 1)
+
+manhattanDistance :: (Int, Int) -> (Int, Int) -> Int
+manhattanDistance (x1, y1) (x2, y2) = abs (x1 - x2) + abs (y1 - y2)
 
 ------------------------------------------------------------------------------------------------
 -- Parsers

@@ -1,6 +1,6 @@
 module TheFloorWillBeLava (energizedTilesCount, energizedTilesCountAllStarts) where
 
-import CommonUtils (Direction (..), movePos)
+import RandomUtils (Direction (..), movePos)
 import Control.Arrow ((&&&))
 import Control.Category ((>>>))
 import Control.Parallel.Strategies (parMap, rseq)

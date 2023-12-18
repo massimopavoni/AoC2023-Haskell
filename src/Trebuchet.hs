@@ -1,6 +1,6 @@
 module Trebuchet (retrieveCalibration, retrieveCalibrationFixed) where
 
-import CommonUtils (Parser, parseInput)
+import RandomUtils (Parser, parseInput)
 import Control.Monad (void)
 import Data.Char (digitToInt, isDigit)
 import Data.Maybe (fromJust, fromMaybe)

@@ -1,6 +1,6 @@
 module CubeConundrum (CubeColor (..), possibleGame, fewestCubes) where
 
-import CommonUtils (Parser, parseInput)
+import RandomUtils (Parser, parseInput)
 import Control.Category ((>>>))
 import Control.Monad (guard, (>=>))
 import Data.Map.Strict (assocs, fromListWith)

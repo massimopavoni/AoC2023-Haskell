@@ -1,6 +1,6 @@
 module Scratchcards (scratchcardPoints, scratchcardsClonesCounts) where
 
-import CommonUtils (Parser, parseInput, space)
+import RandomUtils (Parser, parseInput, space)
 import Control.Category ((>>>))
 import Text.Megaparsec (eof, notFollowedBy, sepBy1, try)
 import Text.Megaparsec.Char (char, string)
