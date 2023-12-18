@@ -1,5 +1,12 @@
-# Created by https://www.toptal.com/developers/gitignore/api/haskell,visualstudiocode
-# Edit at https://www.toptal.com/developers/gitignore?templates=haskell,visualstudiocode
+# Binaries ignoring shenanigans
+*
+!*.*
+!*/
+
+# AoC ignores
+resources/
+*.in
+bin/
 
 ### Haskell ###
 dist
@@ -44,9 +51,3 @@ cabal.project.local~
 # Ignore all local history of files
 .history
 .ionide
-
-# End of https://www.toptal.com/developers/gitignore/api/haskell,visualstudiocode
-
-# AoC ignores
-resources/
-*.in
