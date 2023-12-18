@@ -2,11 +2,11 @@
 
 module HauntedWasteland (camelEscapeTime, ghostEscapeTime) where
 
-import RandomUtils (Parser, parseInput)
 import Control.Applicative (liftA3)
 import Control.Category ((>>>))
 import Data.List (foldl1')
 import Data.Map.Strict (Map, fromList, keys, (!))
+import RandomUtils (Parser, parseInput)
 import Text.Megaparsec (count, eof, notFollowedBy, sepBy1, some, try, (<|>))
 import Text.Megaparsec.Char (char, letterChar, newline, string)
 

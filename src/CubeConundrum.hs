@@ -1,11 +1,11 @@
 module CubeConundrum (CubeColor (..), possibleGame, fewestCubes) where
 
-import RandomUtils (Parser, parseInput)
 import Control.Category ((>>>))
 import Control.Monad (guard, (>=>))
 import Data.Map.Strict (assocs, fromListWith)
 import Data.Maybe (fromJust)
 import GHC.Utils.Misc (capitalise)
+import RandomUtils (Parser, parseInput)
 import Text.Megaparsec (choice, eof, sepBy1, some)
 import Text.Megaparsec.Char (char, letterChar, string)
 import Text.Megaparsec.Char.Lexer (decimal)

@@ -3,7 +3,6 @@
 
 module PipeMaze (farthestPipeSteps, nestPipesCount) where
 
-import RandomUtils (Direction (..), movePos, oppositeDir)
 import Control.Arrow ((&&&))
 import Control.Category ((>>>))
 import Data.Foldable (find)
@@ -11,6 +10,7 @@ import Data.Function ((&))
 import Data.Matrix (Matrix, fromLists, ncols, nrows, safeGet, (!))
 import Data.Maybe (fromJust)
 import Data.Tuple.Extra (both)
+import RandomUtils (Direction (..), movePos, oppositeDir)
 
 -- This problem uses lots of obscure compositions, bear with me.
 
@@ -25,7 +25,7 @@ data Position = Pos {pos :: (Int, Int), dir :: Direction}
 -- We need positions equality only for actual coordinates, not directions.
 instance Eq Position where
   (==) :: Position -> Position -> Bool
-  (Pos xy1 _) == (Pos xy2 _) = xy1 == xy2
+  (Pos p1 _) == (Pos p2 _) = p1 == p2
 
 ------------------------------------------------------------------------------------------------
 -- Exports

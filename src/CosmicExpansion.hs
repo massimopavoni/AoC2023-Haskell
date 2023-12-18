@@ -1,6 +1,5 @@
 module CosmicExpansion (shortestGalaxyPaths, hugeExpansionGalaxyPaths) where
 
-import RandomUtils (manhattanDistance)
 import Control.Category ((>>>))
 import Data.Function ((&))
 import Data.List (tails)
@@ -8,6 +7,7 @@ import Data.Matrix (Matrix, fromLists, getCol, getRow, matrix, ncols, nrows, uns
 import Data.Tuple.Extra (both)
 import Data.Vector (Vector, fromList, scanl', unsafeIndex)
 import qualified Data.Vector as Vect (all)
+import RandomUtils (manhattanDistance)
 import Safe (tailSafe)
 
 ------------------------------------------------------------------------------------------------

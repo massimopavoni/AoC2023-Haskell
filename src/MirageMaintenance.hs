@@ -2,9 +2,9 @@
 
 module MirageMaintenance (nextValuePrediction, initialValuePrediction) where
 
-import RandomUtils (Parser, parseInput)
 import Control.Category ((>>>))
 import Data.List (foldl1')
+import RandomUtils (Parser, parseInput)
 import Text.Megaparsec (eof, sepBy1)
 import Text.Megaparsec.Char (char)
 import Text.Megaparsec.Char.Lexer (decimal, signed)

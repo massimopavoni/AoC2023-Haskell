@@ -1,11 +1,11 @@
 module CamelCards (handWinningsNormal, handWinningsJokers) where
 
-import RandomUtils (Parser, parseInput)
 import Control.Arrow ((&&&))
 import Control.Category ((>>>))
 import Data.Function (on)
 import Data.List (group, sortBy)
 import Data.Maybe (fromJust)
+import RandomUtils (Parser, parseInput)
 import Text.Megaparsec (count, eof, notFollowedBy, oneOf, sepBy1, try)
 import Text.Megaparsec.Char (char, newline)
 import Text.Megaparsec.Char.Lexer (decimal)

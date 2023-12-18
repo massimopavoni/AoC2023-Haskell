@@ -3,13 +3,13 @@
 
 module IfYouGiveASeedAFertilizer (nearestSeed, nearestSeedRange) where
 
-import RandomUtils (Parser, parseInput)
 import Control.Category ((>>>))
 import Control.Monad (void)
 import Data.Foldable (find, foldl')
 import Data.List (sort)
 import Data.List.Extra (chunksOf)
 import Data.Maybe (fromJust, isJust)
+import RandomUtils (Parser, parseInput)
 import Text.Megaparsec (anySingle, between, count, eof, notFollowedBy, sepBy1, someTill, try, (<|>))
 import Text.Megaparsec.Char (char, newline, string)
 import Text.Megaparsec.Char.Lexer (decimal)

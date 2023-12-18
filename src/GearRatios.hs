@@ -2,7 +2,6 @@
 
 module GearRatios (partNumbers, gearRatios) where
 
-import RandomUtils (Parser, parseInput)
 import Control.Arrow ((&&&))
 import Control.Category ((>>>))
 import Control.Monad (guard)
@@ -13,6 +12,7 @@ import qualified Data.Map.Strict as MapS (filter)
 import Data.Matrix (Matrix, fromLists, safeGet)
 import Data.Maybe (catMaybes, mapMaybe)
 import Data.Tuple.Extra (both)
+import RandomUtils (Parser, parseInput)
 import Text.Megaparsec (between, eof, getSourcePos, many, noneOf, optional, some, someTill, sourceColumn, sourceLine, unPos)
 import Text.Megaparsec.Char (digitChar, newline)
 

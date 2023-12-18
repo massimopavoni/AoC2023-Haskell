@@ -1,6 +1,5 @@
 module TheFloorWillBeLava (energizedTilesCount, energizedTilesCountAllStarts) where
 
-import RandomUtils (Direction (..), movePos)
 import Control.Arrow ((&&&))
 import Control.Category ((>>>))
 import Control.Parallel.Strategies (parMap, rseq)
@@ -9,6 +8,7 @@ import Data.HashMap.Strict (HashMap, insertWith, singleton, size)
 import qualified Data.HashMap.Strict as HsMS (lookup)
 import Data.Matrix (Matrix, fromLists, ncols, nrows, safeGet)
 import Data.Maybe (fromJust)
+import RandomUtils (Direction (..), movePos)
 
 -- I was proud of not giving up and look at some people's solutions to get inspiration for this one,
 -- managed to stop trying what I was doing, which was crazy (I think it was some sort of DFS
