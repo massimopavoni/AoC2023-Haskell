@@ -1,4 +1,4 @@
-module RandomUtils where
+module RandomUtils (Parser, Direction (..), parseInput, oppositeDir, movePos, manhattanDistance, space) where
 
 import Data.Void (Void)
 import Text.Megaparsec (Parsec, errorBundlePretty, parse, some)
