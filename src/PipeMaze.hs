@@ -3,6 +3,7 @@
 
 module PipeMaze (farthestPipeSteps, nestPipesCount) where
 
+import CommonUtils (Direction (..), movePos, oppositeDir)
 import Control.Arrow ((&&&))
 import Control.Category ((>>>))
 import Data.Foldable (find)
@@ -17,9 +18,6 @@ import Data.Tuple.Extra (both)
 -- Data types
 
 data Pipe = Ground | Start | NS | WE | NW | NE | SW | SE
-  deriving (Bounded, Enum, Eq)
-
-data Direction = N | S | W | E
   deriving (Bounded, Enum, Eq)
 
 data Position = Pos {pos :: (Int, Int), dir :: Direction}
@@ -85,7 +83,7 @@ walkPipeLoop maze =
     startPipe =
       start
         & ( ((<$> [N ..]) . Pos . pos)
-              >>> map (moveThroughPipe . (movePos <*> dir))
+              >>> map (moveThroughPipe . (movePos' <*> dir))
               >>> head . filter ((/= (0, 0)) . pos)
           )
 
@@ -116,22 +114,12 @@ walkPipeLoop maze =
 
         move :: (Direction, Direction) -> Position
         move (d1, d2)
-          | df == d1 = movePos p d2
-          | df == d2 = movePos p d1
+          | df == d1 = movePos' p d2
+          | df == d2 = movePos' p d1
           | otherwise = invalidPos
 
-    movePos :: Position -> Direction -> Position
-    movePos (Pos (x, y) _) dt = (`Pos` oppositeDir dt) $ case dt of
-      N -> (x - 1, y)
-      S -> (x + 1, y)
-      W -> (x, y - 1)
-      E -> (x, y + 1)
-
-    oppositeDir :: Direction -> Direction
-    oppositeDir N = S
-    oppositeDir S = N
-    oppositeDir W = E
-    oppositeDir E = W
+    movePos' :: Position -> Direction -> Position
+    movePos' (Pos p _) dt = (`Pos` oppositeDir dt) $ movePos p dt
 
 ------------------------------------------------------------------------------------------------
 -- Parsers

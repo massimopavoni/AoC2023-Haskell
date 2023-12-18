@@ -1,5 +1,6 @@
 module TheFloorWillBeLava (energizedTilesCount, energizedTilesCountAllStarts) where
 
+import CommonUtils (Direction (..), movePos)
 import Control.Arrow ((&&&))
 import Control.Category ((>>>))
 import Control.Parallel.Strategies (parMap, rseq)
@@ -21,9 +22,6 @@ import Data.Maybe (fromJust)
 -- Data types
 
 data Tile = Empty | Mirror | AntiMirror | ColSplit | RowSplit
-  deriving (Bounded, Enum, Eq)
-
-data Direction = S | N | E | W
   deriving (Bounded, Enum, Eq)
 
 ------------------------------------------------------------------------------------------------
@@ -96,21 +94,14 @@ followLightBeams ehm ts tm = followLightBeams' ehm ts
                 Nothing -> True
 
             nextTiles' :: (Int, Int) -> Direction -> [((Int, Int), Direction)]
-            nextTiles' pos@(x, y) dir =
-              liftA2 (,) movePos id <$> case uncurry safeGet pos tm of
+            nextTiles' pos dir =
+              liftA2 (,) (movePos pos) id <$> case uncurry safeGet pos tm of
                 Nothing -> []
                 Just Empty -> [dir]
-                Just Mirror -> [[W, E, N, S] !! fromEnum dir]
-                Just AntiMirror -> [[E, W, S, N] !! fromEnum dir]
-                Just ColSplit -> if dir `elem` [E, W] then [S, N] else [dir]
-                Just RowSplit -> if dir `elem` [S, N] then [E, W] else [dir]
-              where
-                movePos :: Direction -> (Int, Int)
-                movePos d = case d of
-                  S -> (x + 1, y)
-                  N -> (x - 1, y)
-                  E -> (x, y + 1)
-                  W -> (x, y - 1)
+                Just Mirror -> [[E, W, S, N] !! fromEnum dir]
+                Just AntiMirror -> [[W, E, N, S] !! fromEnum dir]
+                Just ColSplit -> if dir `elem` [W, E] then [N, S] else [dir]
+                Just RowSplit -> if dir `elem` [N, S] then [W, E] else [dir]
 
 ------------------------------------------------------------------------------------------------
 -- Parsers
