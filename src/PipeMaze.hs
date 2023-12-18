@@ -83,7 +83,7 @@ walkPipeLoop maze =
     startPipe :: Position
     startPipe =
       start
-        & ( ((<$> [N ..]) . Pos . pos)
+        & ( ((<$> [S ..]) . Pos . pos)
               >>> map (moveThroughPipe . (movePos' <*> dir))
               >>> head . filter ((/= (0, 0)) . pos)
           )
@@ -103,12 +103,12 @@ walkPipeLoop maze =
       Just d -> case d of
         Ground -> invalidPos
         Start -> invalidPos
-        NS -> move (N, S)
-        WE -> move (W, E)
+        NS -> move (S, N)
+        WE -> move (E, W)
         NW -> move (S, W)
         NE -> move (S, E)
         SW -> move (N, W)
-        SE -> move (N, E)
+        SE -> move (E, N)
       where
         invalidPos :: Position
         invalidPos = Pos (0, 0) N

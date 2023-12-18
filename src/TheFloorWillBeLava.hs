@@ -55,8 +55,8 @@ energizedTilesCountAllStarts =
       let (nrs, ncs) = (nrows tm, ncols tm)
           (rs, cs) = ([1 .. nrs], [1 .. ncs])
        in [((1, y), S) | y <- cs]
-            ++ [((nrs, y), N) | y <- cs]
             ++ [((x, 1), E) | x <- rs]
+            ++ [((nrs, y), N) | y <- cs]
             ++ [((x, ncs), W) | x <- rs]
 
 ------------------------------------------------------------------------------------------------
@@ -98,10 +98,10 @@ followLightBeams ehm ts tm = followLightBeams' ehm ts
               liftA2 (,) (movePos pos) id <$> case uncurry safeGet pos tm of
                 Nothing -> []
                 Just Empty -> [dir]
-                Just Mirror -> [[E, W, S, N] !! fromEnum dir]
-                Just AntiMirror -> [[W, E, N, S] !! fromEnum dir]
-                Just ColSplit -> if dir `elem` [W, E] then [N, S] else [dir]
-                Just RowSplit -> if dir `elem` [N, S] then [W, E] else [dir]
+                Just Mirror -> [[W, N, E, S] !! fromEnum dir]
+                Just AntiMirror -> [[E, S, W, N] !! fromEnum dir]
+                Just ColSplit -> if dir `elem` [E, W] then [S, N] else [dir]
+                Just RowSplit -> if dir `elem` [S, N] then [E, W] else [dir]
 
 ------------------------------------------------------------------------------------------------
 -- Parsers

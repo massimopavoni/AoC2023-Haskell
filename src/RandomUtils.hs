@@ -9,8 +9,8 @@ import Text.Megaparsec.Char (char)
 
 type Parser = Parsec Void String
 
-data Direction = N | S | W | E
-  deriving (Bounded, Enum, Eq, Show)
+data Direction = S | E | N | W
+  deriving (Bounded, Enum, Eq, Ord, Show)
 
 ------------------------------------------------------------------------------------------------
 -- Functions
@@ -19,17 +19,17 @@ parseInput :: Parser a -> (a -> b) -> String -> b
 parseInput p f = either (error . errorBundlePretty) f . parse p ""
 
 oppositeDir :: Direction -> Direction
-oppositeDir N = S
 oppositeDir S = N
-oppositeDir W = E
 oppositeDir E = W
+oppositeDir N = S
+oppositeDir W = E
 
 movePos :: (Int, Int) -> Direction -> (Int, Int)
 movePos (x, y) d = case d of
-  N -> (x - 1, y)
   S -> (x + 1, y)
-  W -> (x, y - 1)
   E -> (x, y + 1)
+  N -> (x - 1, y)
+  W -> (x, y - 1)
 
 manhattanDistance :: (Int, Int) -> (Int, Int) -> Int
 manhattanDistance (x1, y1) (x2, y2) = abs (x1 - x2) + abs (y1 - y2)
