@@ -19,51 +19,11 @@ source-repository head
   type: git
   location: https://github.com/massimopavoni/AoC2023-Haskell
 
-library
-  exposed-modules:
-      Main
-  other-modules:
-      CamelCards
-      CommonUtils
-      CosmicExpansion
-      CubeConundrum
-      GearRatios
-      HauntedWasteland
-      HotSprings
-      IfYouGiveASeedAFertilizer
-      LensLibrary
-      MirageMaintenance
-      ParabolicReflectorDish
-      PipeMaze
-      PointOfIncidence
-      Scratchcards
-      TheFloorWillBeLava
-      Trebuchet
-      WaitForIt
-      Paths_AoC2023_Haskell
-  hs-source-dirs:
-      src
-  build-depends:
-      array
-    , base
-    , bytestring
-    , containers
-    , extra
-    , ghc
-    , matrix
-    , megaparsec
-    , ordered-containers
-    , parallel
-    , safe
-    , split
-    , unordered-containers
-    , vector
-  default-language: Haskell2010
-
 executable AoC2023-Haskell
   main-is: Main.hs
   other-modules:
       CamelCards
+      ClumsyCrucible
       CommonUtils
       CosmicExpansion
       CubeConundrum

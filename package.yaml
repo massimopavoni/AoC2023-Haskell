@@ -25,7 +25,3 @@ dependencies:
   - split
   - unordered-containers
   - vector
-
-library:
-  exposed-modules: Main
-  source-dirs: src

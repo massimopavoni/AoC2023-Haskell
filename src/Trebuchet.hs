@@ -2,7 +2,7 @@ module Trebuchet (retrieveCalibration, retrieveCalibrationFixed) where
 
 import CommonUtils (Parser, parseInput)
 import Control.Monad (void)
-import Data.Char (isDigit)
+import Data.Char (digitToInt, isDigit)
 import Data.Maybe (fromJust, fromMaybe)
 import Text.Megaparsec (anySingle, choice, eof, getInput, lookAhead, manyTill, optional, setInput, (<|>))
 import Text.Megaparsec.Char (digitChar, string)
@@ -45,7 +45,7 @@ valueParser = do
 
     -- The digit parsers are quite simple, and they mainly rely on the choice between a digit word or character.
     digit :: [String] -> Parser Int
-    digit ds = stringToDigit <$> choice (string <$> ds) <|> read . pure <$> digitChar
+    digit ds = stringToDigit <$> choice (string <$> ds) <|> digitToInt <$> digitChar
 
     stringToDigit :: String -> Int
     stringToDigit = fromJust . (`lookup` digitsMap)
