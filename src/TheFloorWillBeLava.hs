@@ -16,6 +16,7 @@ import Data.Maybe (fromJust)
 -- the multiple starting positions and directions: I might get back on this in the future to try
 -- and slap DP (?) on it, in such a way that I can share information between the multiple applications.
 -- (Also, I just gotta say I'm so fed up with all of these grids problems, dammit.)
+
 ------------------------------------------------------------------------------------------------
 -- Data types
 
