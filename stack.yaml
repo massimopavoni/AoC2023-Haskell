@@ -23,6 +23,8 @@ resolver:
 compiler: ghc-9.6.3
 compiler-check: match-exact
 
+local-bin-path: bin
+
 # User packages to be built.
 # Various formats can be used as shown in the example below.
 #
@@ -33,7 +35,7 @@ compiler-check: match-exact
 #   - auto-update
 #   - wai
 packages:
-- .
+  - .
 # Dependency packages to be pulled from upstream that are not in the resolver.
 # These entries can reference officially published versions as well as
 # forks / in-progress versions pinned to a git hash. For example:

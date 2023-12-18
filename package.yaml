@@ -4,23 +4,28 @@ copyright: Massimo Pavoni 2023
 author: Massimo Pavoni
 github: massimopavoni/AoC2023-Haskell
 
+executables:
+  AoC2023-Haskell:
+    main: Main.hs
+    source-dirs: src
+    ghc-options: -Wall -Werror -O2 -threaded
+
 dependencies:
   - base
+  - array
+  - bytestring
+  - containers
+  - extra
+  - ghc
+  - matrix
+  - megaparsec
+  - ordered-containers
+  - parallel
+  - safe
+  - split
+  - unordered-containers
+  - vector
 
 library:
   exposed-modules: Main
   source-dirs: src
-  ghc-options: -Wall -Werror -O2
-  dependencies:
-    - array
-    - bytestring
-    - containers
-    - extra
-    - ghc
-    - matrix
-    - megaparsec
-    - ordered-containers
-    - safe
-    - split
-    - unordered-containers
-    - vector

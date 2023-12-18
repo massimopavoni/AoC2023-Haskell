@@ -68,8 +68,8 @@ followInstructions end (Maps ns is) begin =
 ------------------------------------------------------------------------------------------------
 -- Parsers
 
--- This parser is slightly funnier compared to previous ones, as I wanted to try and
--- parse the nodes list without creating a local scope secondary parser with another do notation.
+-- This parser is slightly funnier compared to previous ones, as I wanted to try
+-- and parse the nodes list without creating a local scope secondary parser with another do notation.
 -- I know it probably still looks bizarre, but trust me, it's much nicer than with two nested liftA2s, lol.
 mapsParser :: Parser (Maps String (String, String))
 mapsParser = do

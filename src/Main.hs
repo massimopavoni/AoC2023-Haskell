@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -with-rtsopts=-N #-}
+
 module Main
   ( main,
     trebuchetSolutions,
@@ -15,6 +17,7 @@ module Main
     pointOfIncidenceSolutions,
     parabolicReflectorDishSolutions,
     lensLibrarySolutions,
+    theFloorWillBeLavaSolutions,
   )
 where
 
@@ -35,6 +38,7 @@ import ParabolicReflectorDish (platformBeamLoads, spinningPlatformBeamLoads)
 import PipeMaze (farthestPipeSteps, nestPipesCount)
 import PointOfIncidence (mirrorScore, mirrorSmudgeScore)
 import Scratchcards (scratchcardPoints, scratchcardsClonesCounts)
+import TheFloorWillBeLava (energizedTilesCount, energizedTilesCountAllStarts)
 import Trebuchet (retrieveCalibration, retrieveCalibrationFixed)
 import WaitForIt (waysToRecord, waysToRecordFullRace)
 
@@ -61,7 +65,8 @@ main = do
         hotSpringsSolutions,
         pointOfIncidenceSolutions,
         parabolicReflectorDishSolutions,
-        lensLibrarySolutions
+        lensLibrarySolutions,
+        theFloorWillBeLavaSolutions
       ]
 
 trebuchetSolutions :: IO ()
@@ -228,6 +233,17 @@ lensLibrarySolutions = do
     ("LensLibrary", 2)
     (sum . lensBoxFocusingPowers, 267372)
     "src/resources/LensLibrary.in"
+
+theFloorWillBeLavaSolutions :: IO ()
+theFloorWillBeLavaSolutions = do
+  solutionPretty
+    ("TheFloorWillBeLava", 1)
+    (energizedTilesCount, 7860)
+    "src/resources/TheFloorWillBeLava.in"
+  solutionPretty
+    ("TheFloorWillBeLava", 2)
+    (maximum . energizedTilesCountAllStarts, 8331)
+    "src/resources/TheFloorWillBeLava.in"
 
 ------------------------------------------------------------------------------------------------
 -- Functions

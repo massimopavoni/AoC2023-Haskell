@@ -36,8 +36,8 @@ gearRatios = engineGearsParser . fromLists . lines >>= (`parseInput` map product
 -- Parsers
 
 -- I used megaparsec again, just because in my mind there was no way
--- I was gonna be able to correcly parse the parts numbers and
--- the near symbols positions without graually working through the matrix.
+-- I was gonna be able to correcly parse the parts numbers
+-- and the near symbols positions without graually working through the matrix.
 -- The maybePart parser searches for a sequence of digits between dots and other symbols,
 -- then uses the provided function to decide if the number is a part number.
 -- The one thing that allows this is checking every neighbor of every digit,

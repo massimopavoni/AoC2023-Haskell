@@ -27,8 +27,8 @@ handWinningsNormal :: String -> [Int]
 handWinningsNormal = handWinnings (\(ht, h, _) -> (ht, h)) "23456789TJQKA"
 
 -- The second part had me call the elf a m*****f***** for the rest of the puzzle, ahah,
--- because the joker change was a funny one; and so we just gotta use a different cards order and
--- a hand type transformation that depends on the first card group (it's always the jokers, if present).
+-- because the joker change was a funny one; and so we just gotta use a different cards order
+-- and a hand type transformation that depends on the first card group (it's always the jokers, if present).
 handWinningsJokers :: String -> [Int]
 handWinningsJokers = handWinnings handTypeTransform "J23456789TQKA"
   where
