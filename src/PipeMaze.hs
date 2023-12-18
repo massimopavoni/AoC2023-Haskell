@@ -18,9 +18,10 @@ import RandomUtils (Direction (..), movePos, oppositeDir)
 -- Data types
 
 data Pipe = Ground | Start | NS | WE | NW | NE | SW | SE
-  deriving (Bounded, Enum, Eq)
+  deriving (Bounded, Enum, Eq, Show)
 
 data Position = Pos {pos :: (Int, Int), dir :: Direction}
+  deriving (Show)
 
 -- We need positions equality only for actual coordinates, not directions.
 instance Eq Position where

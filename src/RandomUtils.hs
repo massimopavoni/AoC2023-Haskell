@@ -10,7 +10,7 @@ import Text.Megaparsec.Char (char)
 type Parser = Parsec Void String
 
 data Direction = N | S | W | E
-  deriving (Bounded, Enum, Eq)
+  deriving (Bounded, Enum, Eq, Show)
 
 ------------------------------------------------------------------------------------------------
 -- Functions

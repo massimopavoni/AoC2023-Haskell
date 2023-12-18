@@ -22,7 +22,7 @@ import RandomUtils (Direction (..), movePos)
 -- Data types
 
 data Tile = Empty | Mirror | AntiMirror | ColSplit | RowSplit
-  deriving (Bounded, Enum, Eq)
+  deriving (Bounded, Enum, Eq, Show)
 
 ------------------------------------------------------------------------------------------------
 -- Exports

@@ -14,9 +14,10 @@ import Text.Megaparsec.Char.Lexer (decimal)
 -- Data types
 
 data Hand = Hand {cards :: String, bid :: Int}
+  deriving (Show)
 
 data HandType = HighCard | OnePair | TwoPair | ThreeOfAKind | FullHouse | FourOfAKind | FiveOfAKind
-  deriving (Eq, Ord)
+  deriving (Eq, Ord, Show)
 
 ------------------------------------------------------------------------------------------------
 -- Exports

@@ -22,7 +22,7 @@ import Text.Megaparsec.Char.Lexer (decimal)
 -- Data types
 
 data Range a = Range {start :: a, stop :: a}
-  deriving (Eq)
+  deriving (Eq, Show)
 
 -- The Range Functor wasn't really necessary,
 -- but it was a the first occasion I had to write an instance of it,
@@ -38,6 +38,7 @@ instance (Eq a, Ord a) => Ord (Range a) where
   compare (Range s1 _) (Range s2 _) = compare s1 s2
 
 data MapRange a = MapRange {range :: Range a, offset :: a}
+  deriving (Show)
 
 ------------------------------------------------------------------------------------------------
 -- Exports
