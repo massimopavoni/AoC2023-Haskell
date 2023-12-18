@@ -15,10 +15,7 @@ import Data.Maybe (fromJust)
 -- It led to a nice solution, even though the second part is kind of brute-forcing its way through
 -- the multiple starting positions and directions: I might get back on this in the future to try
 -- and slap DP (?) on it, in such a way that I can share information between the multiple applications.
--- (Also, I just gotta say I'm so fed up with all of these grids problems, and the more I think about it,
--- the more I realize that I not only loathe web and UI development, but anything that starts going towards any kind
--- of visual representation of data, which is actually strange, and not something I would expect or endorse.)
-
+-- (Also, I just gotta say I'm so fed up with all of these grids problems, dammit).
 ------------------------------------------------------------------------------------------------
 -- Data types
 
