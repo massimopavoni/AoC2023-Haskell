@@ -14,7 +14,7 @@ import Data.Maybe (fromJust)
 -- and hashset unions, while approaching with BFS and hashmaps is much better), and just start again.
 -- It led to a nice solution, even though the second part is kind of brute-forcing its way through
 -- the multiple starting positions and directions: I might get back on this in the future to try
--- and slap DP (?) on it, in such a way that I can share information between the multiple applications.
+-- and slap DP (?) on it, in such a way that I can share information between the multiple function applications.
 -- (Also, I just gotta say I'm so fed up with all of these grids problems, dammit.)
 
 ------------------------------------------------------------------------------------------------
