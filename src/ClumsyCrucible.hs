@@ -2,12 +2,12 @@
 
 module ClumsyCrucible (minimumCrucibleHeatLoss, minimumUltraCrucibleHeatLoss) where
 
-import Algorithm.Search (aStar, pruning)
+import Algorithm.Search (dijkstra, pruning)
 import Control.Category ((>>>))
 import Data.Char (digitToInt)
 import Data.Matrix (Matrix, fromLists, ncols, nrows, unsafeGet)
 import Data.Maybe (fromJust)
-import RandomUtils (Direction (..), manhattanDistance, movePos)
+import RandomUtils (Direction (..), movePos)
 
 -- exampleCity :: String
 -- exampleCity =
@@ -37,7 +37,7 @@ data Move = M {pos :: !(Int, Int), dir :: !Direction, straight :: !Int}
 minimumCrucibleHeatLoss :: String -> Int
 minimumCrucibleHeatLoss =
   parseCity
-    >>> fst . fromJust . cityAStar 0 3
+    >>> fst . fromJust . cityAStar 1 3
 
 minimumUltraCrucibleHeatLoss :: String -> Int
 minimumUltraCrucibleHeatLoss =
@@ -49,10 +49,10 @@ minimumUltraCrucibleHeatLoss =
 
 cityAStar :: Int -> Int -> Matrix Int -> Maybe (Int, [Move])
 cityAStar mins maxs !cm =
-  aStar
+  dijkstra
     (neighbors `pruning` (not . inMatrix))
     moveCost
-    distanceHeuristic
+    -- distanceHeuristic
     ( liftA2
         (&&)
         ((>= mins) . straight)
@@ -68,21 +68,27 @@ cityAStar mins maxs !cm =
       | otherwise = turnMoves
       where
         straightMove :: Move
-        straightMove = M (movePos p d) d (s + 1)
+        straightMove = M (movePos 1 p d) d (s + 1)
 
         turnMoves :: [Move]
         turnMoves =
-          (\d' -> M (movePos p d') d' 1)
+          (\d' -> M (movePos mins p d') d' mins)
             <$> if d == S || d == N then [E, W] else [S, N]
 
     inMatrix :: Move -> Bool
     inMatrix (M (r, c) _ _) = 0 < r && r <= rn && 0 < c && c <= cn
 
     moveCost :: Move -> Move -> Int
-    moveCost _ m = uncurry unsafeGet (pos m) cm
+    moveCost om nm = sum $ flip (uncurry unsafeGet) cm <$> inBetween (pos om) (pos nm)
+      where
+        inBetween :: (Int, Int) -> (Int, Int) -> [(Int, Int)]
+        inBetween (r1, c1) (r2, c2)
+          | r1 == r2 = let (minc, maxc) = if c1 < c2 then (c1 + 1, c2) else (c2, c1 - 1) in [(r1, c) | c <- [minc .. maxc]]
+          | c1 == c2 = let (minr, maxr) = if r1 < r2 then (r1 + 1, r2) else (r2, r1 - 1) in [(r, c1) | r <- [minr .. maxr]]
+          | otherwise = error "Not a straight line"
 
-    distanceHeuristic :: Move -> Int
-    distanceHeuristic = manhattanDistance destination . pos
+    -- distanceHeuristic :: Move -> Int
+    -- distanceHeuristic = manhattanDistance destination . pos
 
     destination :: (Int, Int)
     destination = (rn, cn)

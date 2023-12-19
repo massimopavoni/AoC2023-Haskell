@@ -120,7 +120,7 @@ walkPipeLoop maze =
           | otherwise = invalidPos
 
     movePos' :: Position -> Direction -> Position
-    movePos' (Pos p _) dt = (`Pos` oppositeDir dt) $ movePos p dt
+    movePos' (Pos p _) dt = (`Pos` oppositeDir dt) $ movePos 1 p dt
 
 ------------------------------------------------------------------------------------------------
 -- Parsers

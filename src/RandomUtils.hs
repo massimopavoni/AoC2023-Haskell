@@ -24,12 +24,12 @@ oppositeDir E = W
 oppositeDir N = S
 oppositeDir W = E
 
-movePos :: (Int, Int) -> Direction -> (Int, Int)
-movePos (x, y) d = case d of
-  S -> (x + 1, y)
-  E -> (x, y + 1)
-  N -> (x - 1, y)
-  W -> (x, y - 1)
+movePos :: Int -> (Int, Int) -> Direction -> (Int, Int)
+movePos a (x, y) d = case d of
+  S -> (x + a, y)
+  E -> (x, y + a)
+  N -> (x - a, y)
+  W -> (x, y - a)
 
 manhattanDistance :: (Int, Int) -> (Int, Int) -> Int
 manhattanDistance (x1, y1) (x2, y2) = abs (x1 - x2) + abs (y1 - y2)
