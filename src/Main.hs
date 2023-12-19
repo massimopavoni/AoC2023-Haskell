@@ -53,22 +53,22 @@ main = do
   sequence_ $
     intersperse
       (putStrLn "")
-      [ -- trebuchetSolutions,
-        -- cubeConundrumSolutions,
-        -- gearRatiosSolutions,
-        -- scratchcardsSolutions,
-        -- ifYouGiveASeedAFertilizerSolutions,
-        -- waitForItSolutions,
-        -- camelCardsSolutions,
-        -- hauntedWastelandSolutions,
-        -- mirageMaintenanceSolutions,
-        -- pipeMazeSolutions,
-        -- cosmicExpansionSolutions,
-        -- hotSpringsSolutions,
-        -- pointOfIncidenceSolutions,
-        -- parabolicReflectorDishSolutions,
-        -- lensLibrarySolutions,
-        -- theFloorWillBeLavaSolutions,
+      [ trebuchetSolutions,
+        cubeConundrumSolutions,
+        gearRatiosSolutions,
+        scratchcardsSolutions,
+        ifYouGiveASeedAFertilizerSolutions,
+        waitForItSolutions,
+        camelCardsSolutions,
+        hauntedWastelandSolutions,
+        mirageMaintenanceSolutions,
+        pipeMazeSolutions,
+        cosmicExpansionSolutions,
+        hotSpringsSolutions,
+        pointOfIncidenceSolutions,
+        parabolicReflectorDishSolutions,
+        lensLibrarySolutions,
+        theFloorWillBeLavaSolutions,
         clumsyCrucibleSolutions
       ]
 
