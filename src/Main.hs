@@ -19,6 +19,7 @@ module Main
     lensLibrarySolutions,
     theFloorWillBeLavaSolutions,
     clumsyCrucibleSolutions,
+    lavaductLagoonSolutions,
   )
 where
 
@@ -34,6 +35,7 @@ import GearRatios (gearRatios, partNumbers)
 import HauntedWasteland (camelEscapeTime, ghostEscapeTime)
 import HotSprings (possibleCombinations, possibleCombinationsUnfolded)
 import IfYouGiveASeedAFertilizer (nearestSeed, nearestSeedRange)
+import LavaductLagoon (lagoonArea, lagoonAreaFixed)
 import LensLibrary (initSequenceHashes, lensBoxFocusingPowers)
 import MirageMaintenance (initialValuePrediction, nextValuePrediction)
 import ParabolicReflectorDish (platformBeamLoads, spinningPlatformBeamLoads)
@@ -69,7 +71,8 @@ main = do
         parabolicReflectorDishSolutions,
         lensLibrarySolutions,
         theFloorWillBeLavaSolutions,
-        clumsyCrucibleSolutions
+        clumsyCrucibleSolutions,
+        lavaductLagoonSolutions
       ]
 
 trebuchetSolutions :: IO ()
@@ -224,6 +227,15 @@ clumsyCrucibleSolutions = do
   solutionPretty
     ("ClumsyCrucible", 2)
     (minimumUltraCrucibleHeatLoss, 925)
+
+lavaductLagoonSolutions :: IO ()
+lavaductLagoonSolutions = do
+  solutionPretty
+    ("LavaductLagoon", 1)
+    (lagoonArea, 40714)
+  solutionPretty
+    ("LavaductLagoon", 2)
+    (lagoonAreaFixed, 129849166997110)
 
 ------------------------------------------------------------------------------------------------
 -- Functions

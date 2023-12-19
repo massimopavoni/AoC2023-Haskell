@@ -30,6 +30,7 @@ executable AoC2023-Haskell
       HauntedWasteland
       HotSprings
       IfYouGiveASeedAFertilizer
+      LavaductLagoon
       LensLibrary
       MirageMaintenance
       ParabolicReflectorDish

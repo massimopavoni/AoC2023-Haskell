@@ -19,7 +19,7 @@ import RandomUtils (Direction (..), movePos)
 ------------------------------------------------------------------------------------------------
 -- Data types
 
--- I don't actually know if using the bang patterns improved anything throughout the solution.
+-- I don't actually know if using bang patterns improved anything throughout the solution.
 data Move = M {pos :: !(Int, Int), dir :: !Direction}
   deriving (Eq, Ord, Show)
 
