@@ -18,10 +18,12 @@ module Main
     parabolicReflectorDishSolutions,
     lensLibrarySolutions,
     theFloorWillBeLavaSolutions,
+    clumsyCrucibleSolutions,
   )
 where
 
 import CamelCards (handWinningsJokers, handWinningsNormal)
+import ClumsyCrucible (minimumCrucibleHeatLoss, minimumUltraCrucibleHeatLoss)
 import Control.Exception (assert)
 import CosmicExpansion (hugeExpansionGalaxyPaths, shortestGalaxyPaths)
 import CubeConundrum (CubeColor (..), fewestCubes, possibleGame)
@@ -51,22 +53,23 @@ main = do
   sequence_ $
     intersperse
       (putStrLn "")
-      [ trebuchetSolutions,
-        cubeConundrumSolutions,
-        gearRatiosSolutions,
-        scratchcardsSolutions,
-        ifYouGiveASeedAFertilizerSolutions,
-        waitForItSolutions,
-        camelCardsSolutions,
-        hauntedWastelandSolutions,
-        mirageMaintenanceSolutions,
-        pipeMazeSolutions,
-        cosmicExpansionSolutions,
-        hotSpringsSolutions,
-        pointOfIncidenceSolutions,
-        parabolicReflectorDishSolutions,
-        lensLibrarySolutions,
-        theFloorWillBeLavaSolutions
+      [ --trebuchetSolutions,
+        -- cubeConundrumSolutions,
+        -- gearRatiosSolutions,
+        -- scratchcardsSolutions,
+        -- ifYouGiveASeedAFertilizerSolutions,
+        -- waitForItSolutions,
+        -- camelCardsSolutions,
+        -- hauntedWastelandSolutions,
+        -- mirageMaintenanceSolutions,
+        -- pipeMazeSolutions,
+        -- cosmicExpansionSolutions,
+        -- hotSpringsSolutions,
+        -- pointOfIncidenceSolutions,
+        -- parabolicReflectorDishSolutions,
+        -- lensLibrarySolutions,
+        -- theFloorWillBeLavaSolutions,
+        clumsyCrucibleSolutions
       ]
 
 trebuchetSolutions :: IO ()
@@ -212,6 +215,15 @@ theFloorWillBeLavaSolutions = do
   solutionPretty
     ("TheFloorWillBeLava", 2)
     (maximum . energizedTilesCountAllStarts, 8331)
+
+clumsyCrucibleSolutions :: IO ()
+clumsyCrucibleSolutions = do
+  solutionPretty
+    ("ClumsyCrucible", 1)
+    (minimumCrucibleHeatLoss, 817)
+  solutionPretty
+    ("ClumsyCrucible", 2)
+    (minimumUltraCrucibleHeatLoss, 925)
 
 ------------------------------------------------------------------------------------------------
 -- Functions
