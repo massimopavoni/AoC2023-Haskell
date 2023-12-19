@@ -10,17 +10,17 @@ import Data.Maybe (fromJust)
 import RandomUtils (Direction (..), movePos)
 
 -- I really hated this one. I'm sorry, but I did. And not even because of the problem itself,
--- but because of the final performance I obtained: still working in less than 20 seconds
--- (usually around 10), but just because I didn't want to just implement my own problem-tailored
--- Dijkstra algorithm. I very much prefer solving simple (or complex, but not overly complicated)
+-- but because of the final performance I obtained: still working in less than 3 seconds,
+-- but just because I didn't want to just implement my own problem-tailored Dijkstra algorithm.
+-- I very much prefer solving simple (or complex, but not overly complicated)
 -- problems, as opposed to use already ready algorithms and libraries.
--- Still had fun, though.
+-- Still had fun, though, and was able to get rid of counting the straight moves.
 
 ------------------------------------------------------------------------------------------------
 -- Data types
 
 -- I don't actually know if using the bang patterns improved anything throughout the solution.
-data Move = M {pos :: !(Int, Int), dir :: !Direction, straight :: !Int}
+data Move = M {pos :: !(Int, Int), dir :: !Direction}
   deriving (Eq, Ord, Show)
 
 ------------------------------------------------------------------------------------------------
@@ -51,35 +51,28 @@ cityDijkstra mins maxs !cm =
   dijkstra
     (neighbors `pruning` (not . inMatrix))
     moveCost
-    ( liftA2
-        (&&)
-        ((>= mins) . straight)
-        ((== destination) . pos)
-    )
-    (M (1, 1) E 0)
+    ((== (rn, cn)) . pos)
+    (M (1, 1) E)
   where
-    -- The neighbors are very annoying, we have 4 cases:
-    -- 1. forced turn if straight moves are over the maximum;
-    -- 2. all possible straight moves and turns if straight moves are over the minimum;
-    -- 3. only the remaining straight moves if straight moves are under the minimum;
-    -- 4. the minimum oves in all directions if this is the first move.
+    -- The neighbors are different if it's the first move or not:
+    -- either we can only move straight towards east, or south,
+    -- or we can only turn, since we always assume moving and then turning
+    -- (because we generate the moves always with all the possible entire straight lines,
+    -- and leave the choice of the best straight move to the algorithm).
     neighbors :: Move -> [Move]
-    neighbors (M p d s)
-      | s >= maxs = turnMoves
-      | s >= mins = (straightMove <$> [1 .. maxs - s]) ++ turnMoves
-      | s > 0 = [straightMove $ mins - s]
-      | otherwise = straightMove mins : turnMoves
-      where
-        straightMove :: Int -> Move
-        straightMove a = M (movePos a p d) d (s + a)
+    neighbors m@(M p d) =
+      if p == (1, 1)
+        then moveMoves m [S, E]
+        else moveMoves m (if d == S || d == N then [E, W] else [S, N])
 
-        turnMoves :: [Move]
-        turnMoves =
-          (\d' -> M (movePos mins p d') d' mins)
-            <$> if d == S || d == N then [E, W] else [S, N]
+    moveMoves :: Move -> [Direction] -> [Move]
+    moveMoves (M p _) ds = [M (movePos s p d') d' | s <- steps, d' <- ds]
+
+    steps :: [Int]
+    steps = [mins .. maxs]
 
     inMatrix :: Move -> Bool
-    inMatrix (M (r, c) _ _) = 0 < r && r <= rn && 0 < c && c <= cn
+    inMatrix (M (r, c) _) = 0 < r && r <= rn && 0 < c && c <= cn
 
     -- The move cost has to be adapted for use with multiple straight moves at once:
     -- we basically generate the moves in between the two postions and sum the costs.
@@ -91,9 +84,6 @@ cityDijkstra mins maxs !cm =
           | r1 == r2 = let (minc, maxc) = if c1 < c2 then (c1 + 1, c2) else (c2, c1 - 1) in [(r1, c) | c <- [minc .. maxc]]
           | c1 == c2 = let (minr, maxr) = if r1 < r2 then (r1 + 1, r2) else (r2, r1 - 1) in [(r, c1) | r <- [minr .. maxr]]
           | otherwise = error "Not a straight line"
-
-    destination :: (Int, Int)
-    destination = (rn, cn)
 
     rn :: Int
     rn = nrows cm
