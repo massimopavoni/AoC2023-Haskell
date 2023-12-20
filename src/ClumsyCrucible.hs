@@ -20,7 +20,7 @@ import RandomUtils (Direction (..), movePos)
 -- Data types
 
 -- I don't actually know if using bang patterns improved anything throughout the solution.
-data Move = M {pos :: !(Int, Int), dir :: !Direction}
+data Move = Move {pos :: !(Int, Int), dir :: !Direction}
   deriving (Eq, Ord, Show)
 
 ------------------------------------------------------------------------------------------------
@@ -52,7 +52,7 @@ cityDijkstra mins maxs !cm =
     (neighbors `pruning` (not . inMatrix))
     moveCost
     ((== (rn, cn)) . pos)
-    (M (1, 1) E)
+    (Move (1, 1) E)
   where
     -- The neighbors are different if it's the first move or not:
     -- either we can only move straight towards east, or south,
@@ -60,19 +60,19 @@ cityDijkstra mins maxs !cm =
     -- (because we generate the moves always with all the possible entire straight lines,
     -- and leave the choice of the best straight move to the algorithm).
     neighbors :: Move -> [Move]
-    neighbors m@(M p d) =
+    neighbors m@(Move p d) =
       if p == (1, 1)
         then moveMoves m [S, E]
         else moveMoves m (if d == S || d == N then [E, W] else [S, N])
 
     moveMoves :: Move -> [Direction] -> [Move]
-    moveMoves (M p _) ds = [M (movePos s p d') d' | s <- steps, d' <- ds]
+    moveMoves (Move p _) ds = [Move (movePos s p d') d' | s <- steps, d' <- ds]
 
     steps :: [Int]
     steps = [mins .. maxs]
 
     inMatrix :: Move -> Bool
-    inMatrix (M (r, c) _) = 0 < r && r <= rn && 0 < c && c <= cn
+    inMatrix (Move (r, c) _) = 0 < r && r <= rn && 0 < c && c <= cn
 
     -- The move cost has to be adapted for use with multiple straight moves at once:
     -- we basically generate the moves in between the two postions and sum the costs.
