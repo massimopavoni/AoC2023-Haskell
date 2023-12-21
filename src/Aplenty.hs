@@ -11,7 +11,7 @@ import Data.List.Extra (breakOn, find)
 import Data.Maybe (fromJust, mapMaybe)
 import Data.Tuple.Extra (both, uncurry3)
 import RandomUtils (Parser, parseInput)
-import Text.Megaparsec (between, choice, oneOf, optional, sepBy, some, takeWhileP, try)
+import Text.Megaparsec (between, choice, oneOf, optional, sepBy1, some, takeWhileP, try)
 import Text.Megaparsec.Char (char, letterChar, string)
 import Text.Megaparsec.Char.Lexer (decimal)
 
@@ -150,7 +150,7 @@ parseWorkflowsAndParts =
     workflowParser :: Parser (String, [Part Int -> String])
     workflowParser = do
       name <- takeWhileP Nothing (/= '{')
-      functions <- betweenCurly $ sepBy functionParser (string ",")
+      functions <- betweenCurly $ sepBy1 functionParser (string ",")
       pure (name, functions)
       where
         functionParser :: Parser (Part Int -> String)
@@ -191,7 +191,7 @@ parseWorkflows =
     workflowParser :: Parser (String, [WorkflowRange])
     workflowParser = do
       name <- takeWhileP Nothing (/= '{')
-      ranges <- betweenCurly $ sepBy workflowRangeParser (string ",")
+      ranges <- betweenCurly $ sepBy1 workflowRangeParser (string ",")
       pure (name, ranges)
       where
         workflowRangeParser :: Parser WorkflowRange
