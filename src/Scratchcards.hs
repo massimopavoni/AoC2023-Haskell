@@ -1,4 +1,4 @@
-module Scratchcards (scratchcardPoints, scratchcardsClonesCounts) where
+module Scratchcards (scratchcardPoints, scratchcardCloneCounts) where
 
 import Control.Category ((>>>))
 import RandomUtils (Parser, parseInput, space)
@@ -21,8 +21,8 @@ scratchcardPoints = parseInput scratchcardParser $
 -- Therefore, we can just start from the end of the list, since we know for sure that
 -- all the previous scratchcards are gonna have clones only of the ones we already considered,
 -- and sum the first values of the subsequent scratchcards, depending on the current one's win count.
-scratchcardsClonesCounts :: String -> [Int]
-scratchcardsClonesCounts =
+scratchcardCloneCounts :: String -> [Int]
+scratchcardCloneCounts =
   lines
     >>> map (parseInput scratchcardParser id)
     >>> foldr (\sc l -> 1 + sum (take (wins sc) l) : l) []
