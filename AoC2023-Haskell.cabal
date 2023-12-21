@@ -22,6 +22,7 @@ source-repository head
 executable AoC2023-Haskell
   main-is: Main.hs
   other-modules:
+      Aplenty
       CamelCards
       ClumsyCrucible
       CosmicExpansion

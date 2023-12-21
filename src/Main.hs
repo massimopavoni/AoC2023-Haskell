@@ -20,9 +20,11 @@ module Main
     theFloorWillBeLavaSolutions,
     clumsyCrucibleSolutions,
     lavaductLagoonSolutions,
+    aplentySolutions,
   )
 where
 
+import Aplenty (acceptedPartRatings, acceptedPartRatingCombinations)
 import CamelCards (handWinningsJokers, handWinningsNormal)
 import ClumsyCrucible (minimumCrucibleHeatLoss, minimumUltraCrucibleHeatLoss)
 import Control.Exception (assert)
@@ -41,7 +43,7 @@ import MirageMaintenance (initialValuePrediction, nextValuePrediction)
 import ParabolicReflectorDish (platformBeamLoads, spinningPlatformBeamLoads)
 import PipeMaze (farthestPipeSteps, nestPipesCount)
 import PointOfIncidence (mirrorScore, mirrorSmudgeScore)
-import Scratchcards (scratchcardPoints, scratchcardsClonesCounts)
+import Scratchcards (scratchcardPoints, scratchcardCloneCounts)
 import TheFloorWillBeLava (energizedTilesCount, energizedTilesCountAllStarts)
 import Trebuchet (retrieveCalibration, retrieveCalibrationFixed)
 import WaitForIt (waysToRecord, waysToRecordFullRace)
@@ -72,7 +74,8 @@ main = do
         lensLibrarySolutions,
         theFloorWillBeLavaSolutions,
         clumsyCrucibleSolutions,
-        lavaductLagoonSolutions
+        lavaductLagoonSolutions,
+        aplentySolutions
       ]
 
 trebuchetSolutions :: IO ()
@@ -109,7 +112,7 @@ scratchcardsSolutions = do
     (sum . map scratchcardPoints . lines, 20117)
   solutionPretty
     ("Scratchcards", 2)
-    (sum . scratchcardsClonesCounts, 13768818)
+    (sum . scratchcardCloneCounts, 13768818)
 
 ifYouGiveASeedAFertilizerSolutions :: IO ()
 ifYouGiveASeedAFertilizerSolutions = do
@@ -236,6 +239,15 @@ lavaductLagoonSolutions = do
   solutionPretty
     ("LavaductLagoon", 2)
     (lagoonAreaFixed, 129849166997110)
+
+aplentySolutions :: IO ()
+aplentySolutions = do
+  solutionPretty
+    ("Aplenty", 1)
+    (sum . acceptedPartRatings, 418498)
+  solutionPretty
+    ("Aplenty", 2)
+    (sum . acceptedPartRatingCombinations, 123331556462603)
 
 ------------------------------------------------------------------------------------------------
 -- Functions
