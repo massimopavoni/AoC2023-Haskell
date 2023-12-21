@@ -1,10 +1,11 @@
 module Trebuchet (retrieveCalibration, retrieveCalibrationFixed) where
 
+import Control.Applicative ((<|>))
 import Control.Monad (void)
 import Data.Char (digitToInt, isDigit)
 import Data.Maybe (fromJust, fromMaybe)
 import RandomUtils (Parser, parseInput)
-import Text.Megaparsec (anySingle, choice, eof, getInput, lookAhead, manyTill, optional, setInput, (<|>))
+import Text.Megaparsec (anySingle, choice, eof, getInput, lookAhead, manyTill, optional, setInput)
 import Text.Megaparsec.Char (digitChar, string)
 
 ------------------------------------------------------------------------------------------------

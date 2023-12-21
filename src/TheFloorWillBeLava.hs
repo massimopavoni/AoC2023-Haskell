@@ -95,7 +95,7 @@ followLightBeams ehm ts tm = followLightBeams' ehm ts
 
             nextTiles' :: (Int, Int) -> Direction -> [((Int, Int), Direction)]
             nextTiles' pos dir =
-              liftA2 (,) (movePos 1 pos) id <$> case uncurry safeGet pos tm of
+              (movePos 1 pos &&& id) <$> case uncurry safeGet pos tm of
                 Nothing -> []
                 Just Empty -> [dir]
                 Just Mirror -> [[W, N, E, S] !! fromEnum dir]

@@ -1,6 +1,6 @@
 module Aplenty (acceptedPartRatings, acceptedPartRatingCombinations) where
 
-import Control.Applicative (liftA3)
+import Control.Applicative (liftA3, (<|>))
 import Control.Arrow (second, (***))
 import Control.Category ((>>>))
 import Data.Bool (bool)
@@ -11,7 +11,7 @@ import Data.List.Extra (breakOn, find)
 import Data.Maybe (fromJust, mapMaybe)
 import Data.Tuple.Extra (both, uncurry3)
 import RandomUtils (Parser, parseInput)
-import Text.Megaparsec (between, choice, oneOf, optional, sepBy, some, takeWhileP, try, (<|>))
+import Text.Megaparsec (between, choice, oneOf, optional, sepBy, some, takeWhileP, try)
 import Text.Megaparsec.Char (char, letterChar, string)
 import Text.Megaparsec.Char.Lexer (decimal)
 
