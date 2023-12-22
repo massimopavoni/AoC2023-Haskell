@@ -81,8 +81,18 @@ cityDijkstra mins maxs !cm =
       where
         inBetween :: (Int, Int) -> (Int, Int) -> [(Int, Int)]
         inBetween (r1, c1) (r2, c2)
-          | r1 == r2 = let (minc, maxc) = if c1 < c2 then (c1 + 1, c2) else (c2, c1 - 1) in [(r1, c) | c <- [minc .. maxc]]
-          | c1 == c2 = let (minr, maxr) = if r1 < r2 then (r1 + 1, r2) else (r2, r1 - 1) in [(r, c1) | r <- [minr .. maxr]]
+          | r1 == r2 =
+              let (minc, maxc) =
+                    if c1 < c2
+                      then (c1 + 1, c2)
+                      else (c2, c1 - 1)
+               in [(r1, c) | c <- [minc .. maxc]]
+          | c1 == c2 =
+              let (minr, maxr) =
+                    if r1 < r2
+                      then (r1 + 1, r2)
+                      else (r2, r1 - 1)
+               in [(r, c1) | r <- [minr .. maxr]]
           | otherwise = error "Not a straight line"
 
     rn :: Int
