@@ -47,7 +47,7 @@ calculateArea =
         shifted = tail $ cycle ps
 
     boundaryLength :: [(Int, Int)] -> Int
-    boundaryLength = sum . (zipWith manhattanDistance =<< tail)
+    boundaryLength = sum . (zipWith manhattanDistance <*> tail)
 
     pickThickBoundary :: Int -> Int -> Int
     pickThickBoundary area boundary = area + boundary `div` 2 + 1
