@@ -21,10 +21,11 @@ module Main
     clumsyCrucibleSolutions,
     lavaductLagoonSolutions,
     aplentySolutions,
+    pulsePropagationSolutions,
   )
 where
 
-import Aplenty (acceptedPartRatings, acceptedPartRatingCombinations)
+import Aplenty (acceptedPartRatingCombinations, acceptedPartRatings)
 import CamelCards (handWinningsJokers, handWinningsNormal)
 import ClumsyCrucible (minimumCrucibleHeatLoss, minimumUltraCrucibleHeatLoss)
 import Control.Exception (assert)
@@ -43,7 +44,8 @@ import MirageMaintenance (initialValuePrediction, nextValuePrediction)
 import ParabolicReflectorDish (platformBeamLoads, spinningPlatformBeamLoads)
 import PipeMaze (farthestPipeSteps, nestPipesCount)
 import PointOfIncidence (mirrorScore, mirrorSmudgeScore)
-import Scratchcards (scratchcardPoints, scratchcardCloneCounts)
+import PulsePropagation (cablesWarmUp, machineTurnOnClicks)
+import Scratchcards (scratchcardCloneCounts, scratchcardPoints)
 import TheFloorWillBeLava (energizedTilesCount, energizedTilesCountAllStarts)
 import Trebuchet (retrieveCalibration, retrieveCalibrationFixed)
 import WaitForIt (waysToRecord, waysToRecordFullRace)
@@ -75,7 +77,8 @@ main = do
         theFloorWillBeLavaSolutions,
         clumsyCrucibleSolutions,
         lavaductLagoonSolutions,
-        aplentySolutions
+        aplentySolutions,
+        pulsePropagationSolutions
       ]
 
 trebuchetSolutions :: IO ()
@@ -248,6 +251,15 @@ aplentySolutions = do
   solutionPretty
     ("Aplenty", 2)
     (sum . acceptedPartRatingCombinations, 123331556462603)
+
+pulsePropagationSolutions :: IO ()
+pulsePropagationSolutions = do
+  solutionPretty
+    ("PulsePropagation", 1)
+    (cablesWarmUp, 899848294)
+  solutionPretty
+    ("PulsePropagation", 2)
+    (machineTurnOnClicks, 247454898168563)
 
 ------------------------------------------------------------------------------------------------
 -- Functions
