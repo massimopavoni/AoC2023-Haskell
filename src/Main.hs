@@ -22,6 +22,7 @@ module Main
     lavaductLagoonSolutions,
     aplentySolutions,
     pulsePropagationSolutions,
+    stepCounterSolutions,
   )
 where
 
@@ -46,6 +47,7 @@ import PipeMaze (farthestPipeSteps, nestPipesCount)
 import PointOfIncidence (mirrorScore, mirrorSmudgeScore)
 import PulsePropagation (cablesWarmUp, machineTurnOnClicks)
 import Scratchcards (scratchcardCloneCounts, scratchcardPoints)
+import StepCounter (gardenReachablePlotsCount, infiniteGardenReachablePlots)
 import TheFloorWillBeLava (energizedTilesCount, energizedTilesCountAllStarts)
 import Trebuchet (retrieveCalibration, retrieveCalibrationFixed)
 import WaitForIt (waysToRecord, waysToRecordFullRace)
@@ -78,7 +80,8 @@ main = do
         clumsyCrucibleSolutions,
         lavaductLagoonSolutions,
         aplentySolutions,
-        pulsePropagationSolutions
+        pulsePropagationSolutions,
+        stepCounterSolutions
       ]
 
 trebuchetSolutions :: IO ()
@@ -260,6 +263,15 @@ pulsePropagationSolutions = do
   solutionPretty
     ("PulsePropagation", 2)
     (machineTurnOnClicks, 247454898168563)
+
+stepCounterSolutions :: IO ()
+stepCounterSolutions = do
+  solutionPretty
+    ("StepCounter", 1)
+    (gardenReachablePlotsCount 64, 3585)
+  solutionPretty
+    ("StepCounter", 2)
+    (infiniteGardenReachablePlots 26501365, 597102953699891)
 
 ------------------------------------------------------------------------------------------------
 -- Functions

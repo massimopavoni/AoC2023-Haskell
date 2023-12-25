@@ -40,6 +40,7 @@ executable AoC2023-Haskell
       PulsePropagation
       RandomUtils
       Scratchcards
+      StepCounter
       TheFloorWillBeLava
       Trebuchet
       WaitForIt
@@ -54,6 +55,7 @@ executable AoC2023-Haskell
     , containers
     , extra
     , ghc
+    , hmatrix
     , matrix
     , megaparsec
     , ordered-containers

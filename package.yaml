@@ -17,6 +17,7 @@ dependencies:
   - containers
   - extra
   - ghc
+  - hmatrix
   - matrix
   - megaparsec
   - ordered-containers
