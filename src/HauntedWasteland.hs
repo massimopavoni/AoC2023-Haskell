@@ -16,7 +16,7 @@ import Text.Megaparsec.Char (char, letterChar, newline, string)
 -- The Maps data type is a wrapper for a map of nodes and a list of instructions.
 -- The map of nodes is always mapping a single node to some collection of other nodes,
 -- while the list of instructions is a list of functions that choose from those nodes.
-data Maps a b = Maps (Map a b) [b -> a]
+data Maps a b = Maps {maps :: Map a b, instructions :: [b -> a]}
 
 ------------------------------------------------------------------------------------------------
 -- Exports
@@ -39,7 +39,7 @@ ghostEscapeTime =
     liftA2
       map
       (followInstructions ((== 'Z') . last))
-      (filter ((== 'A') . last) . keys . (\(Maps ns _) -> ns))
+      (filter ((== 'A') . last) . keys . maps)
       >>> foldl1' lcm
 
 ------------------------------------------------------------------------------------------------
@@ -85,7 +85,7 @@ mapsParser = do
       (try $ newline <* notFollowedBy eof)
       <* newline
       <* eof
-  pure $ Maps (fromList ns) is
+  pure $ Maps {maps = fromList ns, instructions = is}
   where
     node :: Parser String
     node = count 3 letterChar
