@@ -39,6 +39,7 @@ executable AoC2023-Haskell
       PointOfIncidence
       PulsePropagation
       RandomUtils
+      SandSlabs
       Scratchcards
       StepCounter
       TheFloorWillBeLava

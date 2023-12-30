@@ -23,15 +23,17 @@ module Main
     aplentySolutions,
     pulsePropagationSolutions,
     stepCounterSolutions,
+    sandSlabsSolutions,
   )
 where
 
 import Aplenty (acceptedPartRatingCombinations, acceptedPartRatings)
 import CamelCards (handWinningsJokers, handWinningsNormal)
 import ClumsyCrucible (minimumCrucibleHeatLoss, minimumUltraCrucibleHeatLoss)
-import Control.Exception (assert)
+import Control.Applicative (liftA3)
 import CosmicExpansion (hugeExpansionGalaxyPaths, shortestGalaxyPaths)
 import CubeConundrum (CubeColor (..), fewestCubes, possibleGame)
+import Data.Bool (bool)
 import Data.List (intersperse)
 import Data.List.Split (splitOn)
 import Data.Maybe (mapMaybe)
@@ -46,8 +48,10 @@ import ParabolicReflectorDish (platformBeamLoads, spinningPlatformBeamLoads)
 import PipeMaze (farthestPipeSteps, nestPipesCount)
 import PointOfIncidence (mirrorScore, mirrorSmudgeScore)
 import PulsePropagation (cablesWarmUp, machineTurnOnClicks)
+import SandSlabs (safeBricksCount, unsafeBrickFallsCount)
 import Scratchcards (scratchcardCloneCounts, scratchcardPoints)
 import StepCounter (gardenReachablePlotsCount, infiniteGardenReachablePlots)
+import Text.Printf (printf)
 import TheFloorWillBeLava (energizedTilesCount, energizedTilesCountAllStarts)
 import Trebuchet (retrieveCalibration, retrieveCalibrationFixed)
 import WaitForIt (waysToRecord, waysToRecordFullRace)
@@ -81,7 +85,8 @@ main = do
         lavaductLagoonSolutions,
         aplentySolutions,
         pulsePropagationSolutions,
-        stepCounterSolutions
+        stepCounterSolutions,
+        sandSlabsSolutions
       ]
 
 trebuchetSolutions :: IO ()
@@ -273,10 +278,29 @@ stepCounterSolutions = do
     ("StepCounter", 2)
     (infiniteGardenReachablePlots 26501365, 597102953699891)
 
+sandSlabsSolutions :: IO ()
+sandSlabsSolutions = do
+  solutionPretty
+    ("SandSlabs", 1)
+    (safeBricksCount, 441)
+  solutionPretty
+    ("SandSlabs", 2)
+    (unsafeBrickFallsCount, 80778)
+
 ------------------------------------------------------------------------------------------------
 -- Functions
 
 solutionPretty :: (Show b, Eq b) => (String, Int) -> (String -> b, b) -> IO ()
 solutionPretty (puzzle, part) (solution, expectedResult) = do
   putStr $ unwords [puzzle, show part, "->"] ++ " "
-  print . (assert =<< (== expectedResult)) . solution =<< readFile ("src/resources/" ++ puzzle ++ ".in")
+  print
+    . liftA3
+      bool
+      ( error
+          . printf "Wrong solution for %s part %d: expected %s, but got %s" puzzle part (show expectedResult)
+          . show
+      )
+      id
+      (== expectedResult)
+    . solution
+    =<< readFile ("src/resources/" ++ puzzle ++ ".in")
