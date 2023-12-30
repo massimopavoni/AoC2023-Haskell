@@ -4,6 +4,7 @@ module ClumsyCrucible (minimumCrucibleHeatLoss, minimumUltraCrucibleHeatLoss) wh
 
 import Algorithm.Search (dijkstra, pruning)
 import Control.Category ((>>>))
+import Data.Bool (bool)
 import Data.Char (digitToInt)
 import Data.Matrix (Matrix, fromLists, ncols, nrows, unsafeGet)
 import Data.Maybe (fromJust)
@@ -82,16 +83,10 @@ cityDijkstra mins maxs !cm =
         inBetween :: (Int, Int) -> (Int, Int) -> [(Int, Int)]
         inBetween (r1, c1) (r2, c2)
           | r1 == r2 =
-              let (minc, maxc) =
-                    if c1 < c2
-                      then (c1 + 1, c2)
-                      else (c2, c1 - 1)
+              let (minc, maxc) = bool (c2, c1 - 1) (c1 + 1, c2) (c1 < c2)
                in [(r1, c) | c <- [minc .. maxc]]
           | c1 == c2 =
-              let (minr, maxr) =
-                    if r1 < r2
-                      then (r1 + 1, r2)
-                      else (r2, r1 - 1)
+              let (minr, maxr) = bool (r2, r1 - 1) (r1 + 1, r2) (r1 < r2)
                in [(r, c1) | r <- [minr .. maxr]]
           | otherwise = error "Not a straight line"
 
