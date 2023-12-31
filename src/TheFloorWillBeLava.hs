@@ -12,7 +12,7 @@ import RandomUtils (Direction (..), movePos)
 
 -- I was proud of not giving up into looking at some people's solutions to get inspiration for this one,
 -- managed to stop trying what I was doing, which was crazy (I think it was some sort of DFS
--- and hashset unions, while approaching with BFS and hashmaps is much better), and just start again.
+-- and hashset unions, while approaching with BFS and hashmaps is much better), and just started again.
 -- It led to a nice solution, even though the second part is kind of brute-forcing its way through
 -- the multiple starting positions and directions: I might get back on this in the future to try
 -- and slap DP (?) on it, in such a way that I can share information between the multiple function applications.
