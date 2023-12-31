@@ -2,7 +2,6 @@
 
 module GearRatios (partNumbers, gearRatios) where
 
-import Control.Arrow ((&&&))
 import Control.Category ((>>>))
 import Control.Monad (guard)
 import Data.Functor ((<&>))
@@ -11,9 +10,8 @@ import Data.Map.Strict (elems, fromListWith)
 import qualified Data.Map.Strict as MapS (filter)
 import Data.Matrix (Matrix, fromLists, safeGet)
 import Data.Maybe (catMaybes, mapMaybe)
-import Data.Tuple.Extra (both)
-import RandomUtils (Parser, parseInput)
-import Text.Megaparsec (between, eof, getSourcePos, many, noneOf, optional, some, someTill, sourceColumn, sourceLine, unPos)
+import RandomUtils (Parser, parseInput, position)
+import Text.Megaparsec (between, eof, many, noneOf, optional, some, someTill)
 import Text.Megaparsec.Char (digitChar, newline)
 
 -- This problem was...oh so much more challenging.
@@ -95,16 +93,6 @@ betweenSymbols f =
   where
     noDigit :: Parser Char
     noDigit = noneOf $ '\n' : ['0' .. '9']
-
-    -- The position function allowed me to use a more interesting Arrow combinator
-    -- for the first time, and I'm glad I did, 'cause it looks sick.
-    -- In all seriousness, the position function could be a bit of a controversial choice,
-    -- since it's supposedly "not cheap", in terms of computation time.
-    -- It's true that I don't call it on every single character, and that it's necessary
-    -- for the way I represented the engine and solve the entire problem,
-    -- but I'm sure there's a better solution.
-    position :: Parser (Int, Int)
-    position = both unPos . (sourceLine &&& sourceColumn) <$> getSourcePos
 
 ------------------------------------------------------------------------------------------------
 -- Functions

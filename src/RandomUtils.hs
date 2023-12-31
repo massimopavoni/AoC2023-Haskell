@@ -1,7 +1,9 @@
-module RandomUtils (Parser, Direction (..), parseInput, oppositeDir, movePos, manhattanDistance, space) where
+module RandomUtils (Parser, Direction (..), parseInput, oppositeDir, movePos, manhattanDistance, position, space) where
 
+import Control.Arrow ((&&&))
+import Data.Tuple.Extra (both)
 import Data.Void (Void)
-import Text.Megaparsec (Parsec, errorBundlePretty, parse, some)
+import Text.Megaparsec (Parsec, errorBundlePretty, getSourcePos, parse, some, sourceColumn, sourceLine, unPos)
 import Text.Megaparsec.Char (char)
 
 ------------------------------------------------------------------------------------------------
@@ -39,3 +41,10 @@ manhattanDistance (x1, y1) (x2, y2) = abs (x1 - x2) + abs (y1 - y2)
 
 space :: Parser String
 space = some $ char ' '
+
+-- The position function could be a bit of a controversial choice,
+-- since it's supposedly "not cheap", in terms of computation time.
+-- It's true that I usually don't call it on every single character, and that it's necessary
+-- for the way I represented some puzzle inputs, but I'm sure there's a better solution.
+position :: Parser (Int, Int)
+position = both unPos . (sourceLine &&& sourceColumn) <$> getSourcePos
