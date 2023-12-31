@@ -10,7 +10,7 @@ import Data.Matrix (Matrix, fromLists, ncols, nrows, safeGet)
 import Data.Maybe (fromJust)
 import RandomUtils (Direction (..), movePos)
 
--- I was proud of not giving up and look at some people's solutions to get inspiration for this one,
+-- I was proud of not giving up into looking at some people's solutions to get inspiration for this one,
 -- managed to stop trying what I was doing, which was crazy (I think it was some sort of DFS
 -- and hashset unions, while approaching with BFS and hashmaps is much better), and just start again.
 -- It led to a nice solution, even though the second part is kind of brute-forcing its way through
