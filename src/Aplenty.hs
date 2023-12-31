@@ -146,34 +146,28 @@ parseWorkflowsAndParts =
   breakOn "\n\n"
     >>> second (drop 2)
     >>> both lines
-    >>> fromList . map (parseInput workflowParser id) *** map (parseInput partParser id)
+    >>> fromList . map (parseInput (workflowParser functionParser) id) *** map (parseInput partParser id)
   where
-    workflowParser :: Parser (String, [Part Int -> String])
-    workflowParser = do
-      name <- takeWhileP Nothing (/= '{')
-      functions <- betweenCurly $ sepBy1 functionParser (string ",")
-      pure (name, functions)
-      where
-        functionParser :: Parser (Part Int -> String)
-        functionParser = do
-          f <-
-            optional . try $
-              liftA2
-                (>>>)
-                ( choice
-                    [ char 'x' $> xValue,
-                      char 'm' $> mValue,
-                      char 'a' $> aValue,
-                      char 's' $> sValue
-                    ]
-                )
-                ( liftA2
-                    flip
-                    ((char '<' $> (<)) <|> (char '>' $> (>)))
-                    (decimal <* char ':')
-                )
-          s <- some letterChar
-          pure $ maybe (const s) (bool "" s .) f
+    functionParser :: Parser (Part Int -> String)
+    functionParser = do
+      f <-
+        optional . try $
+          liftA2
+            (>>>)
+            ( choice
+                [ char 'x' $> xValue,
+                  char 'm' $> mValue,
+                  char 'a' $> aValue,
+                  char 's' $> sValue
+                ]
+            )
+            ( liftA2
+                flip
+                ((char '<' $> (<)) <|> (char '>' $> (>)))
+                (decimal <* char ':')
+            )
+      s <- some letterChar
+      pure $ maybe (const s) (bool "" s .) f
 
     partParser :: Parser (Part Int)
     partParser = betweenCurly $ do
@@ -187,25 +181,25 @@ parseWorkflows :: String -> HashMap String [WorkflowRange]
 parseWorkflows =
   fst . breakOn "\n\n"
     >>> lines
-    >>> fromList . map (parseInput workflowParser id)
+    >>> fromList . map (parseInput (workflowParser workflowRangeParser) id)
   where
-    workflowParser :: Parser (String, [WorkflowRange])
-    workflowParser = do
-      name <- takeWhileP Nothing (/= '{')
-      ranges <- betweenCurly $ sepBy1 workflowRangeParser (string ",")
-      pure (name, ranges)
-      where
-        workflowRangeParser :: Parser WorkflowRange
-        workflowRangeParser = do
-          r <-
-            optional . try $
-              liftA3
-                (,,)
-                (oneOf "xmas")
-                ((char '<' $> LT) <|> (char '>' $> GT))
-                (decimal <* char ':')
-          s <- some letterChar
-          pure $ maybe (WfRange '#' EQ 0 s) (flip (uncurry3 WfRange) s) r
+    workflowRangeParser :: Parser WorkflowRange
+    workflowRangeParser = do
+      r <-
+        optional . try $
+          liftA3
+            (,,)
+            (oneOf "xmas")
+            ((char '<' $> LT) <|> (char '>' $> GT))
+            (decimal <* char ':')
+      s <- some letterChar
+      pure $ maybe (WfRange '#' EQ 0 s) (flip (uncurry3 WfRange) s) r
+
+workflowParser :: Parser a -> Parser (String, [a])
+workflowParser wfParser = do
+  name <- takeWhileP Nothing (/= '{')
+  wfs <- betweenCurly $ sepBy1 wfParser (string ",")
+  pure (name, wfs)
 
 betweenCurly :: Parser a -> Parser a
 betweenCurly = between (char '{') (char '}')
