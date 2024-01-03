@@ -6,7 +6,7 @@ import Control.Category ((>>>))
 import Data.Foldable (find, foldl')
 import Data.Function ((&))
 import Data.Functor (($>))
-import Data.HashMap.Strict (HashMap, adjust, elems, empty, fromList, insert, keys, member, (!))
+import Data.Map.Strict (Map, adjust, elems, empty, fromList, insert, keys, member, notMember, (!))
 import Data.List (foldl1', iterate')
 import Data.Maybe (fromJust)
 import Data.Tuple.Extra (both)
@@ -34,7 +34,7 @@ data Pulse = Low | High
 data Module
   = Broadcaster {outputs :: [String]}
   | FlipFlop {switch :: Pulse, outputs :: [String]}
-  | Conjuction {memory :: HashMap String Pulse, outputs :: [String]}
+  | Conjuction {memory :: Map String Pulse, outputs :: [String]}
   deriving (Show)
 
 -- A configuration of the module network identifies a specific state of the network's module fields,
@@ -43,8 +43,8 @@ data Module
 data Configuration = Config
   { clicks :: Int,
     pulses :: (Int, Int),
-    cycles :: HashMap String Int,
-    modules :: HashMap String Module
+    cycles :: Map String Int,
+    modules :: Map String Module
   }
   deriving (Show)
 
@@ -73,7 +73,7 @@ machineTurnOnClicks =
     >>> finishedCyclesConfiguration
     >>> foldl1' lcm . elems . cycles
   where
-    finishedCyclesConfiguration :: HashMap String Module -> Configuration
+    finishedCyclesConfiguration :: Map String Module -> Configuration
     finishedCyclesConfiguration ms =
       iterate' singleButtonClick (Config 0 (0, 0) empty ms)
         & fromJust . find rxInputsFound . tail
@@ -116,7 +116,7 @@ singleButtonClick (Config cks _ cs ms) = updateConfig [("", "broadcaster", Low)]
       let bos = outputs $ modules c ! "broadcaster"
        in updateConfig [("broadcaster", o, Low) | o <- bos] c {pulses = first (+ length bos) (pulses c)}
     updateConfig ((sm, mn, p) : mps) c
-      | not . member mn $ modules c = updateConfig mps c
+      | notMember mn $ modules c = updateConfig mps c
       | p == High && not (isConjuctionModule m) = updateConfig mps c {cycles = cycles'}
       | otherwise =
           updateConfig
@@ -149,7 +149,7 @@ singleButtonClick (Config cks _ cs ms) = updateConfig [("", "broadcaster", Low)]
             (+ length (outputs m'))
             $ pulses c
 
-        cycles' :: HashMap String Int
+        cycles' :: Map String Int
         cycles'
           | p /= High || "rx" `notElem` outputs m = cycles c
           | otherwise = insert sm (clicks c) $ cycles c
@@ -161,7 +161,7 @@ isConjuctionModule _ = False
 ------------------------------------------------------------------------------------------------
 -- Parsers
 
-parseModules :: String -> HashMap String Module
+parseModules :: String -> Map String Module
 parseModules =
   lines
     >>> fromList . map (parseInput moduleParser id)
@@ -186,7 +186,7 @@ parseModules =
     -- (We have to do this after parsing all the modules because the memory field depends
     -- on information that's not available directly from the input, as opposed to the outputs field,
     -- or the switch field of flip-flop modules, which can both be initialized right away.)
-    initMemories :: HashMap String Module -> String -> HashMap String Module
+    initMemories :: Map String Module -> String -> Map String Module
     initMemories hm n =
       foldl'
         (flip $ adjust updateMemory)
