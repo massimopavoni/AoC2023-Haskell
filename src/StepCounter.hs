@@ -4,10 +4,10 @@ import Control.Arrow (first, second, (***))
 import Control.Category ((>>>))
 import Data.Foldable (find, foldMap')
 import Data.Function ((&))
-import Data.HashSet (HashSet, empty, fromList, member, singleton, size)
 import Data.Matrix (fromLists, ncols, nrows, (!))
 import qualified Data.Matrix as DMat (Matrix)
 import Data.Maybe (fromJust)
+import Data.Set (Set, empty, fromList, notMember, singleton, size)
 import Data.Tuple.Extra (both)
 import Numeric.LinearAlgebra (linearSolve)
 import Numeric.LinearAlgebra.Data (asColumn, flatten, toList, vector, (><))
@@ -91,19 +91,19 @@ findReachablePlots steps garden = bfsGardenPlotsCount (steps, singleton start) e
           ((== 'S') . (garden !))
           [(x, y) | x <- [1 .. rowsCount], y <- [1 .. colsCount]]
 
-    bfsGardenPlotsCount :: (Int, HashSet (Int, Int)) -> HashSet (Int, Int) -> [Int] -> [Int]
+    bfsGardenPlotsCount :: (Int, Set (Int, Int)) -> Set (Int, Int) -> [Int] -> [Int]
     bfsGardenPlotsCount (ss, cp) pp cs
       | ss == 0 = cs'
       | otherwise = bfsGardenPlotsCount (ss - 1, foldMap' nextPositions cp) cp cs'
       where
-        nextPositions :: (Int, Int) -> HashSet (Int, Int)
+        nextPositions :: (Int, Int) -> Set (Int, Int)
         nextPositions =
           (&)
             >>> (<$> [first (subtract 1), second (subtract 1), first (+ 1), second (+ 1)])
             >>> filter
               ( liftA2
                   (&&)
-                  (not . (`member` pp))
+                  (`notMember` pp)
                   ( both (subtract 1)
                       >>> (`mod` rowsCount) *** (`mod` colsCount)
                       >>> both (+ 1)
