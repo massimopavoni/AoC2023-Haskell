@@ -5,8 +5,8 @@ import Data.Bool (bool)
 import qualified Data.ByteString as BStr (foldl')
 import Data.ByteString.Char8 (ByteString, pack, splitWith, unsnoc)
 import qualified Data.ByteString.Char8 as BSC8 (init)
-import Data.HashMap.Strict (HashMap, empty)
-import qualified Data.HashMap.Strict as HsMS (alter, toList)
+import Data.IntMap.Strict (IntMap, empty)
+import qualified Data.IntMap.Strict as ItMS (alter, toList)
 import qualified Data.List as List (foldl')
 import qualified Data.Map.Ordered as MapO (alter)
 import Data.Map.Ordered.Strict (OMap, assocs, delete, singleton)
@@ -30,13 +30,13 @@ lensBoxFocusingPowers =
   parseInitSequence
     >>> map parseLensOp
     >>> List.foldl' updateBoxes empty
-    >>> map (uncurry boxFocusingPower) . HsMS.toList
+    >>> map (uncurry boxFocusingPower) . ItMS.toList
   where
     -- In particular, we're using a Ordered Map for every box, as we need to keep the lenses sorted by insertion order,
     -- and we fortunately still have a alter function from the normal Ordered Map module,
     -- while getting the other functions from the strict submodule.
-    updateBoxes :: HashMap Int (OMap ByteString Int) -> (Int, ByteString, Int) -> HashMap Int (OMap ByteString Int)
-    updateBoxes hm (boxH, lbl, lfl) = HsMS.alter executeOp boxH hm
+    updateBoxes :: IntMap (OMap ByteString Int) -> (Int, ByteString, Int) -> IntMap (OMap ByteString Int)
+    updateBoxes hm (boxH, lbl, lfl) = ItMS.alter executeOp boxH hm
       where
         -- For every lens operation, we have some possibilities:
         -- 1. the box does not exist yet, so we create it with the first lens in it
