@@ -5,6 +5,7 @@ module MirageMaintenance (nextValuePrediction, initialValuePrediction) where
 import Control.Category ((>>>))
 import Data.List (foldl1')
 import RandomUtils (Parser, parseInput)
+import Safe (headErr, tailSafe)
 import Text.Megaparsec (eof, sepBy1)
 import Text.Megaparsec.Char (char)
 import Text.Megaparsec.Char.Lexer (decimal, signed)
@@ -19,7 +20,7 @@ nextValuePrediction = parseInput valueHistoryParser $ predictValue last sum
 -- The second part does not change much compared to the first,
 -- as the only change is the function to properly calculate the difference that yields the initial value.
 initialValuePrediction :: String -> Int
-initialValuePrediction = parseInput valueHistoryParser $ predictValue head (foldl1' (flip (-)))
+initialValuePrediction = parseInput valueHistoryParser $ predictValue headErr (foldl1' (flip (-)))
 
 ------------------------------------------------------------------------------------------------
 -- Functions
@@ -29,7 +30,7 @@ predictValue f r =
   ([],)
     >>> until
       (all (== 0) . snd)
-      (\(ls, xs) -> (f xs : ls, (zipWith (-) =<< tail) xs))
+      (\(ls, xs) -> (f xs : ls, (zipWith (-) =<< tailSafe) xs))
     >>> r . fst
 
 ------------------------------------------------------------------------------------------------

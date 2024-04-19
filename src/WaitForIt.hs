@@ -1,6 +1,7 @@
 module WaitForIt (waysToRecord, waysToRecordFullRace) where
 
 import RandomUtils (Parser, parseInput, space)
+import Safe (headErr)
 import Text.Megaparsec (between, eof, sepBy1, some)
 import Text.Megaparsec.Char (digitChar, newline, string)
 import Text.Megaparsec.Char.Lexer (decimal)
@@ -16,7 +17,7 @@ waysToRecord = parseInput (racesParser False) $ map inequationBoundsSize
 -- (and racesParser True switches the parser to "one race only mode",
 -- also known as "bad kerning mode", lol).
 waysToRecordFullRace :: String -> Int
-waysToRecordFullRace = parseInput (racesParser True) $ inequationBoundsSize . head
+waysToRecordFullRace = parseInput (racesParser True) $ inequationBoundsSize . headErr
 
 ------------------------------------------------------------------------------------------------
 -- Functions

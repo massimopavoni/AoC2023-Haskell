@@ -6,6 +6,7 @@ import Data.Function (on)
 import Data.List (group, sortBy)
 import Data.Maybe (fromJust)
 import RandomUtils (Parser, parseInput)
+import Safe (headErr)
 import Text.Megaparsec (count, eof, notFollowedBy, oneOf, sepBy1, try)
 import Text.Megaparsec.Char (char, newline)
 import Text.Megaparsec.Char.Lexer (decimal)
@@ -34,10 +35,10 @@ handWinningsJokers :: String -> [Int]
 handWinningsJokers = handWinnings handTypeTransform "J23456789TQKA"
   where
     handTypeTransform :: (HandType, Hand, [String]) -> (HandType, Hand)
-    handTypeTransform (ht, h, csg) = if head firstCardsGroup == 'J' then (improveHandType, h) else (ht, h)
+    handTypeTransform (ht, h, csg) = if headErr firstCardsGroup == 'J' then (improveHandType, h) else (ht, h)
       where
         firstCardsGroup :: String
-        firstCardsGroup = head csg
+        firstCardsGroup = headErr csg
 
         -- A quite simple function, once I laid out a table of the possible options:
         -- 1. a high card can have 1 joker at most (which is always not the actual high card),

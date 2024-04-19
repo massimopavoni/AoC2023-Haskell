@@ -5,6 +5,7 @@ import Control.Category ((>>>))
 import Data.List (elemIndex, inits, tails, transpose)
 import Data.Maybe (fromMaybe)
 import Data.Tuple.Extra (both)
+import Safe (tailSafe)
 
 ------------------------------------------------------------------------------------------------
 -- Exports
@@ -47,6 +48,6 @@ reflectionLineScore smudgeCount =
     lineReflectionDifferences =
       liftA2
         (zipWith (zipWith (==)))
-        (map reverse . tail . inits)
-        (init . tail . tails)
+        (map reverse . tailSafe . inits)
+        (init . tailSafe . tails)
         >>> map (length . filter not)

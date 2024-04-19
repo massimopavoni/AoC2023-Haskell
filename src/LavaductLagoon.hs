@@ -9,6 +9,7 @@ import Data.Function ((&))
 import Data.Maybe (fromJust)
 import Data.Tuple.Extra (both)
 import RandomUtils (Direction (..), manhattanDistance, movePos)
+import Safe (headErr, tailSafe)
 
 ------------------------------------------------------------------------------------------------
 -- Exports
@@ -30,7 +31,7 @@ lagoonAreaFixed = parseDigPlanFixed >>> calculateArea
 -- given by the sum of the Manhattan distances between any sequence of coordinates that respect the dig plan.
 calculateArea :: [(Direction, Int)] -> Int
 calculateArea =
-  foldl' (\ps (d, a) -> movePos a (head ps) d : ps) [(0, 0)]
+  foldl' (\ps (d, a) -> movePos a (headErr ps) d : ps) [(0, 0)]
     >>> shoelaceArea &&& boundaryLength
     >>> uncurry pickThickBoundary
   where
@@ -44,10 +45,10 @@ calculateArea =
           )
       where
         shifted :: [(Int, Int)]
-        shifted = tail $ cycle ps
+        shifted = tailSafe $ cycle ps
 
     boundaryLength :: [(Int, Int)] -> Int
-    boundaryLength = sum . (zipWith manhattanDistance <*> tail)
+    boundaryLength = sum . (zipWith manhattanDistance <*> tailSafe)
 
     pickThickBoundary :: Int -> Int -> Int
     pickThickBoundary area boundary = area + boundary `div` 2 + 1

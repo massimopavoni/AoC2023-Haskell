@@ -14,6 +14,7 @@ import Data.HashSet (HashSet, fromList)
 import qualified Data.HashSet as HSet (size, toList)
 import Data.List (sort)
 import Data.List.Split (splitOn)
+import Safe (tailSafe)
 
 ------------------------------------------------------------------------------------------------
 -- Data types
@@ -65,7 +66,7 @@ unsafeBrickFallsCount =
     countFalls graph =
       let transposedGraph = transposeG graph
        in map
-            ( pure &&& sort . tail . reachable transposedGraph
+            ( pure &&& sort . tailSafe . reachable transposedGraph
                 >>> length . uncurry fallingBricks
             )
       where

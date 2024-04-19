@@ -11,6 +11,7 @@ import Data.Matrix (Matrix, fromLists, ncols, nrows, safeGet, (!))
 import Data.Maybe (fromJust)
 import Data.Tuple.Extra (both)
 import RandomUtils (Direction (..), movePos, oppositeDir)
+import Safe (headErr, tailSafe)
 
 -- This problem uses lots of obscure compositions, bear with me.
 
@@ -61,7 +62,7 @@ nestPipesCount =
           )
       where
         shifted :: [(Int, Int)]
-        shifted = tail . cycle $ pos <$> ps
+        shifted = tailSafe . cycle $ pos <$> ps
 
 ------------------------------------------------------------------------------------------------
 -- Functions
@@ -72,8 +73,8 @@ nestPipesCount =
 walkPipeLoop :: Matrix Pipe -> [Position]
 walkPipeLoop maze =
   until
-    ((== Start) . (maze !) . pos . head)
-    (liftA2 (:) (moveThroughPipe . head) id)
+    ((== Start) . (maze !) . pos . headErr)
+    (liftA2 (:) (moveThroughPipe . headErr) id)
     [startPipe, start]
   where
     -- The start pipe is not S itself, but one of the only two possible pipes (the connected ones),
@@ -85,7 +86,7 @@ walkPipeLoop maze =
       start
         & ( ((<$> [S ..]) . Pos . pos)
               >>> map (moveThroughPipe . (movePos' <*> dir))
-              >>> head . filter ((/= (0, 0)) . pos)
+              >>> headErr . filter ((/= (0, 0)) . pos)
           )
 
     start :: Position

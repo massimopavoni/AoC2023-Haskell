@@ -12,6 +12,7 @@ import Data.Tuple.Extra (both)
 import Numeric.LinearAlgebra (linearSolve)
 import Numeric.LinearAlgebra.Data (asColumn, flatten, toList, vector, (><))
 import qualified Numeric.LinearAlgebra.Data as LMat (Matrix)
+import Safe (headErr)
 
 -- This is not a fair problem: it had very specific properties that made the second part not fun.
 -- What I am thinking is that crafting 25 puzzles this well thought out and maintaining a level
@@ -28,7 +29,7 @@ gardenReachablePlotsCount :: Int -> String -> Int
 gardenReachablePlotsCount steps =
   fromLists . lines
     >>> findReachablePlots steps
-    >>> head
+    >>> headErr
 
 -- The second part is the annoying thing I mentioned above.
 -- I don't care how ingenious the puzzle can be, it is not fun to solve it if it requires you

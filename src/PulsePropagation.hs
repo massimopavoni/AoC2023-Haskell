@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wno-incomplete-record-updates #-}
+
 module PulsePropagation (cablesWarmUp, machineTurnOnClicks) where
 
 import Control.Applicative ((<|>))
@@ -6,11 +8,12 @@ import Control.Category ((>>>))
 import Data.Foldable (find, foldl')
 import Data.Function ((&))
 import Data.Functor (($>))
-import Data.Map.Strict (Map, adjust, elems, empty, fromList, insert, keys, member, notMember, (!))
 import Data.List (foldl1', iterate')
+import Data.Map.Strict (Map, adjust, elems, empty, fromList, insert, keys, member, notMember, (!))
 import Data.Maybe (fromJust)
 import Data.Tuple.Extra (both)
 import RandomUtils (Parser, parseInput)
+import Safe (tailSafe)
 import Text.Megaparsec (between, eof, sepBy1, some)
 import Text.Megaparsec.Char (char, letterChar, string)
 
@@ -57,7 +60,7 @@ cablesWarmUp =
   parseModules
     >>> Config 0 (0, 0) empty
     >>> iterate' singleButtonClick
-    >>> take 1000 . tail
+    >>> take 1000 . tailSafe
     >>> unzip . map pulses
     >>> both sum
     >>> uncurry (*)
@@ -76,7 +79,7 @@ machineTurnOnClicks =
     finishedCyclesConfiguration :: Map String Module -> Configuration
     finishedCyclesConfiguration ms =
       iterate' singleButtonClick (Config 0 (0, 0) empty ms)
-        & fromJust . find rxInputsFound . tail
+        & fromJust . find rxInputsFound . tailSafe
       where
         rxInputsFound :: Configuration -> Bool
         rxInputsFound (Config _ _ cs _) = all (`elem` keys cs) rxInputs

@@ -8,7 +8,7 @@ import Data.Tuple.Extra (both)
 import Data.Vector (Vector, fromList, scanl', unsafeIndex)
 import qualified Data.Vector as Vect (all)
 import RandomUtils (manhattanDistance)
-import Safe (tailSafe)
+import Safe (headErr, tailSafe)
 
 ------------------------------------------------------------------------------------------------
 -- Exports
@@ -41,7 +41,7 @@ analyzeImage e m =
   [(x, y) | x <- [1 .. nrows m], y <- [1 .. ncols m], unsafeGet x y m == '#']
     & ( tails
           >>> concatMap
-            ( liftA2 map ((,) . head) tailSafe
+            ( liftA2 map ((,) . headErr) tailSafe
                 >>> map expandedManhattanDistance
             )
       )
