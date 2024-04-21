@@ -8,6 +8,7 @@ import qualified Data.ByteString.Char8 as BSC8 (init)
 import Data.IntMap.Strict (IntMap, empty)
 import qualified Data.IntMap.Strict as ItMS (alter, toList)
 import qualified Data.List as List (foldl')
+import Data.List.Extra (zipFrom)
 import qualified Data.Map.Ordered as MapO (alter)
 import Data.Map.Ordered.Strict (OMap, assocs, delete, singleton)
 
@@ -50,7 +51,7 @@ lensBoxFocusingPowers =
           _ -> Just $ MapO.alter (const $ Just lfl) lbl lsm
 
     boxFocusingPower :: Int -> OMap ByteString Int -> Int
-    boxFocusingPower bn = List.foldl' foldLens 0 . zip [1 ..] . assocs
+    boxFocusingPower bn = List.foldl' foldLens 0 . zipFrom 1 . assocs
       where
         boxN :: Int
         boxN = bn + 1

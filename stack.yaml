@@ -17,10 +17,9 @@
 #
 # resolver: ./custom-snapshot.yaml
 # resolver: https://example.com/snapshots/2023-01-01.yaml
-resolver:
-  url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2024/4/19.yaml
+resolver: lts-22.17
 
-compiler: ghc-9.8.2
+compiler: ghc-9.6.4
 compiler-check: match-exact
 
 local-bin-path: bin

@@ -62,9 +62,13 @@ cityDijkstra mins maxs !cm =
     -- and leave the choice of the best straight move to the algorithm).
     neighbors :: Move -> [Move]
     neighbors m@(Move p d) =
-      if p == (1, 1)
-        then moveMoves m [S, E]
-        else moveMoves m (if d == S || d == N then [E, W] else [S, N])
+      moveMoves
+        m
+        ( if p == (1, 1)
+            then
+              [S, E]
+            else (if d == S || d == N then [E, W] else [S, N])
+        )
 
     moveMoves :: Move -> [Direction] -> [Move]
     moveMoves (Move p _) ds = [Move (movePos s p d') d' | s <- steps, d' <- ds]

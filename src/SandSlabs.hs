@@ -13,6 +13,7 @@ import qualified Data.HashMap.Strict as HsMS (empty, filter, foldl', insert)
 import Data.HashSet (HashSet, fromList)
 import qualified Data.HashSet as HSet (size, toList)
 import Data.List (sort)
+import Data.List.Extra (zipFrom)
 import Data.List.Split (splitOn)
 import Safe (tailSafe)
 
@@ -90,7 +91,7 @@ unsafeBrickFallsCount =
 fallBricksIntoGraph :: [Brick] -> Graph
 fallBricksIntoGraph =
   sort
-    >>> zip [1 ..]
+    >>> zipFrom 1
     >>> foldl' fallingBrick HsMS.empty
     >>> liftA2 array ((1,) . size) (foldlWithKey' (\a k v -> (k, snd v) : a) [])
   where

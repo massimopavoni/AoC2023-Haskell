@@ -42,7 +42,7 @@ gardenReachablePlotsCount steps =
 -- (exploring the package was one of the few fun parts, at least).
 -- We even have to choose specific steps to analyze, since the quadratic function works well for numbers
 -- that are congruent to 65 modulo 131, since the input has a width and height of 131
--- and the edge of the garden tile can be reached in 65 stops without encountering any rocks.
+-- and the edge of the garden tile can be reached in 65 steps without encountering any rocks.
 -- I didn't try making the choice of the sample steps and step points depend on the input size,
 -- but I still have serious doubts that the solution would work for any other type of input,
 -- especially because of the visible empty garden plots diamond
@@ -50,12 +50,12 @@ gardenReachablePlotsCount steps =
 -- that can be used to make accurate predictions on the answer for different step numbers),
 -- and because of the precise number of steps mentioned in the puzzle description
 -- (26501365 is indeed congruent to 65 modulo 131, even though maybe this property only makes
--- the result precise for those values and an approximation to be rounded for the other values).
+-- the result precise for those numbers and an approximation to be rounded for different values).
 infiniteGardenReachablePlots :: Int -> String -> Int
 infiniteGardenReachablePlots steps =
   fromLists . lines
     >>> findReachablePlots sampleSteps
-    >>> (<$> ((sampleSteps -) <$> stepPoints)) . (!!)
+    >>> (<$> map (sampleSteps -) stepPoints) . (!!)
     >>> asColumn . vector . map fromIntegral
     >>> linearSolve a
     >>> toList . flatten . fromJust

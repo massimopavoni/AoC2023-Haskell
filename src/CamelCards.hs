@@ -4,6 +4,7 @@ import Control.Arrow ((&&&))
 import Control.Category ((>>>))
 import Data.Function (on)
 import Data.List (group, sortBy)
+import Data.List.Extra (zipWithFrom)
 import Data.Maybe (fromJust)
 import RandomUtils (Parser, parseInput)
 import Safe (headErr)
@@ -74,7 +75,7 @@ handWinnings httf cso =
   parseInput handsParser $
     map (httf . addHandType . addCardsGroups)
       >>> map snd . sortBy compareRanks
-      >>> zipWith (curry (liftA2 (*) fst (bid . snd))) [1 ..]
+      >>> zipWithFrom (curry (liftA2 (*) fst (bid . snd))) 1
   where
     addCardsGroups :: Hand -> (Hand, [String])
     addCardsGroups = id &&& group . sortBy compareCards . cards
