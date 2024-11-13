@@ -9,6 +9,7 @@ import qualified Data.ByteString.Char8 as BSC8 (length, reverse)
 import Data.Function ((&))
 import Data.HashMap.Strict (HashMap, empty, insert, (!?))
 import Data.List (foldl')
+import RandomUtils (Pos)
 
 ------------------------------------------------------------------------------------------------
 -- Exports
@@ -30,7 +31,7 @@ platformBeamLoads = map pack . lines >>> northBeamLoads
                   >>> snd
               )
       where
-        addLoad :: (Int, Int) -> (Int, Int) -> (Int, Int)
+        addLoad :: Pos -> Pos -> Pos
         addLoad (rl, tl) (cl, oc) = (rl - cl - 1, tl + sum [rl - oc + 1 .. rl])
 
 -- The second part was annoyingly incredibly slow:
@@ -55,7 +56,7 @@ spinningPlatformBeamLoads cycles =
   where
     -- Once we find an already seen platform pattern, we can stop spinnning
     -- and just yield the indices of the first cycle.
-    spinCycle :: HashMap [ByteString] Int -> Int -> [[ByteString]] -> (Int, Int)
+    spinCycle :: HashMap [ByteString] Int -> Int -> [[ByteString]] -> Pos
     spinCycle _ _ [] = error "No spinning cycles"
     spinCycle m i (p : ps) = case m !? p of
       Nothing -> spinCycle (insert p i m) (i + 1) ps

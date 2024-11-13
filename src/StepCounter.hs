@@ -12,6 +12,7 @@ import Data.Tuple.Extra (both)
 import Numeric.LinearAlgebra (linearSolve)
 import Numeric.LinearAlgebra.Data (asColumn, flatten, toList, vector, (><))
 import qualified Numeric.LinearAlgebra.Data as LMat (Matrix)
+import RandomUtils (Pos)
 import Safe (headErr)
 
 -- This is not a fair problem: it had very specific properties that made the second part not fun.
@@ -79,25 +80,25 @@ infiniteGardenReachablePlots steps =
 
 -- The breadth-first-search itself is straightforward enough.
 -- The only quirks are saving the previous positions to avoid visiting them again
--- (and making use of hash sets for it, because we can simply use their Monoid instance with foldMap',
+-- (and making use of a set for it, because we can simply use their Monoid instance with foldMap',
 -- which is pretty nice for the knowledge I have, not still having studied the type classes
 -- that take from Algebra and Category Theory).
 findReachablePlots :: Int -> DMat.Matrix Char -> [Int]
 findReachablePlots steps garden = bfsGardenPlotsCount (steps, singleton start) empty [0, 0]
   where
-    start :: (Int, Int)
+    start :: Pos
     start =
       fromJust $
         find
           ((== 'S') . (garden !))
           [(x, y) | x <- [1 .. rowsCount], y <- [1 .. colsCount]]
 
-    bfsGardenPlotsCount :: (Int, Set (Int, Int)) -> Set (Int, Int) -> [Int] -> [Int]
+    bfsGardenPlotsCount :: (Int, Set Pos) -> Set Pos -> [Int] -> [Int]
     bfsGardenPlotsCount (ss, cp) pp cs
       | ss == 0 = cs'
       | otherwise = bfsGardenPlotsCount (ss - 1, foldMap' nextPositions cp) cp cs'
       where
-        nextPositions :: (Int, Int) -> Set (Int, Int)
+        nextPositions :: Pos -> Set Pos
         nextPositions =
           (&)
             >>> (<$> [first (subtract 1), second (subtract 1), first (+ 1), second (+ 1)])

@@ -10,7 +10,7 @@ import Data.Function ((&))
 import Data.Matrix (Matrix, fromLists, ncols, nrows, safeGet, (!))
 import Data.Maybe (fromJust)
 import Data.Tuple.Extra (both)
-import RandomUtils (Direction (..), movePos, oppositeDir)
+import RandomUtils (Direction (..), Pos, movePos, oppositeDir)
 import Safe (headErr, tailSafe)
 
 -- This problem uses lots of obscure compositions, bear with me.
@@ -21,7 +21,7 @@ import Safe (headErr, tailSafe)
 data Pipe = Ground | Start | NS | WE | NW | NE | SW | SE
   deriving (Bounded, Enum, Eq, Show)
 
-data Position = Pos {pos :: (Int, Int), dir :: Direction}
+data Position = Pos {pos :: Pos, dir :: Direction}
   deriving (Show)
 
 -- We need positions equality only for actual coordinates, not directions.
@@ -61,7 +61,7 @@ nestPipesCount =
               >>> uncurry (-)
           )
       where
-        shifted :: [(Int, Int)]
+        shifted :: [Pos]
         shifted = tailSafe . cycle $ pos <$> ps
 
 ------------------------------------------------------------------------------------------------

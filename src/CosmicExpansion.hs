@@ -7,7 +7,7 @@ import Data.Matrix (Matrix, fromLists, getCol, getRow, matrix, ncols, nrows, uns
 import Data.Tuple.Extra (both)
 import Data.Vector (Vector, fromList, scanl', unsafeIndex)
 import qualified Data.Vector as Vect (all)
-import RandomUtils (manhattanDistance)
+import RandomUtils (Pos, manhattanDistance)
 import Safe (headErr, tailSafe)
 
 ------------------------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ analyzeImage e m =
             )
       )
   where
-    expandedManhattanDistance :: ((Int, Int), (Int, Int)) -> Int
+    expandedManhattanDistance :: (Pos, Pos) -> Int
     expandedManhattanDistance ((a, b), (c, d)) =
       manhattanDistance (a, b) (c, d)
         + (e - 1)

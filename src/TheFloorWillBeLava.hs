@@ -8,7 +8,7 @@ import Data.HashMap.Strict (HashMap, insertWith, singleton, size)
 import qualified Data.HashMap.Strict as HsMS (lookup)
 import Data.Matrix (Matrix, fromLists, ncols, nrows, safeGet)
 import Data.Maybe (fromJust)
-import RandomUtils (Direction (..), movePos)
+import RandomUtils (Direction (..), Pos, movePos)
 
 -- I was proud of not giving up into looking at some people's solutions to get inspiration for this one,
 -- managed to stop trying what I was doing, which was crazy (I think it was some sort of DFS
@@ -50,7 +50,7 @@ energizedTilesCountAllStarts =
         ss
   where
     -- Just 4 list comprehensions, nothing to see here.
-    starts :: Matrix Tile -> [((Int, Int), Direction)]
+    starts :: Matrix Tile -> [(Pos, Direction)]
     starts tm =
       let (nrs, ncs) = (nrows tm, ncols tm)
           (rs, cs) = ([1 .. nrs], [1 .. ncs])
@@ -67,18 +67,18 @@ energizedTilesCountAllStarts =
 -- The HashMap values are Direction lists, because we have to check if the tile we're visiting
 -- was already encountered, but with a different direction, in which case we have to pass through it again,
 -- because it might lead to more unvisited tiles and therefore a higher count.
-followLightBeams :: HashMap (Int, Int) [Direction] -> [((Int, Int), Direction)] -> Matrix Tile -> HashMap (Int, Int) [Direction]
+followLightBeams :: HashMap Pos [Direction] -> [(Pos, Direction)] -> Matrix Tile -> HashMap Pos [Direction]
 followLightBeams ehm [] _ = ehm
 followLightBeams ehm ts tm = followLightBeams' ehm ts
   where
-    followLightBeams' :: HashMap (Int, Int) [Direction] -> [((Int, Int), Direction)] -> HashMap (Int, Int) [Direction]
+    followLightBeams' :: HashMap Pos [Direction] -> [(Pos, Direction)] -> HashMap Pos [Direction]
     followLightBeams' shm cts =
       followLightBeams
         (foldl' (\hm (pos, dir) -> insertWith (++) pos [dir] hm) shm nextTiles)
         nextTiles
         tm
       where
-        nextTiles :: [((Int, Int), Direction)]
+        nextTiles :: [(Pos, Direction)]
         nextTiles = concatMap (filter unseen . uncurry nextTiles') cts
           where
             -- It's also important to notice that other than not passing through the tiles we've visited
@@ -86,14 +86,14 @@ followLightBeams ehm ts tm = followLightBeams' ehm ts
             -- because no matter which direction we're going towards, we're sure we already visited
             -- everything through a splitter (if you just think about it for a bit, you'll quickly understand
             -- that loops and maybe other other special cases are not a problem thanks to this).
-            unseen :: ((Int, Int), Direction) -> Bool
+            unseen :: (Pos, Direction) -> Bool
             unseen (pos, dir) = case uncurry safeGet pos tm of
               Nothing -> False
               Just ct -> case HsMS.lookup pos ehm of
                 Just ds -> ct /= ColSplit && ct /= RowSplit && dir `notElem` ds
                 Nothing -> True
 
-            nextTiles' :: (Int, Int) -> Direction -> [((Int, Int), Direction)]
+            nextTiles' :: Pos -> Direction -> [(Pos, Direction)]
             nextTiles' pos dir =
               (movePos 1 pos &&& id) <$> case uncurry safeGet pos tm of
                 Nothing -> []

@@ -24,9 +24,11 @@ module Main
     pulsePropagationSolutions,
     stepCounterSolutions,
     sandSlabsSolutions,
+    aLongWalkSolutions,
   )
 where
 
+import ALongWalk (walkLongestDryHike, walkLongestHike)
 import Aplenty (acceptedPartRatingCombinations, acceptedPartRatings)
 import CamelCards (handWinningsJokers, handWinningsNormal)
 import ClumsyCrucible (minimumCrucibleHeatLoss, minimumUltraCrucibleHeatLoss)
@@ -34,6 +36,7 @@ import Control.Applicative (liftA3)
 import CosmicExpansion (hugeExpansionGalaxyPaths, shortestGalaxyPaths)
 import CubeConundrum (CubeColor (..), fewestCubes, possibleGame)
 import Data.Bool (bool)
+import Data.Foldable (sequenceA_)
 import Data.List (intersperse)
 import Data.List.Split (splitOn)
 import Data.Maybe (mapMaybe)
@@ -62,7 +65,7 @@ import WaitForIt (waysToRecord, waysToRecordFullRace)
 main :: IO ()
 main = do
   putStrLn "All solutions:\n"
-  sequence_ $
+  sequenceA_ $
     intersperse
       (putStrLn "")
       [ trebuchetSolutions,
@@ -86,7 +89,8 @@ main = do
         aplentySolutions,
         pulsePropagationSolutions,
         stepCounterSolutions,
-        sandSlabsSolutions
+        sandSlabsSolutions,
+        aLongWalkSolutions
       ]
 
 trebuchetSolutions :: IO ()
@@ -286,6 +290,15 @@ sandSlabsSolutions = do
   solutionPretty
     ("SandSlabs", 2)
     (unsafeBrickFallsCount, 80778)
+
+aLongWalkSolutions :: IO ()
+aLongWalkSolutions = do
+  solutionPretty
+    ("ALongWalk", 1)
+    (walkLongestHike, 2366)
+  solutionPretty
+    ("ALongWalk", 2)
+    (walkLongestDryHike, 6682)
 
 ------------------------------------------------------------------------------------------------
 -- Functions

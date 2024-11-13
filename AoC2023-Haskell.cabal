@@ -10,7 +10,7 @@ homepage:       https://github.com/massimopavoni/AoC2023-Haskell#readme
 bug-reports:    https://github.com/massimopavoni/AoC2023-Haskell/issues
 author:         Massimo Pavoni
 maintainer:     Massimo Pavoni
-copyright:      Massimo Pavoni 2023
+copyright:      Massimo Pavoni 2023-2024
 license:        GPL-3
 license-file:   LICENSE
 build-type:     Simple
@@ -22,6 +22,7 @@ source-repository head
 executable AoC2023-Haskell
   main-is: Main.hs
   other-modules:
+      ALongWalk
       Aplenty
       CamelCards
       ClumsyCrucible

@@ -12,7 +12,7 @@ import qualified Data.Map.Strict as MapS (filter)
 import Data.Matrix (Matrix, fromLists, safeGet)
 import Data.Maybe (catMaybes, mapMaybe)
 import Data.Tuple.Extra (both)
-import RandomUtils (Parser, parseInput)
+import RandomUtils (Parser, Pos, parseInput)
 import Text.Megaparsec (between, eof, getSourcePos, many, noneOf, optional, some, someTill, sourceColumn, sourceLine, unPos)
 import Text.Megaparsec.Char (digitChar, newline)
 
@@ -45,7 +45,7 @@ gearRatios = engineGearsParser . fromLists . lines >>= (`parseInput` map product
 enginePartsParser :: Matrix Char -> Parser [Int]
 enginePartsParser m = catMaybes <$> someTill (betweenSymbols nearSymbol) eof
   where
-    nearSymbol :: Maybe [((Int, Int), Char)] -> Maybe Int
+    nearSymbol :: Maybe [(Pos, Char)] -> Maybe Int
     nearSymbol =
       maybe Nothing $
         liftA2
@@ -53,7 +53,7 @@ enginePartsParser m = catMaybes <$> someTill (betweenSymbols nearSymbol) eof
           (guard . any (any symbolNeighbor . neighbors m . fst))
           (Just . read . map snd)
 
-    symbolNeighbor :: ((Int, Int), Char) -> Bool
+    symbolNeighbor :: (Pos, Char) -> Bool
     symbolNeighbor = (`notElem` '\n' : '.' : ['0' .. '9']) . snd
 
 -- The engineGearsParser does a tiny bit more than what the above enginePartsParser does.
@@ -76,19 +76,19 @@ engineGearsParser m =
             >>> elems
         )
   where
-    nearGear :: Maybe [((Int, Int), Char)] -> Maybe [((Int, Int), Int)]
+    nearGear :: Maybe [(Pos, Char)] -> Maybe [(Pos, Int)]
     nearGear = maybe Nothing $ \z -> do
       let gears = gearNeighbors z
       guard . not . null $ gears
       Just $ (,read $ snd <$> z) <$> gears
 
-    gearNeighbors :: [((Int, Int), Char)] -> [(Int, Int)]
+    gearNeighbors :: [(Pos, Char)] -> [Pos]
     gearNeighbors =
       concatMap (neighbors m . fst)
         >>> toList . fromList
         >>> map fst . filter ((== '*') . snd)
 
-betweenSymbols :: (Maybe [((Int, Int), Char)] -> Maybe b) -> Parser (Maybe b)
+betweenSymbols :: (Maybe [(Pos, Char)] -> Maybe b) -> Parser (Maybe b)
 betweenSymbols f =
   between (many noDigit) (many noDigit <* optional newline) $
     f <$> optional (some $ liftA2 (,) position digitChar)
@@ -100,7 +100,7 @@ betweenSymbols f =
     -- since it's supposedly "not cheap", in terms of computation time.
     -- It's true that I usually don't call it on every single character, and that it's necessary
     -- for the way I represented some puzzle inputs, but I'm sure there's a better solution.
-    position :: Parser (Int, Int)
+    position :: Parser Pos
     position = both unPos . (sourceLine &&& sourceColumn) <$> getSourcePos
 
 ------------------------------------------------------------------------------------------------
@@ -110,11 +110,11 @@ betweenSymbols f =
 -- and it got slightly better once I decided to go back to the Matrix type,
 -- instead of using an Array, since the first one has consistent indexing bounds
 -- in relation to the way megaparsec gives you the current source position.
-neighbors :: Matrix Char -> (Int, Int) -> [((Int, Int), Char)]
+neighbors :: Matrix Char -> Pos -> [(Pos, Char)]
 neighbors m = mapMaybe safeNeighbor . positions
   where
-    safeNeighbor :: (Int, Int) -> Maybe ((Int, Int), Char)
+    safeNeighbor :: Pos -> Maybe (Pos, Char)
     safeNeighbor p = (p,) <$> uncurry safeGet p m
 
-    positions :: (Int, Int) -> [(Int, Int)]
+    positions :: Pos -> [Pos]
     positions (x, y) = [(l, c) | l <- [x - 1 .. x + 1], c <- [y - 1 .. y + 1], (l, c) /= (x, y)]

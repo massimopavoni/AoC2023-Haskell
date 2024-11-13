@@ -8,7 +8,7 @@ import Data.Bool (bool)
 import Data.Char (digitToInt)
 import Data.Matrix (Matrix, fromLists, ncols, nrows, unsafeGet)
 import Data.Maybe (fromJust)
-import RandomUtils (Direction (..), movePos)
+import RandomUtils (Direction (..), Pos, movePos)
 
 -- I really hated this one. I'm sorry, but I did. And not even because of the problem itself,
 -- but because of the final performance I obtained: still working in less than 3 seconds,
@@ -21,7 +21,7 @@ import RandomUtils (Direction (..), movePos)
 -- Data types
 
 -- I don't actually know if using bang patterns improved anything throughout the solution.
-data Move = Move {pos :: !(Int, Int), dir :: !Direction}
+data Move = Move {pos :: !Pos, dir :: !Direction}
   deriving (Eq, Ord, Show)
 
 ------------------------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ cityDijkstra mins maxs !cm =
     moveCost :: Move -> Move -> Int
     moveCost om nm = sum $ flip (uncurry unsafeGet) cm <$> inBetween (pos om) (pos nm)
       where
-        inBetween :: (Int, Int) -> (Int, Int) -> [(Int, Int)]
+        inBetween :: Pos -> Pos -> [Pos]
         inBetween (r1, c1) (r2, c2)
           | r1 == r2 =
               let (minc, maxc) = bool (c2, c1 - 1) (c1 + 1, c2) (c1 < c2)

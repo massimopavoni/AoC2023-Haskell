@@ -8,7 +8,7 @@ import Data.Foldable (foldl')
 import Data.Function ((&))
 import Data.Maybe (fromJust)
 import Data.Tuple.Extra (both)
-import RandomUtils (Direction (..), manhattanDistance, movePos)
+import RandomUtils (Direction (..), Pos, manhattanDistance, movePos)
 import Safe (headErr, tailSafe)
 
 ------------------------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ calculateArea =
     >>> shoelaceArea &&& boundaryLength
     >>> uncurry pickThickBoundary
   where
-    shoelaceArea :: [(Int, Int)] -> Int
+    shoelaceArea :: [Pos] -> Int
     shoelaceArea ps =
       ps
         & ( (,map snd shifted) . map fst &&& (,map fst shifted) . map snd
@@ -44,10 +44,10 @@ calculateArea =
               >>> (`div` 2)
           )
       where
-        shifted :: [(Int, Int)]
+        shifted :: [Pos]
         shifted = tailSafe $ cycle ps
 
-    boundaryLength :: [(Int, Int)] -> Int
+    boundaryLength :: [Pos] -> Int
     boundaryLength = sum . (zipWith manhattanDistance <*> tailSafe)
 
     pickThickBoundary :: Int -> Int -> Int
