@@ -1,9 +1,9 @@
 module Scratchcards (scratchcardPoints, scratchcardCloneCounts) where
 
 import Control.Category ((>>>))
-import RandomUtils (Parser, parseInput, space)
+import RandomUtils (Parser, parseInput)
 import Text.Megaparsec (eof, notFollowedBy, sepBy1, try)
-import Text.Megaparsec.Char (char, string)
+import Text.Megaparsec.Char (char, hspace1, string)
 import Text.Megaparsec.Char.Lexer (decimal)
 
 -- I guess I'm also taking this first Advent of Code instance of mine as a megaparsec exploration, lol.
@@ -35,7 +35,7 @@ scratchcardCloneCounts =
 
 scratchcardParser :: Parser ([Int], [Int])
 scratchcardParser = do
-  _ <- string "Card" *> space *> decimal <* char ':' <* space :: Parser Int
-  ws <- sepBy1 decimal (try $ space <* notFollowedBy (char '|')) <* string " |" <* space
-  ns <- sepBy1 decimal space <* eof
+  _ <- string "Card" *> hspace1 *> decimal <* char ':' <* hspace1 :: Parser Int
+  ws <- sepBy1 decimal (try $ hspace1 <* notFollowedBy (char '|')) <* string " |" <* hspace1
+  ns <- sepBy1 decimal hspace1 <* eof
   pure (ws, ns)

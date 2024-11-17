@@ -37,7 +37,6 @@ import CosmicExpansion (hugeExpansionGalaxyPaths, shortestGalaxyPaths)
 import CubeConundrum (CubeColor (..), fewestCubes, possibleGame)
 import Data.Bool (bool)
 import Data.Foldable (sequenceA_)
-import Data.List (intersperse)
 import Data.List.Split (splitOn)
 import Data.Maybe (mapMaybe)
 import GearRatios (gearRatios, partNumbers)
@@ -47,6 +46,7 @@ import IfYouGiveASeedAFertilizer (nearestSeed, nearestSeedRange)
 import LavaductLagoon (lagoonArea, lagoonAreaFixed)
 import LensLibrary (initSequenceHashes, lensBoxFocusingPowers)
 import MirageMaintenance (initialValuePrediction, nextValuePrediction)
+import NeverTellMeTheOdds (Hailstone (..), hailstoneCollisions, throwPerfectHailstone)
 import ParabolicReflectorDish (platformBeamLoads, spinningPlatformBeamLoads)
 import PipeMaze (farthestPipeSteps, nestPipesCount)
 import PointOfIncidence (mirrorScore, mirrorSmudgeScore)
@@ -64,11 +64,18 @@ import WaitForIt (waysToRecord, waysToRecordFullRace)
 
 main :: IO ()
 main = do
-  putStrLn "All solutions:\n"
-  sequenceA_ $
-    intersperse
-      (putStrLn "")
-      [ trebuchetSolutions,
+  putStrLn "AoC 2023 - Haskell\n"
+  sequenceA_
+    . foldr
+      ( \s ls ->
+          putStrLn
+            (printf "Day %d" (24 - length ls `div` 3))
+            : s
+            : putStrLn ""
+            : ls
+      )
+      []
+    $ [ trebuchetSolutions,
         cubeConundrumSolutions,
         gearRatiosSolutions,
         scratchcardsSolutions,
@@ -90,7 +97,8 @@ main = do
         pulsePropagationSolutions,
         stepCounterSolutions,
         sandSlabsSolutions,
-        aLongWalkSolutions
+        aLongWalkSolutions,
+        neverTellMeTheOddsSolutions
       ]
 
 trebuchetSolutions :: IO ()
@@ -300,12 +308,21 @@ aLongWalkSolutions = do
     ("ALongWalk", 2)
     (walkLongestDryHike, 6682)
 
+neverTellMeTheOddsSolutions :: IO ()
+neverTellMeTheOddsSolutions = do
+  solutionPretty
+    ("NeverTellMeTheOdds", 1)
+    (length . hailstoneCollisions, 21679)
+  solutionPretty
+    ("NeverTellMeTheOdds", 2)
+    ((round :: Double -> Int) . sum . position . throwPerfectHailstone, 566914635762564)
+
 ------------------------------------------------------------------------------------------------
 -- Functions
 
 solutionPretty :: (Show b, Eq b) => (String, Int) -> (String -> b, b) -> IO ()
 solutionPretty (puzzle, part) (solution, expectedResult) = do
-  putStr $ unwords [puzzle, show part, "->"] ++ " "
+  putStr $ printf "%d. %s -> " part puzzle
   print
     . liftA3
       bool

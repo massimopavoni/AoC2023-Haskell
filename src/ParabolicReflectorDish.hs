@@ -70,8 +70,8 @@ spinningPlatformBeamLoads cycles =
     -- while for north and west we also need to reverse the strings to sort in the correct order.
     -- Now, that last statement might seem wrong, so here's why we should reverse for those directions:
     -- the correct order should be round rocks first, then empty spaces, and finally cube rocks,
-    -- but as it turns out, we can just use the natural order of the ASCII characters,
-    -- which is # < . < O, and that means that left to right is actually reverse that.
+    -- but it turns out we can just use the natural order of the ASCII characters,
+    -- which is # < . < O, meaning that left to right is actually reverse that.
     -- (Without this little trick, we could've had to either use a custom data type,
     -- which would've been too much for the problem and could've made the solution even slower
     -- because of not being able to use ByteStrings (and Vectors or other similar types

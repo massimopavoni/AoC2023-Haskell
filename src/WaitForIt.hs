@@ -1,9 +1,9 @@
 module WaitForIt (waysToRecord, waysToRecordFullRace) where
 
-import RandomUtils (Parser, parseInput, space)
+import RandomUtils (Parser, parseInput)
 import Safe (headErr)
 import Text.Megaparsec (between, eof, sepBy1, some)
-import Text.Megaparsec.Char (digitChar, newline, string)
+import Text.Megaparsec.Char (digitChar, newline, string, hspace1)
 import Text.Megaparsec.Char.Lexer (decimal)
 
 ------------------------------------------------------------------------------------------------
@@ -42,12 +42,12 @@ inequationBoundsSize (t, d) =
 -- but I don't care, it looks nicer, lol.
 racesParser :: Bool -> Parser [(Int, Int)]
 racesParser sr = do
-  tls <- between (string "Time:" <* space) newline numbers
-  drs <- between (string "Distance:" <* space) newline numbers <* eof
+  tls <- between (string "Time:" <* hspace1) newline numbers
+  drs <- between (string "Distance:" <* hspace1) newline numbers <* eof
   pure $ zip tls drs
   where
     numbers :: Parser [Int]
     numbers =
       if sr
-        then pure . read . concat <$> sepBy1 (some digitChar) space
-        else sepBy1 decimal space
+        then pure . read . concat <$> sepBy1 (some digitChar) hspace1
+        else sepBy1 decimal hspace1
