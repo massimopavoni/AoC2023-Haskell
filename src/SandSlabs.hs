@@ -93,7 +93,10 @@ fallBricksIntoGraph =
   sort
     >>> zipFrom 1
     >>> foldl' fallingBrick HsMS.empty
-    >>> liftA2 array ((1,) . size) (foldlWithKey' (\a k v -> (k, snd v) : a) [])
+    >>> liftA2
+      array
+      ((1,) . size)
+      (foldlWithKey' (\a k v -> (k, snd v) : a) [])
   where
     -- A falling brick can be in one of three states:
     -- 1. it's below the ground, it is not supported by any other brick, so we bring it up to level 1;

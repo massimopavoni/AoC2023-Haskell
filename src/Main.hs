@@ -25,6 +25,8 @@ module Main
     stepCounterSolutions,
     sandSlabsSolutions,
     aLongWalkSolutions,
+    neverTellMeTheOddsSolutions,
+    snowverloadSolutions,
   )
 where
 
@@ -46,14 +48,15 @@ import IfYouGiveASeedAFertilizer (nearestSeed, nearestSeedRange)
 import LavaductLagoon (lagoonArea, lagoonAreaFixed)
 import LensLibrary (initSequenceHashes, lensBoxFocusingPowers)
 import MirageMaintenance (initialValuePrediction, nextValuePrediction)
-import NeverTellMeTheOdds (Hailstone (..), hailstoneCollisions, throwPerfectHailstone)
+import NeverTellMeTheOdds (Hailstone (..), hailstoneCollisions, throwPerfectRock)
 import ParabolicReflectorDish (platformBeamLoads, spinningPlatformBeamLoads)
 import PipeMaze (farthestPipeSteps, nestPipesCount)
 import PointOfIncidence (mirrorScore, mirrorSmudgeScore)
 import PulsePropagation (cablesWarmUp, machineTurnOnClicks)
 import SandSlabs (safeBricksCount, unsafeBrickFallsCount)
 import Scratchcards (scratchcardCloneCounts, scratchcardPoints)
-import StepCounter (gardenReachablePlotsCount, infiniteGardenReachablePlots)
+import Snowverload (splitComponentSizes)
+import StepCounter (gardenReachablePlotsCount, infiniteGardenReachablePlotsCount)
 import Text.Printf (printf)
 import TheFloorWillBeLava (energizedTilesCount, energizedTilesCountAllStarts)
 import Trebuchet (retrieveCalibration, retrieveCalibrationFixed)
@@ -69,7 +72,7 @@ main = do
     . foldr
       ( \s ls ->
           putStrLn
-            (printf "Day %d" (24 - length ls `div` 3))
+            (printf "Day %d" (25 - length ls `div` 3))
             : s
             : putStrLn ""
             : ls
@@ -98,230 +101,194 @@ main = do
         stepCounterSolutions,
         sandSlabsSolutions,
         aLongWalkSolutions,
-        neverTellMeTheOddsSolutions
+        neverTellMeTheOddsSolutions,
+        snowverloadSolutions
       ]
 
 trebuchetSolutions :: IO ()
-trebuchetSolutions = do
-  solutionPretty
-    ("Trebuchet", 1)
+trebuchetSolutions =
+  prettySolution2
+    "Trebuchet"
     (sum . map retrieveCalibration . lines, 54388)
-  solutionPretty
-    ("Trebuchet", 2)
     (sum . map retrieveCalibrationFixed . lines, 53515)
 
 cubeConundrumSolutions :: IO ()
-cubeConundrumSolutions = do
-  solutionPretty
-    ("CubeConundrum", 1)
+cubeConundrumSolutions =
+  prettySolution2
+    "CubeConundrum"
     (sum . mapMaybe (possibleGame [(Blue, 14), (Green, 13), (Red, 12)]) . lines, 2278)
-  solutionPretty
-    ("CubeConundrum", 2)
     (sum . map (product . map snd . fewestCubes) . lines, 67953)
 
 gearRatiosSolutions :: IO ()
-gearRatiosSolutions = do
-  solutionPretty
-    ("GearRatios", 1)
+gearRatiosSolutions =
+  prettySolution2
+    "GearRatios"
     (sum . partNumbers, 520019)
-  solutionPretty
-    ("GearRatios", 2)
     (sum . gearRatios, 75519888)
 
 scratchcardsSolutions :: IO ()
-scratchcardsSolutions = do
-  solutionPretty
-    ("Scratchcards", 1)
+scratchcardsSolutions =
+  prettySolution2
+    "Scratchcards"
     (sum . map scratchcardPoints . lines, 20117)
-  solutionPretty
-    ("Scratchcards", 2)
     (sum . scratchcardCloneCounts, 13768818)
 
 ifYouGiveASeedAFertilizerSolutions :: IO ()
-ifYouGiveASeedAFertilizerSolutions = do
-  solutionPretty
-    ("IfYouGiveASeedAFertilizer", 1)
+ifYouGiveASeedAFertilizerSolutions =
+  prettySolution2
+    "IfYouGiveASeedAFertilizer"
     (nearestSeed, 240320250)
-  solutionPretty
-    ("IfYouGiveASeedAFertilizer", 2)
     (nearestSeedRange, 28580589)
 
 waitForItSolutions :: IO ()
-waitForItSolutions = do
-  solutionPretty
-    ("WaitForIt", 1)
+waitForItSolutions =
+  prettySolution2
+    "WaitForIt"
     (product . waysToRecord, 4403592)
-  solutionPretty
-    ("WaitForIt", 2)
     (waysToRecordFullRace, 38017587)
 
 camelCardsSolutions :: IO ()
-camelCardsSolutions = do
-  solutionPretty
-    ("CamelCards", 1)
+camelCardsSolutions =
+  prettySolution2
+    "CamelCards"
     (sum . handWinningsNormal, 250602641)
-  solutionPretty
-    ("CamelCards", 2)
     (sum . handWinningsJokers, 251037509)
 
 hauntedWastelandSolutions :: IO ()
-hauntedWastelandSolutions = do
-  solutionPretty
-    ("HauntedWasteland", 1)
+hauntedWastelandSolutions =
+  prettySolution2
+    "HauntedWasteland"
     (camelEscapeTime, 15989)
-  solutionPretty
-    ("HauntedWasteland", 2)
     (ghostEscapeTime, 13830919117339)
 
 mirageMaintenanceSolutions :: IO ()
-mirageMaintenanceSolutions = do
-  solutionPretty
-    ("MirageMaintenance", 1)
+mirageMaintenanceSolutions =
+  prettySolution2
+    "MirageMaintenance"
     (sum . map nextValuePrediction . lines, 1702218515)
-  solutionPretty
-    ("MirageMaintenance", 2)
     (sum . map initialValuePrediction . lines, 925)
 
 pipeMazeSolutions :: IO ()
-pipeMazeSolutions = do
-  solutionPretty
-    ("PipeMaze", 1)
+pipeMazeSolutions =
+  prettySolution2
+    "PipeMaze"
     (farthestPipeSteps, 7102)
-  solutionPretty
-    ("PipeMaze", 2)
     (nestPipesCount, 363)
 
 cosmicExpansionSolutions :: IO ()
-cosmicExpansionSolutions = do
-  solutionPretty
-    ("CosmicExpansion", 1)
+cosmicExpansionSolutions =
+  prettySolution2
+    "CosmicExpansion"
     (sum . shortestGalaxyPaths, 9556712)
-  solutionPretty
-    ("CosmicExpansion", 2)
     (sum . hugeExpansionGalaxyPaths, 678626199476)
 
 hotSpringsSolutions :: IO ()
-hotSpringsSolutions = do
-  solutionPretty
-    ("HotSprings", 1)
+hotSpringsSolutions =
+  prettySolution2
+    "HotSprings"
     (sum . map possibleCombinations . lines, 7653)
-  solutionPretty
-    ("HotSprings", 2)
     (sum . map (possibleCombinationsUnfolded 5) . lines, 60681419004564)
 
 pointOfIncidenceSolutions :: IO ()
-pointOfIncidenceSolutions = do
-  solutionPretty
-    ("PointOfIncidence", 1)
+pointOfIncidenceSolutions =
+  prettySolution2
+    "PointOfIncidence"
     (sum . map mirrorScore . splitOn "\n\n", 29846)
-  solutionPretty
-    ("PointOfIncidence", 2)
     (sum . map mirrorSmudgeScore . splitOn "\n\n", 25401)
 
 parabolicReflectorDishSolutions :: IO ()
-parabolicReflectorDishSolutions = do
-  solutionPretty
-    ("ParabolicReflectorDish", 1)
+parabolicReflectorDishSolutions =
+  prettySolution2
+    "ParabolicReflectorDish"
     (sum . platformBeamLoads, 110677)
-  solutionPretty
-    ("ParabolicReflectorDish", 2)
     (sum . spinningPlatformBeamLoads 1000000000, 90551)
 
 lensLibrarySolutions :: IO ()
-lensLibrarySolutions = do
-  solutionPretty
-    ("LensLibrary", 1)
+lensLibrarySolutions =
+  prettySolution2
+    "LensLibrary"
     (sum . initSequenceHashes, 517965)
-  solutionPretty
-    ("LensLibrary", 2)
     (sum . lensBoxFocusingPowers, 267372)
 
 theFloorWillBeLavaSolutions :: IO ()
-theFloorWillBeLavaSolutions = do
-  solutionPretty
-    ("TheFloorWillBeLava", 1)
+theFloorWillBeLavaSolutions =
+  prettySolution2
+    "TheFloorWillBeLava"
     (energizedTilesCount, 7860)
-  solutionPretty
-    ("TheFloorWillBeLava", 2)
     (maximum . energizedTilesCountAllStarts, 8331)
 
 clumsyCrucibleSolutions :: IO ()
-clumsyCrucibleSolutions = do
-  solutionPretty
-    ("ClumsyCrucible", 1)
+clumsyCrucibleSolutions =
+  prettySolution2
+    "ClumsyCrucible"
     (minimumCrucibleHeatLoss, 817)
-  solutionPretty
-    ("ClumsyCrucible", 2)
     (minimumUltraCrucibleHeatLoss, 925)
 
 lavaductLagoonSolutions :: IO ()
-lavaductLagoonSolutions = do
-  solutionPretty
-    ("LavaductLagoon", 1)
+lavaductLagoonSolutions =
+  prettySolution2
+    "LavaductLagoon"
     (lagoonArea, 40714)
-  solutionPretty
-    ("LavaductLagoon", 2)
     (lagoonAreaFixed, 129849166997110)
 
 aplentySolutions :: IO ()
-aplentySolutions = do
-  solutionPretty
-    ("Aplenty", 1)
+aplentySolutions =
+  prettySolution2
+    "Aplenty"
     (sum . acceptedPartRatings, 418498)
-  solutionPretty
-    ("Aplenty", 2)
     (sum . acceptedPartRatingCombinations, 123331556462603)
 
 pulsePropagationSolutions :: IO ()
-pulsePropagationSolutions = do
-  solutionPretty
-    ("PulsePropagation", 1)
+pulsePropagationSolutions =
+  prettySolution2
+    "PulsePropagation"
     (cablesWarmUp, 899848294)
-  solutionPretty
-    ("PulsePropagation", 2)
     (machineTurnOnClicks, 247454898168563)
 
 stepCounterSolutions :: IO ()
-stepCounterSolutions = do
-  solutionPretty
-    ("StepCounter", 1)
+stepCounterSolutions =
+  prettySolution2
+    "StepCounter"
     (gardenReachablePlotsCount 64, 3585)
-  solutionPretty
-    ("StepCounter", 2)
-    (infiniteGardenReachablePlots 26501365, 597102953699891)
+    (infiniteGardenReachablePlotsCount 26501365, 597102953699891)
 
 sandSlabsSolutions :: IO ()
-sandSlabsSolutions = do
-  solutionPretty
-    ("SandSlabs", 1)
+sandSlabsSolutions =
+  prettySolution2
+    "SandSlabs"
     (safeBricksCount, 441)
-  solutionPretty
-    ("SandSlabs", 2)
     (unsafeBrickFallsCount, 80778)
 
 aLongWalkSolutions :: IO ()
-aLongWalkSolutions = do
-  solutionPretty
-    ("ALongWalk", 1)
+aLongWalkSolutions =
+  prettySolution2
+    "ALongWalk"
     (walkLongestHike, 2366)
-  solutionPretty
-    ("ALongWalk", 2)
     (walkLongestDryHike, 6682)
 
 neverTellMeTheOddsSolutions :: IO ()
-neverTellMeTheOddsSolutions = do
-  solutionPretty
-    ("NeverTellMeTheOdds", 1)
+neverTellMeTheOddsSolutions =
+  prettySolution2
+    "NeverTellMeTheOdds"
     (length . hailstoneCollisions, 21679)
-  solutionPretty
-    ("NeverTellMeTheOdds", 2)
-    ((round :: Double -> Int) . sum . position . throwPerfectHailstone, 566914635762564)
+    ((round :: Double -> Int) . sum . position . throwPerfectRock, 566914635762564)
+
+snowverloadSolutions :: IO ()
+snowverloadSolutions =
+  prettySolution
+    (1, "Snowverload")
+    (uncurry (*) . splitComponentSizes 3, 545528)
 
 ------------------------------------------------------------------------------------------------
 -- Functions
 
-solutionPretty :: (Show b, Eq b) => (String, Int) -> (String -> b, b) -> IO ()
-solutionPretty (puzzle, part) (solution, expectedResult) = do
+prettySolution2 :: (Show a, Show b, Eq a, Eq b) => String -> (String -> a, a) -> (String -> b, b) -> IO ()
+prettySolution2 puzzle (solution1, expectedResult1) (solution2, expectedResult2) = do
+  prettySolution (1, puzzle) (solution1, expectedResult1)
+  prettySolution (2, puzzle) (solution2, expectedResult2)
+
+prettySolution :: (Show a, Eq a) => (Int, String) -> (String -> a, a) -> IO ()
+prettySolution (part, puzzle) (solution, expectedResult) = do
   putStr $ printf "%d. %s -> " part puzzle
   print
     . liftA3
@@ -333,4 +300,4 @@ solutionPretty (puzzle, part) (solution, expectedResult) = do
       id
       (== expectedResult)
     . solution
-    =<< readFile ("src/resources/" ++ puzzle ++ ".in")
+    =<< readFile (printf "src/resources/%s.in" puzzle)

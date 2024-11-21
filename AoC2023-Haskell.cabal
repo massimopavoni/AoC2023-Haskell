@@ -43,6 +43,7 @@ executable AoC2023-Haskell
       RandomUtils
       SandSlabs
       Scratchcards
+      Snowverload
       StepCounter
       TheFloorWillBeLava
       Trebuchet
@@ -63,6 +64,7 @@ executable AoC2023-Haskell
     , megaparsec
     , ordered-containers
     , parallel
+    , random
     , safe
     , search-algorithms
     , split

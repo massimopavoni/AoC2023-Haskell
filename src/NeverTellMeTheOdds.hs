@@ -1,4 +1,4 @@
-module NeverTellMeTheOdds (hailstoneCollisions, throwPerfectHailstone, Hailstone (..)) where
+module NeverTellMeTheOdds (hailstoneCollisions, throwPerfectRock, Hailstone (..)) where
 
 import Control.Arrow (second, (&&&))
 import Control.Category ((>>>))
@@ -92,8 +92,8 @@ hailstoneCollisions =
 -- shift the frame of reference using the first one: the cross product condition of colinearity
 -- for the 2 remaining hailstones can be used to find the collision times.
 -- Some more simple calculations lead to the initial position and velocity of the perfect rock throw.
-throwPerfectHailstone :: String -> Hailstone
-throwPerfectHailstone =
+throwPerfectRock :: String -> Hailstone
+throwPerfectRock =
   parseHailstones
     >>> take 3
     >>> map hailstoneToPosVel3D

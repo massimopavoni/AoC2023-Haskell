@@ -1,4 +1,4 @@
-module StepCounter (gardenReachablePlotsCount, infiniteGardenReachablePlots) where
+module StepCounter (gardenReachablePlotsCount, infiniteGardenReachablePlotsCount) where
 
 import Control.Arrow (first, second, (***))
 import Control.Category ((>>>))
@@ -52,8 +52,8 @@ gardenReachablePlotsCount steps =
 -- and because of the precise number of steps mentioned in the puzzle description
 -- (26501365 is indeed congruent to 65 modulo 131, even though maybe this property only makes
 -- the result precise for those numbers and an approximation to be rounded for different values).
-infiniteGardenReachablePlots :: Int -> String -> Int
-infiniteGardenReachablePlots steps =
+infiniteGardenReachablePlotsCount :: Int -> String -> Int
+infiniteGardenReachablePlotsCount steps =
   fromLists . lines
     >>> findReachablePlots sampleSteps
     >>> (<$> map (sampleSteps -) stepPoints) . (!!)
