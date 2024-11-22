@@ -277,7 +277,7 @@ snowverloadSolutions :: IO ()
 snowverloadSolutions =
   prettySolution
     (1, "Snowverload")
-    (uncurry (*) . splitComponentSizes 3, 545528)
+    (uncurry (*) . splitComponentSizes, 545528)
 
 ------------------------------------------------------------------------------------------------
 -- Functions

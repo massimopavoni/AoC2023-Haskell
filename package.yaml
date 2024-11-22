@@ -22,7 +22,6 @@ dependencies:
   - megaparsec
   - ordered-containers
   - parallel
-  - random
   - safe
   - search-algorithms
   - split

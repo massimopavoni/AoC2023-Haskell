@@ -64,7 +64,6 @@ executable AoC2023-Haskell
     , megaparsec
     , ordered-containers
     , parallel
-    , random
     , safe
     , search-algorithms
     , split
