@@ -22,8 +22,6 @@ resolver: lts-22.41
 compiler: ghc-9.6.6
 compiler-check: match-exact
 
-local-bin-path: bin
-
 # User packages to be built.
 # Various formats can be used as shown in the example below.
 #

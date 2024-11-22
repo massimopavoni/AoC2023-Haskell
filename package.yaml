@@ -16,6 +16,7 @@ dependencies:
   - bytestring
   - containers
   - extra
+  - file-embed
   - ghc
   - hmatrix
   - matrix

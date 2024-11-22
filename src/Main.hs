@@ -1,3 +1,4 @@
+{-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS_GHC -with-rtsopts=-N #-}
 
 module Main
@@ -38,9 +39,12 @@ import Control.Applicative (liftA3)
 import CosmicExpansion (hugeExpansionGalaxyPaths, shortestGalaxyPaths)
 import CubeConundrum (CubeColor (..), fewestCubes, possibleGame)
 import Data.Bool (bool)
+import Data.ByteString (ByteString)
+import Data.ByteString.Char8 (unpack)
+import Data.FileEmbed (embedDir)
 import Data.Foldable (sequenceA_)
 import Data.List.Split (splitOn)
-import Data.Maybe (mapMaybe)
+import Data.Maybe (fromMaybe, mapMaybe)
 import GearRatios (gearRatios, partNumbers)
 import HauntedWasteland (camelEscapeTime, ghostEscapeTime)
 import HotSprings (possibleCombinations, possibleCombinationsUnfolded)
@@ -61,6 +65,12 @@ import Text.Printf (printf)
 import TheFloorWillBeLava (energizedTilesCount, energizedTilesCountAllStarts)
 import Trebuchet (retrieveCalibration, retrieveCalibrationFixed)
 import WaitForIt (waysToRecord, waysToRecordFullRace)
+
+------------------------------------------------------------------------------------------------
+-- File embeds
+
+resourcesDir :: [(FilePath, ByteString)]
+resourcesDir = $(embedDir "src/resources")
 
 ------------------------------------------------------------------------------------------------
 -- Exports
@@ -300,4 +310,6 @@ prettySolution (part, puzzle) (solution, expectedResult) = do
       id
       (== expectedResult)
     . solution
-    =<< readFile (printf "src/resources/%s.in" puzzle)
+    . unpack
+    . (\name -> fromMaybe (error $ "Resource not found: " ++ name) $ lookup name resourcesDir)
+    $ (puzzle ++ ".in")

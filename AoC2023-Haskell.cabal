@@ -58,6 +58,7 @@ executable AoC2023-Haskell
     , bytestring
     , containers
     , extra
+    , file-embed
     , ghc
     , hmatrix
     , matrix
