@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS_GHC -with-rtsopts=-N #-}
 
@@ -36,6 +37,7 @@ import Aplenty (acceptedPartRatingCombinations, acceptedPartRatings)
 import CamelCards (handWinningsJokers, handWinningsNormal)
 import ClumsyCrucible (minimumCrucibleHeatLoss, minimumUltraCrucibleHeatLoss)
 import Control.Applicative (liftA3)
+import Control.Arrow ((>>>))
 import CosmicExpansion (hugeExpansionGalaxyPaths, shortestGalaxyPaths)
 import CubeConundrum (CubeColor (..), fewestCubes, possibleGame)
 import Data.Bool (bool)
@@ -43,6 +45,9 @@ import Data.ByteString (ByteString)
 import Data.ByteString.Char8 (unpack)
 import Data.FileEmbed (embedDir)
 import Data.Foldable (sequenceA_)
+import Data.Function ((&))
+import Data.HashMap.Strict (HashMap)
+import qualified Data.HashMap.Strict as HsMS (fromList, (!))
 import Data.List.Split (splitOn)
 import Data.Maybe (fromMaybe, mapMaybe)
 import GearRatios (gearRatios, partNumbers)
@@ -67,10 +72,31 @@ import Trebuchet (retrieveCalibration, retrieveCalibrationFixed)
 import WaitForIt (waysToRecord, waysToRecordFullRace)
 
 ------------------------------------------------------------------------------------------------
--- File embeds
+-- Resources
 
 resourcesDir :: [(FilePath, ByteString)]
 resourcesDir = $(embedDir "src/resources")
+
+resourceToString :: String -> String
+resourceToString =
+  unpack
+    . liftA2
+      fromMaybe
+      (error . ("Resource not found: " ++))
+      (`lookup` resourcesDir)
+
+puzzleAnswers :: (Read a) => HashMap String (a, a)
+puzzleAnswers =
+  resourceToString "PuzzleAnswers.out"
+    & ( lines
+          >>> map words
+          >>> map listToPuzzleAnswer
+          >>> HsMS.fromList
+      )
+  where
+    listToPuzzleAnswer :: (Read a) => [String] -> (String, (a, a))
+    listToPuzzleAnswer [p, a1, a2] = (p, (read a1, read a2))
+    listToPuzzleAnswer _ = error "Invalid puzzle answers format"
 
 ------------------------------------------------------------------------------------------------
 -- Exports
@@ -119,186 +145,186 @@ trebuchetSolutions :: IO ()
 trebuchetSolutions =
   prettySolution2
     "Trebuchet"
-    (sum . map retrieveCalibration . lines, 54388)
-    (sum . map retrieveCalibrationFixed . lines, 53515)
+    (sum . map retrieveCalibration . lines)
+    (sum . map retrieveCalibrationFixed . lines)
 
 cubeConundrumSolutions :: IO ()
 cubeConundrumSolutions =
   prettySolution2
     "CubeConundrum"
-    (sum . mapMaybe (possibleGame [(Blue, 14), (Green, 13), (Red, 12)]) . lines, 2278)
-    (sum . map (product . map snd . fewestCubes) . lines, 67953)
+    (sum . mapMaybe (possibleGame [(Blue, 14), (Green, 13), (Red, 12)]) . lines)
+    (sum . map (product . map snd . fewestCubes) . lines)
 
 gearRatiosSolutions :: IO ()
 gearRatiosSolutions =
   prettySolution2
     "GearRatios"
-    (sum . partNumbers, 520019)
-    (sum . gearRatios, 75519888)
+    (sum . partNumbers)
+    (sum . gearRatios)
 
 scratchcardsSolutions :: IO ()
 scratchcardsSolutions =
   prettySolution2
     "Scratchcards"
-    (sum . map scratchcardPoints . lines, 20117)
-    (sum . scratchcardCloneCounts, 13768818)
+    (sum . map scratchcardPoints . lines)
+    (sum . scratchcardCloneCounts)
 
 ifYouGiveASeedAFertilizerSolutions :: IO ()
 ifYouGiveASeedAFertilizerSolutions =
   prettySolution2
     "IfYouGiveASeedAFertilizer"
-    (nearestSeed, 240320250)
-    (nearestSeedRange, 28580589)
+    (nearestSeed)
+    (nearestSeedRange)
 
 waitForItSolutions :: IO ()
 waitForItSolutions =
   prettySolution2
     "WaitForIt"
-    (product . waysToRecord, 4403592)
-    (waysToRecordFullRace, 38017587)
+    (product . waysToRecord)
+    (waysToRecordFullRace)
 
 camelCardsSolutions :: IO ()
 camelCardsSolutions =
   prettySolution2
     "CamelCards"
-    (sum . handWinningsNormal, 250602641)
-    (sum . handWinningsJokers, 251037509)
+    (sum . handWinningsNormal)
+    (sum . handWinningsJokers)
 
 hauntedWastelandSolutions :: IO ()
 hauntedWastelandSolutions =
   prettySolution2
     "HauntedWasteland"
-    (camelEscapeTime, 15989)
-    (ghostEscapeTime, 13830919117339)
+    (camelEscapeTime)
+    (ghostEscapeTime)
 
 mirageMaintenanceSolutions :: IO ()
 mirageMaintenanceSolutions =
   prettySolution2
     "MirageMaintenance"
-    (sum . map nextValuePrediction . lines, 1702218515)
-    (sum . map initialValuePrediction . lines, 925)
+    (sum . map nextValuePrediction . lines)
+    (sum . map initialValuePrediction . lines)
 
 pipeMazeSolutions :: IO ()
 pipeMazeSolutions =
   prettySolution2
     "PipeMaze"
-    (farthestPipeSteps, 7102)
-    (nestPipesCount, 363)
+    (farthestPipeSteps)
+    (nestPipesCount)
 
 cosmicExpansionSolutions :: IO ()
 cosmicExpansionSolutions =
   prettySolution2
     "CosmicExpansion"
-    (sum . shortestGalaxyPaths, 9556712)
-    (sum . hugeExpansionGalaxyPaths, 678626199476)
+    (sum . shortestGalaxyPaths)
+    (sum . hugeExpansionGalaxyPaths)
 
 hotSpringsSolutions :: IO ()
 hotSpringsSolutions =
   prettySolution2
     "HotSprings"
-    (sum . map possibleCombinations . lines, 7653)
-    (sum . map (possibleCombinationsUnfolded 5) . lines, 60681419004564)
+    (sum . map possibleCombinations . lines)
+    (sum . map (possibleCombinationsUnfolded 5) . lines)
 
 pointOfIncidenceSolutions :: IO ()
 pointOfIncidenceSolutions =
   prettySolution2
     "PointOfIncidence"
-    (sum . map mirrorScore . splitOn "\n\n", 29846)
-    (sum . map mirrorSmudgeScore . splitOn "\n\n", 25401)
+    (sum . map mirrorScore . splitOn "\n\n")
+    (sum . map mirrorSmudgeScore . splitOn "\n\n")
 
 parabolicReflectorDishSolutions :: IO ()
 parabolicReflectorDishSolutions =
   prettySolution2
     "ParabolicReflectorDish"
-    (sum . platformBeamLoads, 110677)
-    (sum . spinningPlatformBeamLoads 1000000000, 90551)
+    (sum . platformBeamLoads)
+    (sum . spinningPlatformBeamLoads 1000000000)
 
 lensLibrarySolutions :: IO ()
 lensLibrarySolutions =
   prettySolution2
     "LensLibrary"
-    (sum . initSequenceHashes, 517965)
-    (sum . lensBoxFocusingPowers, 267372)
+    (sum . initSequenceHashes)
+    (sum . lensBoxFocusingPowers)
 
 theFloorWillBeLavaSolutions :: IO ()
 theFloorWillBeLavaSolutions =
   prettySolution2
     "TheFloorWillBeLava"
-    (energizedTilesCount, 7860)
-    (maximum . energizedTilesCountAllStarts, 8331)
+    (energizedTilesCount)
+    (maximum . energizedTilesCountAllStarts)
 
 clumsyCrucibleSolutions :: IO ()
 clumsyCrucibleSolutions =
   prettySolution2
     "ClumsyCrucible"
-    (minimumCrucibleHeatLoss, 817)
-    (minimumUltraCrucibleHeatLoss, 925)
+    (minimumCrucibleHeatLoss)
+    (minimumUltraCrucibleHeatLoss)
 
 lavaductLagoonSolutions :: IO ()
 lavaductLagoonSolutions =
   prettySolution2
     "LavaductLagoon"
-    (lagoonArea, 40714)
-    (lagoonAreaFixed, 129849166997110)
+    (lagoonArea)
+    (lagoonAreaFixed)
 
 aplentySolutions :: IO ()
 aplentySolutions =
   prettySolution2
     "Aplenty"
-    (sum . acceptedPartRatings, 418498)
-    (sum . acceptedPartRatingCombinations, 123331556462603)
+    (sum . acceptedPartRatings)
+    (sum . acceptedPartRatingCombinations)
 
 pulsePropagationSolutions :: IO ()
 pulsePropagationSolutions =
   prettySolution2
     "PulsePropagation"
-    (cablesWarmUp, 899848294)
-    (machineTurnOnClicks, 247454898168563)
+    (cablesWarmUp)
+    (machineTurnOnClicks)
 
 stepCounterSolutions :: IO ()
 stepCounterSolutions =
   prettySolution2
     "StepCounter"
-    (gardenReachablePlotsCount 64, 3585)
-    (infiniteGardenReachablePlotsCount 26501365, 597102953699891)
+    (gardenReachablePlotsCount 64)
+    (infiniteGardenReachablePlotsCount 26501365)
 
 sandSlabsSolutions :: IO ()
 sandSlabsSolutions =
   prettySolution2
     "SandSlabs"
-    (safeBricksCount, 441)
-    (unsafeBrickFallsCount, 80778)
+    (safeBricksCount)
+    (unsafeBrickFallsCount)
 
 aLongWalkSolutions :: IO ()
 aLongWalkSolutions =
   prettySolution2
     "ALongWalk"
-    (walkLongestHike, 2366)
-    (walkLongestDryHike, 6682)
+    (walkLongestHike)
+    (walkLongestDryHike)
 
 neverTellMeTheOddsSolutions :: IO ()
 neverTellMeTheOddsSolutions =
   prettySolution2
     "NeverTellMeTheOdds"
-    (length . hailstoneCollisions, 21679)
-    ((round :: Double -> Int) . sum . position . throwPerfectRock, 566914635762564)
+    (length . hailstoneCollisions)
+    ((round :: Double -> Int) . sum . position . throwPerfectRock)
 
 snowverloadSolutions :: IO ()
 snowverloadSolutions =
   prettySolution
     (1, "Snowverload")
-    (uncurry (*) . splitComponentSizes, 545528)
+    (uncurry (*) . splitComponentSizes)
 
 ------------------------------------------------------------------------------------------------
 -- Functions
 
-prettySolution2 :: (Show a, Show b, Eq a, Eq b) => String -> (String -> a, a) -> (String -> b, b) -> IO ()
-prettySolution2 puzzle (solution1, expectedResult1) (solution2, expectedResult2) = do
-  prettySolution (1, puzzle) (solution1, expectedResult1)
-  prettySolution (2, puzzle) (solution2, expectedResult2)
+prettySolution2 :: (Read a, Read b, Show a, Show b, Eq a, Eq b) => String -> (String -> a) -> (String -> b) -> IO ()
+prettySolution2 puzzle solution1 solution2 = do
+  prettySolution (1, puzzle) solution1
+  prettySolution (2, puzzle) solution2
 
-prettySolution :: (Show a, Eq a) => (Int, String) -> (String -> a, a) -> IO ()
-prettySolution (part, puzzle) (solution, expectedResult) = do
+prettySolution :: forall a. (Read a, Show a, Eq a) => (Int, String) -> (String -> a) -> IO ()
+prettySolution (part, puzzle) solution = do
   putStr $ printf "%d. %s -> " part puzzle
   print
     . liftA3
@@ -310,6 +336,11 @@ prettySolution (part, puzzle) (solution, expectedResult) = do
       id
       (== expectedResult)
     . solution
-    . unpack
-    . (\name -> fromMaybe (error $ "Resource not found: " ++ name) $ lookup name resourcesDir)
+    . resourceToString
     $ (puzzle ++ ".in")
+  where
+    expectedResult :: a
+    expectedResult = case part of
+      1 -> fst $ puzzleAnswers HsMS.! puzzle
+      2 -> snd $ puzzleAnswers HsMS.! puzzle
+      _ -> error "Invalid puzzle part number"

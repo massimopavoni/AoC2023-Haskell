@@ -38,8 +38,8 @@ platformBeamLoads = map pack . lines >>> northBeamLoads
 -- I get that it's not about developing the most efficient solution,
 -- but I still went out of my way to try and optimize some parts of it,
 -- managing to practically quarter the execution time (making use of ByteString and a HashMap).
--- Other than that, the solution is similar to some previous problems,
--- in the sense that we have to use a different approach to a variation of the problem.
+-- Other than that, the solution is similar to some previous ones,
+-- in the sense that we have to use a different approach for a variation of the puzzle.
 -- In this case, we had to find a repeating platform pattern after a certain number of tilting cycles:
 -- once figured how to get that, we can just use modular arithmetic to find the platform pattern
 -- after the given number of cycles.

@@ -1,5 +1,3 @@
-{-# OPTIONS_GHC -Wno-incomplete-record-updates #-}
-
 module PulsePropagation (cablesWarmUp, machineTurnOnClicks) where
 
 import Control.Applicative ((<|>))
