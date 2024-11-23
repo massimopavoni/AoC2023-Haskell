@@ -173,15 +173,15 @@ ifYouGiveASeedAFertilizerSolutions :: IO ()
 ifYouGiveASeedAFertilizerSolutions =
   prettySolution2
     "IfYouGiveASeedAFertilizer"
-    (nearestSeed)
-    (nearestSeedRange)
+    nearestSeed
+    nearestSeedRange
 
 waitForItSolutions :: IO ()
 waitForItSolutions =
   prettySolution2
     "WaitForIt"
     (product . waysToRecord)
-    (waysToRecordFullRace)
+    waysToRecordFullRace
 
 camelCardsSolutions :: IO ()
 camelCardsSolutions =
@@ -194,8 +194,8 @@ hauntedWastelandSolutions :: IO ()
 hauntedWastelandSolutions =
   prettySolution2
     "HauntedWasteland"
-    (camelEscapeTime)
-    (ghostEscapeTime)
+    camelEscapeTime
+    ghostEscapeTime
 
 mirageMaintenanceSolutions :: IO ()
 mirageMaintenanceSolutions =
@@ -208,8 +208,8 @@ pipeMazeSolutions :: IO ()
 pipeMazeSolutions =
   prettySolution2
     "PipeMaze"
-    (farthestPipeSteps)
-    (nestPipesCount)
+    farthestPipeSteps
+    nestPipesCount
 
 cosmicExpansionSolutions :: IO ()
 cosmicExpansionSolutions =
@@ -250,22 +250,22 @@ theFloorWillBeLavaSolutions :: IO ()
 theFloorWillBeLavaSolutions =
   prettySolution2
     "TheFloorWillBeLava"
-    (energizedTilesCount)
+    energizedTilesCount
     (maximum . energizedTilesCountAllStarts)
 
 clumsyCrucibleSolutions :: IO ()
 clumsyCrucibleSolutions =
   prettySolution2
     "ClumsyCrucible"
-    (minimumCrucibleHeatLoss)
-    (minimumUltraCrucibleHeatLoss)
+    minimumCrucibleHeatLoss
+    minimumUltraCrucibleHeatLoss
 
 lavaductLagoonSolutions :: IO ()
 lavaductLagoonSolutions =
   prettySolution2
     "LavaductLagoon"
-    (lagoonArea)
-    (lagoonAreaFixed)
+    lagoonArea
+    lagoonAreaFixed
 
 aplentySolutions :: IO ()
 aplentySolutions =
@@ -278,8 +278,8 @@ pulsePropagationSolutions :: IO ()
 pulsePropagationSolutions =
   prettySolution2
     "PulsePropagation"
-    (cablesWarmUp)
-    (machineTurnOnClicks)
+    cablesWarmUp
+    machineTurnOnClicks
 
 stepCounterSolutions :: IO ()
 stepCounterSolutions =
@@ -292,15 +292,15 @@ sandSlabsSolutions :: IO ()
 sandSlabsSolutions =
   prettySolution2
     "SandSlabs"
-    (safeBricksCount)
-    (unsafeBrickFallsCount)
+    safeBricksCount
+    unsafeBrickFallsCount
 
 aLongWalkSolutions :: IO ()
 aLongWalkSolutions =
   prettySolution2
     "ALongWalk"
-    (walkLongestHike)
-    (walkLongestDryHike)
+    walkLongestHike
+    walkLongestDryHike
 
 neverTellMeTheOddsSolutions :: IO ()
 neverTellMeTheOddsSolutions =

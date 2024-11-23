@@ -12,7 +12,7 @@ This was my very first ever [**Advent of Code**](https://adventofcode.com/2023)
 and I had a lot of conflicting feelings and opinions about it.
 <br>
 In the end, I'm glad I tried and made it to the end, despite taking a lot of time
-and the puzzle solutions not being all original( had some help from **Reddit** [here](https://www.reddit.com/r/adventofcode/)
+and the puzzle solutions not being all original (had some help from **Reddit** [here](https://www.reddit.com/r/adventofcode/)
 and [here](https://www.reddit.com/r/haskell/)) or optimized enough to run in less than a second.
 
 The best part was surely learning a lot of new stuff about Haskell
@@ -20,8 +20,8 @@ and how to approach problems with a "heavily functional mindset" 😆
 
 ### Days
 Instead of going through each day and writing any sort of write-up,
-I would like to list some of the most interesting and useful concepts I reviewed and studied for every problem
-(you can always explore the repository to see the code in detail if you're intrigued).
+I would like to list some of the most interesting and useful concepts I reviewed and studied for the problems
+(if you're intrigued, you can always explore the repository and check out the code in detail).
 
 Very "dry" summary of days:
 1. [Trebuchet](src/Trebuchet.hs) ->
@@ -118,3 +118,7 @@ Very "dry" summary of days:
     [eigendecomposition](https://en.wikipedia.org/wiki/Eigendecomposition_of_a_matrix)
     [eigenvalues and eigenvectors](https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors),
     [Fiedler vector](https://en.wikipedia.org/wiki/Algebraic_connectivity#Fiedler_vector),
+
+Some additional things I learned during the whole experience are: [Stack](https://docs.haskellstack.org/en/stable/)
+project management, Haskell program profiling, multiple language extensions and pragmas usage, some commonly used and useful libraries,
+point-free style (and slightly obfuscating code at times), better understanding of Functor-Applicative-Monad, file handling and resources embedding.
