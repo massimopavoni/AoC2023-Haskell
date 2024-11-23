@@ -3,10 +3,10 @@ My solutions to the Advent of Code 2023 puzzles
 
 ### Thoughts
 The solutions are run all together in the [Main](src/Main.hs) module,
-compiled down to a single optimized executable containing the inputs too.
+compiled down to a single optimized executable.
 <br>
-The answers are obviously specific to the inputs, which is why I made it so
-that anyone can build and run the project with their own inputs.
+The answers are obviously specific to the inputs, which is why I made it so that anyone
+can build and run the project with their own inputs (although I tested the program only on Linux).
 
 This was my very first ever [**Advent of Code**](https://adventofcode.com/2023)
 and I had a lot of conflicting feelings and opinions about it.
@@ -15,8 +15,8 @@ In the end, I'm glad I tried and made it to the end, despite taking a lot of tim
 and the puzzle solutions not being all original (had some help from **Reddit** [here](https://www.reddit.com/r/adventofcode/)
 and [here](https://www.reddit.com/r/haskell/)) or optimized enough to run in less than a second.
 
-The best part was surely learning a lot of new stuff about Haskell
-and how to approach problems with a "heavily functional mindset" 😆
+The best part was surely learning a lot of new stuff about Haskell and all the different topics that inspired the puzzles,
+as well as how to approach problems with a "heavily functional mindset" 😆
 
 ### Days
 Instead of going through each day and writing any sort of write-up,
@@ -119,6 +119,6 @@ Very "dry" summary of days:
     [eigenvalues and eigenvectors](https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors),
     [Fiedler vector](https://en.wikipedia.org/wiki/Algebraic_connectivity#Fiedler_vector),
 
-Some additional things I learned during the whole experience are: [Stack](https://docs.haskellstack.org/en/stable/)
-project management, Haskell program profiling, multiple language extensions and pragmas usage, some commonly used and useful libraries,
-point-free style (and slightly obfuscating code at times), better understanding of Functor-Applicative-Monad, file handling and resources embedding.
+Some additional things I learned during **AoC2023** are: [Stack](https://docs.haskellstack.org/en/stable/)
+project management, Haskell program profiling, multiple language extensions and pragmas usage, some more commonly used and useful libraries,
+point-free style (slightly obfuscating code), better understanding of Functor-Applicative-Monad, file handling and resources embedding.
