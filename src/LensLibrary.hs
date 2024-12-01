@@ -1,4 +1,4 @@
-module LensLibrary where
+module LensLibrary (initSequenceHashes, lensBoxFocusingPowers) where
 
 import Control.Category ((>>>))
 import Data.Bool (bool)
