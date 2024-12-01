@@ -1,12 +1,5 @@
-# Binaries ignoring shenanigans
-*
-!*.*
-!*/
-
 # AoC ignores
 resources/
-*.in
-bin/
 
 ### Haskell ###
 dist
