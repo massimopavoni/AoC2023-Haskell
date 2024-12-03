@@ -115,7 +115,7 @@ Very "dry" summary of days:
     [spectral partitioning and spectral bisection](https://en.wikipedia.org/wiki/Graph_partition#Spectral_partitioning_and_spectral_bisection),
     [spectral graph theory](https://en.wikipedia.org/wiki/Spectral_graph_theory),
     [Laplacian matrix](https://en.wikipedia.org/wiki/Laplacian_matrix),
-    [eigendecomposition](https://en.wikipedia.org/wiki/Eigendecomposition_of_a_matrix)
+    [eigendecomposition](https://en.wikipedia.org/wiki/Eigendecomposition_of_a_matrix),
     [eigenvalues and eigenvectors](https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors),
     [Fiedler vector](https://en.wikipedia.org/wiki/Algebraic_connectivity#Fiedler_vector)
 
