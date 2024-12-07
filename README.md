@@ -92,7 +92,7 @@ Very "dry" summary of days:
 22. [Sand Slabs](src/SandSlabs.hs) ->
     [graph theory](https://en.wikipedia.org/wiki/Graph_theory),
     graph analysis,
-    [graphviz](https://graphviz.org/),
+    [graphviz](https://graphviz.org/)
 23. [A Long Walk](src/ALongWalk.hs) ->
     [longest path problem](https://en.wikipedia.org/wiki/Longest_path_problem),
     types of graphs,
@@ -104,7 +104,7 @@ Very "dry" summary of days:
     [boolean satifiability problems](https://en.wikipedia.org/wiki/Boolean_satisfiability_problem),
     [satifiability modulo theories](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories),
     [cross product](https://en.wikipedia.org/wiki/Cross_product) properties
-    for [computational geometry](https://en.wikipedia.org/wiki/Cross_product#Computational_geometry),
+    for [computational geometry](https://en.wikipedia.org/wiki/Cross_product#Computational_geometry)
 25. [Snowverload](src/Snowverload.hs) ->
     [graph components](https://en.wikipedia.org/wiki/Component_(graph_theory)),
     [graph connectivity](https://en.wikipedia.org/wiki/Connectivity_(graph_theory)),
@@ -115,9 +115,9 @@ Very "dry" summary of days:
     [spectral partitioning and spectral bisection](https://en.wikipedia.org/wiki/Graph_partition#Spectral_partitioning_and_spectral_bisection),
     [spectral graph theory](https://en.wikipedia.org/wiki/Spectral_graph_theory),
     [Laplacian matrix](https://en.wikipedia.org/wiki/Laplacian_matrix),
-    [eigendecomposition](https://en.wikipedia.org/wiki/Eigendecomposition_of_a_matrix)
+    [eigendecomposition](https://en.wikipedia.org/wiki/Eigendecomposition_of_a_matrix),
     [eigenvalues and eigenvectors](https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors),
-    [Fiedler vector](https://en.wikipedia.org/wiki/Algebraic_connectivity#Fiedler_vector),
+    [Fiedler vector](https://en.wikipedia.org/wiki/Algebraic_connectivity#Fiedler_vector)
 
 Some additional things I learned during **AoC2023** are: [Stack](https://docs.haskellstack.org/en/stable/)
 project management, Haskell program profiling, multiple language extensions and pragmas usage, some more commonly used and useful libraries,
