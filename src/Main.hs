@@ -85,7 +85,7 @@ resourceToString =
       (error . ("Resource not found: " ++))
       (`lookup` resourcesDir)
 
-puzzleAnswers :: (Read a) => HashMap String (a, a)
+puzzleAnswers :: HashMap String (String, String)
 puzzleAnswers =
   resourceToString "PuzzleAnswers.out"
     & ( lines
@@ -94,8 +94,8 @@ puzzleAnswers =
           >>> HsMS.fromList
       )
   where
-    listToPuzzleAnswer :: (Read a) => [String] -> (String, (a, a))
-    listToPuzzleAnswer [p, a1, a2] = (p, (read a1, read a2))
+    listToPuzzleAnswer :: [String] -> (String, (String, String))
+    listToPuzzleAnswer [p, a1, a2] = (p, (a1, a2))
     listToPuzzleAnswer _ = error "Invalid puzzle answers format"
 
 ------------------------------------------------------------------------------------------------
@@ -318,28 +318,28 @@ snowverloadSolutions =
 ------------------------------------------------------------------------------------------------
 -- Functions
 
-prettySolution2 :: (Read a, Read b, Show a, Show b, Eq a, Eq b) => String -> (String -> a) -> (String -> b) -> IO ()
+prettySolution2 :: (Show a, Show b) => String -> (String -> a) -> (String -> b) -> IO ()
 prettySolution2 puzzle solution1 solution2 = do
   prettySolution (1, puzzle) solution1
   prettySolution (2, puzzle) solution2
 
-prettySolution :: forall a. (Read a, Show a, Eq a) => (Int, String) -> (String -> a) -> IO ()
+prettySolution :: forall a. (Show a) => (Int, String) -> (String -> a) -> IO ()
 prettySolution (part, puzzle) solution = do
   putStr $ printf "%d. %s -> " part puzzle
   print
     . liftA3
       bool
       ( error
-          . printf "Wrong solution for %s part %d: expected %s, but got %s" puzzle part (show expectedResult)
+          . printf "Wrong solution for %s part %d: expected %s, but got %s" puzzle (show part) (show expectedResult)
           . show
       )
       id
-      (== expectedResult)
+      ((== expectedResult) . show)
     . solution
     . resourceToString
     $ (puzzle ++ ".in")
   where
-    expectedResult :: a
+    expectedResult :: String
     expectedResult = case part of
       1 -> fst $ puzzleAnswers HsMS.! puzzle
       2 -> snd $ puzzleAnswers HsMS.! puzzle
