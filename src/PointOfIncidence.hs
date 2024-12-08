@@ -1,8 +1,9 @@
-module PointOfIncidence (mirrorScore, mirrorSmudgeScore) where
+module PointOfIncidence (mirrorScoresSum, mirrorSmudgeScoresSum) where
 
 import Control.Arrow (second, (&&&))
 import Control.Category ((>>>))
 import Data.List (elemIndex, inits, tails, transpose)
+import Data.List.Split (splitOn)
 import Data.Maybe (fromMaybe)
 import Data.Tuple.Extra (both)
 import Safe (tailSafe)
@@ -11,12 +12,18 @@ import Safe (tailSafe)
 -- Exports
 
 -- The first part got changed after the second one, using a generic function.
-mirrorScore :: String -> Int
-mirrorScore = reflectionLineScore 0
+mirrorScoresSum :: String -> Int
+mirrorScoresSum =
+  splitOn "\n\n"
+    >>> map (reflectionLineScore 0)
+    >>> sum
 
 -- The second part introduces the possibility of mirrors with imperfect reflections (smudges).
-mirrorSmudgeScore :: String -> Int
-mirrorSmudgeScore = reflectionLineScore 1
+mirrorSmudgeScoresSum :: String -> Int
+mirrorSmudgeScoresSum =
+  splitOn "\n\n"
+    >>> map (reflectionLineScore 1)
+    >>> sum
 
 ------------------------------------------------------------------------------------------------
 -- Functions

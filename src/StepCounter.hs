@@ -26,10 +26,10 @@ import Safe (headErr)
 -- Exports
 
 -- The first part is easy enough, since it just involves a breadth-first search.
-gardenReachablePlotsCount :: Int -> String -> Int
-gardenReachablePlotsCount steps =
+gardenReachablePlotsCount :: String -> Int
+gardenReachablePlotsCount =
   fromLists . lines
-    >>> findReachablePlots steps
+    >>> findReachablePlots 64
     >>> headErr
 
 -- The second part is the annoying thing I mentioned above.
@@ -52,15 +52,15 @@ gardenReachablePlotsCount steps =
 -- and because of the precise number of steps mentioned in the puzzle description
 -- (26501365 is indeed congruent to 65 modulo 131, even though maybe this property only makes
 -- the result precise for those numbers and an approximation to be rounded for different values).
-infiniteGardenReachablePlotsCount :: Int -> String -> Int
-infiniteGardenReachablePlotsCount steps =
+infiniteGardenReachablePlotsCount :: String -> Int
+infiniteGardenReachablePlotsCount =
   fromLists . lines
     >>> findReachablePlots sampleSteps
     >>> (<$> map (sampleSteps -) stepPoints) . (!!)
     >>> asColumn . vector . map fromIntegral
     >>> linearSolve a
     >>> toList . flatten . fromJust
-    >>> zipWith (*) (variableQuadratic steps)
+    >>> zipWith (*) (variableQuadratic 26501365)
     >>> round . sum
   where
     sampleSteps :: Int

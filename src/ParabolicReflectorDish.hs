@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module ParabolicReflectorDish (platformBeamLoads, spinningPlatformBeamLoads) where
+module ParabolicReflectorDish (platformBeamLoadsSum, spinningPlatformBeamLoadsSum) where
 
 import Control.Arrow ((&&&))
 import Control.Category ((>>>))
@@ -17,8 +17,11 @@ import RandomUtils (Pos)
 -- The first part was very straightforward, and I was able to come up with a solution that
 -- does not even manipulate the original input, but just counts the number of round rocks,
 -- then uses that information to find the indices to use for the loads summations.
-platformBeamLoads :: String -> [Int]
-platformBeamLoads = map pack . lines >>> northBeamLoads
+platformBeamLoadsSum :: String -> Int
+platformBeamLoadsSum =
+  map pack . lines
+    >>> northBeamLoads
+    >>> sum
   where
     northBeamLoads :: [ByteString] -> [Int]
     northBeamLoads ls =
@@ -43,16 +46,17 @@ platformBeamLoads = map pack . lines >>> northBeamLoads
 -- In this case, we had to find a repeating platform pattern after a certain number of tilting cycles:
 -- once figured how to get that, we can just use modular arithmetic to find the platform pattern
 -- after the given number of cycles.
-spinningPlatformBeamLoads :: Int -> String -> [Int]
-spinningPlatformBeamLoads cycles =
+spinningPlatformBeamLoadsSum :: String -> Int
+spinningPlatformBeamLoadsSum =
   map pack . lines
     >>> iterate spinOnce
     >>> liftA2
       (!!)
       id
-      ((\(b, e) -> b + (cycles - b) `rem` (e - b)) . spinCycle empty 0)
+      ((\(b, e) -> b + (1000000000 - b) `rem` (e - b)) . spinCycle empty 0)
     >>> transpose
     >>> map calculateLoad
+    >>> sum
   where
     -- Once we find an already seen platform pattern, we can stop spinnning
     -- and just yield the indices of the first cycle.

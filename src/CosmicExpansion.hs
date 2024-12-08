@@ -1,4 +1,4 @@
-module CosmicExpansion (shortestGalaxyPaths, hugeExpansionGalaxyPaths) where
+module CosmicExpansion (shortestGalaxyPathsSum, hugeExpansionGalaxyPathsSum) where
 
 import Control.Category ((>>>))
 import Data.Function ((&))
@@ -14,12 +14,18 @@ import Safe (headErr, tailSafe)
 -- Exports
 
 -- The first part finds the shortest paths using an expanding factor of 2 for empty rows/columns.
-shortestGalaxyPaths :: String -> [Int]
-shortestGalaxyPaths = fromLists . lines >>> analyzeImage 2
+shortestGalaxyPathsSum :: String -> Int
+shortestGalaxyPathsSum =
+  fromLists . lines
+    >>> analyzeImage 2
+    >>> sum
 
 -- The second part finds the shortest paths using an expanding factor of 1000000 for empty rows/columns.
-hugeExpansionGalaxyPaths :: String -> [Int]
-hugeExpansionGalaxyPaths = fromLists . lines >>> analyzeImage 1000000
+hugeExpansionGalaxyPathsSum :: String -> Int
+hugeExpansionGalaxyPathsSum =
+  fromLists . lines
+    >>> analyzeImage 1000000
+    >>> sum
 
 ------------------------------------------------------------------------------------------------
 -- Functions

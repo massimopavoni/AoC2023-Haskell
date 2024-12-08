@@ -1,4 +1,4 @@
-module NeverTellMeTheOdds (hailstoneCollisions, throwPerfectRock, Hailstone (..)) where
+module NeverTellMeTheOdds (hailstoneCollisionsCount, perfectRockThrowCoordinatesSum) where
 
 import Control.Arrow (second, (&&&))
 import Control.Category ((>>>))
@@ -32,12 +32,13 @@ type VecTuple = (Vector Double, Vector Double)
 -- Since the number of hailstones is not too high, this is just about using
 -- line-line intersection equations to find the time of collision and verify
 -- that it happens within 0 and 1 nano-second from the starting position.
-hailstoneCollisions :: String -> [Vector Double]
-hailstoneCollisions =
+hailstoneCollisionsCount :: String -> Int
+hailstoneCollisionsCount =
   parseHailstones
     >>> map hailstoneToLine2D
     >>> join (zipIf (<))
     >>> mapMaybe (uncurry linesIntersection)
+    >>> length
   where
     -- This part only deals in 2 dimensions.
     hailstoneToLine2D :: Hailstone -> VecTuple
@@ -92,14 +93,14 @@ hailstoneCollisions =
 -- shift the frame of reference using the first one: the cross product condition of colinearity
 -- for the 2 remaining hailstones can be used to find the collision times.
 -- Some more simple calculations lead to the initial position and velocity of the perfect rock throw.
-throwPerfectRock :: String -> Hailstone
-throwPerfectRock =
+perfectRockThrowCoordinatesSum :: String -> Int
+perfectRockThrowCoordinatesSum =
   parseHailstones
     >>> take 3
     >>> map hailstoneToPosVel3D
     >>> findPerfectThrow
     >>> both toList
-    >>> uncurry Hailstone
+    >>> round . sum . fst
   where
     -- And this part deals in 3 dimensions (plus the time).
     hailstoneToPosVel3D :: Hailstone -> VecTuple

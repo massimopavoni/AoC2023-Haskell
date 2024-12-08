@@ -1,4 +1,4 @@
-module Aplenty (acceptedPartRatings, acceptedPartRatingCombinations) where
+module Aplenty (acceptedPartRatingsSum, acceptedPartRatingCombinationsSum) where
 
 import Control.Applicative (liftA3, (<|>))
 import Control.Arrow (second, (***))
@@ -38,11 +38,12 @@ data WorkflowRange = WfRange {xmas :: Char, condition :: Ordering, branch :: Int
 -- as well as the now loved and probably overused applicative lifting
 -- and a rather obscure until function (it just gets the next workflow thanks to
 -- the lazy evaluation of the find function over the list of mapped workflow conditions).
-acceptedPartRatings :: String -> [Int]
-acceptedPartRatings =
+acceptedPartRatingsSum :: String -> Int
+acceptedPartRatingsSum =
   parseWorkflowsAndParts
     >>> uncurry partsThroughWorkflows
     >>> concatMap ((<$> partValueFunctions) . (&))
+    >>> sum
   where
     partsThroughWorkflows :: HashMap String [Part a -> String] -> [Part a] -> [Part a]
     partsThroughWorkflows hm =
@@ -65,12 +66,13 @@ acceptedPartRatings =
 -- The second part is the main monster, and there's a lot to unpack:
 -- once we have all the accepted ranges for part ratings, we just multiply those to get all possible combinations...
 -- ...but how to we get the ranges?
-acceptedPartRatingCombinations :: String -> [Int]
-acceptedPartRatingCombinations =
+acceptedPartRatingCombinationsSum :: String -> Int
+acceptedPartRatingCombinationsSum =
   parseWorkflows
     >>> rangesThroughWorkflows
     >>> map (map ((+ 1) . abs . uncurry (-)) . (<$> partValueFunctions) . (&))
     >>> map product
+    >>> sum
   where
     -- We start from when input workflow and with all possible rating ranges.
     rangesThroughWorkflows :: HashMap String [WorkflowRange] -> [Part (Int, Int)]

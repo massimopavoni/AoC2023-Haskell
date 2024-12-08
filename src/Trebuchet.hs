@@ -1,6 +1,7 @@
-module Trebuchet (retrieveCalibration, retrieveCalibrationFixed) where
+module Trebuchet (calibrationValuesSum, fixedCalibrationValuesSum) where
 
 import Control.Applicative ((<|>))
+import Control.Arrow ((>>>))
 import Control.Monad (void)
 import Data.Char (digitToInt, isDigit)
 import Data.Maybe (fromJust, fromMaybe)
@@ -12,8 +13,11 @@ import Text.Megaparsec.Char (digitChar, string)
 -- Exports
 
 -- The first part supports a basic solution, and a pretty self-explanatory one at that.
-retrieveCalibration :: String -> Int
-retrieveCalibration = read . firstLast . filter isDigit
+calibrationValuesSum :: String -> Int
+calibrationValuesSum =
+  lines
+    >>> map (read . firstLast . filter isDigit)
+    >>> sum
   where
     firstLast :: [a] -> [a]
     firstLast [] = []
@@ -22,8 +26,11 @@ retrieveCalibration = read . firstLast . filter isDigit
 
 -- The second part saw my first few attempts fail under the desire to not use many complex external packages.
 -- But I ended up using a parsing library anyway, and still learned a lot in the process.
-retrieveCalibrationFixed :: String -> Int
-retrieveCalibrationFixed = parseInput valueParser id
+fixedCalibrationValuesSum :: String -> Int
+fixedCalibrationValuesSum =
+  lines
+    >>> map (parseInput valueParser id)
+    >>> sum
 
 ------------------------------------------------------------------------------------------------
 -- Parsers

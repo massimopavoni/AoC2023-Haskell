@@ -1,6 +1,6 @@
 {-# LANGUAGE TupleSections #-}
 
-module MirageMaintenance (nextValuePrediction, initialValuePrediction) where
+module MirageMaintenance (nextValuePredictionsSum, initialValuePredictionsSum) where
 
 import Control.Category ((>>>))
 import Data.List (foldl1')
@@ -14,13 +14,19 @@ import Text.Megaparsec.Char.Lexer (decimal, signed)
 -- Exports
 
 -- The first part is quite simple, once the predictValue function recursion is understood.
-nextValuePrediction :: String -> Int
-nextValuePrediction = parseInput valueHistoryParser $ predictValue last sum
+nextValuePredictionsSum :: String -> Int
+nextValuePredictionsSum =
+  lines
+    >>> map (parseInput valueHistoryParser $ predictValue last sum)
+    >>> sum
 
 -- The second part does not change much compared to the first,
 -- as the only change is the function to properly calculate the difference that yields the initial value.
-initialValuePrediction :: String -> Int
-initialValuePrediction = parseInput valueHistoryParser $ predictValue headErr (foldl1' (flip (-)))
+initialValuePredictionsSum :: String -> Int
+initialValuePredictionsSum =
+  lines
+    >>> map (parseInput valueHistoryParser $ predictValue headErr (foldl1' (flip (-))))
+    >>> sum
 
 ------------------------------------------------------------------------------------------------
 -- Functions

@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module HotSprings (possibleCombinations, possibleCombinationsUnfolded) where
+module HotSprings (possibleCombinationsSum, unfoldedPossibleCombinationsSum) where
 
 import Control.Arrow ((***))
 import Control.Category ((>>>))
@@ -15,17 +15,23 @@ import qualified Data.Vector as Vect (concat, drop, length, uncons)
 -- Exports
 
 -- The first part is easy enough, once the dynamic programming problem is understood.
-possibleCombinations :: String -> Int
-possibleCombinations = uncurry validArrangementsMemoized . parseRecord
+possibleCombinationsSum :: String -> Int
+possibleCombinationsSum =
+  lines
+    >>> map (uncurry validArrangementsMemoized . parseRecord)
+    >>> sum
 
 -- The second part is instead quite much slower, and needing at least some memoization.
-possibleCombinationsUnfolded :: Int -> String -> Int
-possibleCombinationsUnfolded unfoldFactor = uncurry validArrangementsMemoized . unfold . parseRecord
+unfoldedPossibleCombinationsSum :: String -> Int
+unfoldedPossibleCombinationsSum =
+  lines
+    >>> map (uncurry validArrangementsMemoized . unfold . parseRecord)
+    >>> sum
   where
     unfold :: (ByteString, Vector Int) -> (ByteString, Vector Int)
     unfold (drs, udrs) =
-      ( intercalate "?" $ replicate unfoldFactor drs,
-        Vect.concat $ replicate unfoldFactor udrs
+      ( intercalate "?" $ replicate 5 drs,
+        Vect.concat $ replicate 5 udrs
       )
 
 ------------------------------------------------------------------------------------------------

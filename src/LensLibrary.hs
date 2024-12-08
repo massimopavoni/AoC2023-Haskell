@@ -1,4 +1,4 @@
-module LensLibrary (initSequenceHashes, lensBoxFocusingPowers) where
+module LensLibrary (initSequenceHashesSum, lensBoxFocusingPowersSum) where
 
 import Control.Category ((>>>))
 import Data.Bool (bool)
@@ -20,18 +20,20 @@ import Data.Map.Ordered.Strict (OMap, assocs, delete, singleton)
 -- Exports
 
 -- The first part is very easy, as it's just about properly hashing the values.
-initSequenceHashes :: String -> [Int]
-initSequenceHashes =
+initSequenceHashesSum :: String -> Int
+initSequenceHashesSum =
   parseInitSequence
     >>> map hash
+    >>> sum
 
 -- The second part was also quite easy, once the appropriate data structures are used.
-lensBoxFocusingPowers :: String -> [Int]
-lensBoxFocusingPowers =
+lensBoxFocusingPowersSum :: String -> Int
+lensBoxFocusingPowersSum =
   parseInitSequence
     >>> map parseLensOp
     >>> List.foldl' updateBoxes empty
     >>> map (uncurry boxFocusingPower) . ItMS.toList
+    >>> sum
   where
     -- In particular, we're using a Ordered Map for every box, as we need to keep the lenses sorted by insertion order,
     -- and we fortunately still have a alter function from the normal Ordered Map module,

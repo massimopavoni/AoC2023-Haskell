@@ -1,17 +1,17 @@
-module WaitForIt (waysToRecord, waysToRecordFullRace) where
+module WaitForIt (waysToRecordProduct, waysToRecordFullRace) where
 
 import RandomUtils (Parser, parseInput)
 import Safe (headErr)
 import Text.Megaparsec (between, eof, sepBy1, some)
-import Text.Megaparsec.Char (digitChar, newline, string, hspace1)
+import Text.Megaparsec.Char (digitChar, hspace1, newline, string)
 import Text.Megaparsec.Char.Lexer (decimal)
 
 ------------------------------------------------------------------------------------------------
 -- Exports
 
--- The first part maps the bounds size the solutions.
-waysToRecord :: String -> [Int]
-waysToRecord = parseInput (racesParser False) $ map inequationBoundsSize
+-- The first part maps the bounds size.
+waysToRecordProduct :: String -> Int
+waysToRecordProduct = product . parseInput (racesParser False) (map inequationBoundsSize)
 
 -- The second part just gets the bounds size of the one solution, the one race
 -- (and racesParser True switches the parser to "one race only mode",

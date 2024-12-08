@@ -1,9 +1,9 @@
-module CubeConundrum (CubeColor (..), possibleGame, fewestCubes) where
+module CubeConundrum (possibleGamesIdSum, fewestCubesPowerSetSum) where
 
 import Control.Category ((>>>))
 import Control.Monad (guard, (>=>))
 import Data.Map.Strict (assocs, fromListWith)
-import Data.Maybe (fromJust)
+import Data.Maybe (fromJust, mapMaybe)
 import GHC.Utils.Misc (capitalise)
 import RandomUtils (Parser, parseInput)
 import Text.Megaparsec (choice, eof, sepBy1, some)
@@ -20,25 +20,37 @@ data CubeColor = Blue | Green | Red
 -- Exports
 
 -- The first part is very easy, once the parser for the input is properly set up.
-possibleGame :: [(CubeColor, Int)] -> String -> Maybe Int
-possibleGame bag =
-  parseInput gameParser Just
-    >=> liftA2
-      (>>)
-      (guard . all possibleExtraction . snd)
-      (pure . fst)
+possibleGamesIdSum :: String -> Int
+possibleGamesIdSum =
+  lines
+    >>> mapMaybe
+      ( parseInput gameParser Just
+          >=> liftA2
+            (>>)
+            (guard . all possibleExtraction . snd)
+            (pure . fst)
+      )
+    >>> sum
   where
     possibleExtraction :: (CubeColor, Int) -> Bool
     possibleExtraction (c, n) = fromJust (lookup c bag) >= n
+      where
+        bag :: [(CubeColor, Int)]
+        bag = [(Blue, 14), (Green, 13), (Red, 12)]
 
 -- The second part of the problem is even simpler.
-fewestCubes :: String -> [(CubeColor, Int)]
-fewestCubes =
-  parseInput
-    gameParser
-    ( fromListWith max . snd
-        >>> assocs
-    )
+fewestCubesPowerSetSum :: String -> Int
+fewestCubesPowerSetSum =
+  lines
+    >>> map
+      ( parseInput
+          gameParser
+          ( fromListWith max . snd
+              >>> assocs
+          )
+          >>> product . map snd
+      )
+    >>> sum
 
 ------------------------------------------------------------------------------------------------
 -- Parsers

@@ -1,6 +1,6 @@
 {-# LANGUAGE LambdaCase #-}
 
-module Snowverload (splitComponentSizes) where
+module Snowverload (splitComponentSizesProduct) where
 
 import Control.Arrow ((&&&), (>>>))
 import Data.Foldable (foldl')
@@ -33,8 +33,8 @@ type Graph = HashMap Vertex [Vertex]
 -- The first (and only) part looks incredibly simple, and it's wonderful knowing it just works.
 -- After parsing the input, the answer to our graph partitioning/min-cut question can be found
 -- with what's called spectral partitioning/bisection (see spectral decomposition and spectral theorem).
-splitComponentSizes :: String -> (Int, Int)
-splitComponentSizes =
+splitComponentSizesProduct :: String -> Int
+splitComponentSizesProduct =
   parseWiringDiagram
     >>> eigSH' . graphToLaplacian
     >>> toList . chooseFiedlerVector
@@ -45,6 +45,7 @@ splitComponentSizes =
             else (cs1, cs2 + 1)
       )
       (0, 0)
+    >>> uncurry (*)
   where
     -- The first step is to convert the graph into its Laplacian matrix representation.
     -- The time this takes is negligible compared to the next step operation: eigendecomposition.

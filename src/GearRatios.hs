@@ -1,6 +1,6 @@
 {-# LANGUAGE TupleSections #-}
 
-module GearRatios (partNumbers, gearRatios) where
+module GearRatios (partNumbersSum, gearRatiosSum) where
 
 import Control.Arrow ((&&&))
 import Control.Category ((>>>))
@@ -25,12 +25,12 @@ import Text.Megaparsec.Char (digitChar, newline)
 -- Exports
 
 -- The first part is the most important, as I had to find a way of dealing with the grid-like input.
-partNumbers :: String -> [Int]
-partNumbers = enginePartsParser . fromLists . lines >>= (`parseInput` id)
+partNumbersSum :: String -> Int
+partNumbersSum = sum . (enginePartsParser . fromLists . lines >>= (`parseInput` id))
 
 -- The second part was quite a lot easier, considering the amount of hours I spent on the first one.
-gearRatios :: String -> [Int]
-gearRatios = engineGearsParser . fromLists . lines >>= (`parseInput` map product)
+gearRatiosSum :: String -> Int
+gearRatiosSum = sum . (engineGearsParser . fromLists . lines >>= (`parseInput` map product))
 
 ------------------------------------------------------------------------------------------------
 -- Parsers

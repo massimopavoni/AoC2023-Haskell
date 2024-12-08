@@ -1,4 +1,4 @@
-module TheFloorWillBeLava (energizedTilesCount, energizedTilesCountAllStarts) where
+module TheFloorWillBeLava (energizedTilesCount, maximumEnergizedTilesCountAllStarts) where
 
 import Control.Arrow ((&&&))
 import Control.Category ((>>>))
@@ -36,18 +36,20 @@ energizedTilesCount =
         >>> size
 
 -- The second part instead has to use all the possible starting positions along the contraption's borders.
-energizedTilesCountAllStarts :: String -> [Int]
-energizedTilesCountAllStarts =
+maximumEnergizedTilesCountAllStarts :: String -> Int
+maximumEnergizedTilesCountAllStarts =
   parseContraption
     >>> (starts &&& id)
-    >>> \(ss, tm) ->
-      parMap
-        rseq
-        ( liftA2 singleton fst (pure . snd) &&& pure
-            >>> flip (uncurry followLightBeams) tm
-            >>> size
+    >>> ( \(ss, tm) ->
+            parMap
+              rseq
+              ( liftA2 singleton fst (pure . snd) &&& pure
+                  >>> flip (uncurry followLightBeams) tm
+                  >>> size
+              )
+              ss
         )
-        ss
+    >>> maximum
   where
     -- Just 4 list comprehensions, nothing to see here.
     starts :: Matrix Tile -> [(Pos, Direction)]
