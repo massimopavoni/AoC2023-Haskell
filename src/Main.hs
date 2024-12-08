@@ -119,7 +119,7 @@ prettySolution puzzle part solution = do
     . liftA3
       bool
       ( error
-          . printf "Wrong solution for %s part %d: expected %s, but got %s" puzzle (show part) (show expectedResult)
+          . printf "Wrong solution for %s part %d: expected %s, but got %s" puzzle part (show expectedResult)
           . show
       )
       id
