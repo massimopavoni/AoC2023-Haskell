@@ -105,7 +105,7 @@ main = do
 -- Functions
 prettySolution2 :: (Show a, Show b) => (Int, String) -> (String -> a) -> Maybe (String -> b) -> IO ()
 prettySolution2 (day, puzzle) solution1 maybeSolution2 = do
-  putStrLn (printf "Day %d - %s" day puzzle)
+  putStrLn (printf "Day %d: %s" day puzzle)
   prettySolution puzzle 1 solution1
   case maybeSolution2 of
     Just solution2 -> prettySolution puzzle 2 solution2
