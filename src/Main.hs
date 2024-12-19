@@ -47,8 +47,8 @@ import WaitForIt (waysToRecordFullRace, waysToRecordProduct)
 resourcesDir :: [(FilePath, ByteString)]
 resourcesDir = $(embedDir "src/resources")
 
-resourceToString :: String -> String
-resourceToString =
+getResource :: String -> String
+getResource =
   unpack
     . liftA2
       fromMaybe
@@ -57,7 +57,7 @@ resourceToString =
 
 puzzleAnswers :: HashMap String (String, String)
 puzzleAnswers =
-  resourceToString "PuzzleAnswers.out"
+  getResource "PuzzleAnswers.out"
     & ( lines
           >>> map words
           >>> map listToPuzzleAnswer
@@ -125,7 +125,7 @@ prettySolution puzzle part solution = do
       id
       ((== expectedResult) . show)
     . solution
-    . resourceToString
+    . getResource
     $ (puzzle ++ ".in")
   where
     expectedResult :: String
