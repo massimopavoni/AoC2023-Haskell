@@ -131,10 +131,10 @@ singleButtonClick (Config cks _ cs ms) = updateConfig [("", "broadcaster", Low)]
         p' = nextPulse m'
 
         m' :: Module
-        m'
-          | isConjuctionModule m = m {memory = adjust (const p) sm $ memory m}
-          | switch m == Low = m {switch = High}
-          | otherwise = m {switch = Low}
+        m' = case m of
+          Conjuction mem _ -> m {memory = adjust (const p) sm mem}
+          FlipFlop sw _ -> m {switch = if sw == Low then High else Low}
+          _ -> m
 
         nextPulse :: Module -> Pulse
         nextPulse mm
@@ -195,4 +195,6 @@ parseModules =
         [out | out <- outputs (hm ! n), out `member` hm, isConjuctionModule (hm ! out)]
       where
         updateMemory :: Module -> Module
-        updateMemory m = m {memory = insert n Low $ memory m}
+        updateMemory m = case m of
+          Conjuction mem _ -> m {memory = insert n Low mem}
+          _ -> m
