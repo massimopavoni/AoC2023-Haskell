@@ -25,62 +25,82 @@ I would like to list some of the most interesting and useful concepts I reviewed
 
 1. [Trebuchet](src/Trebuchet.hs) ->
    [*megaparsec*](https://hackage.haskell.org/package/megaparsec) basics
+
 2. [Cube Conundrum](src/CubeConundrum.hs) ->
    more *megaparsec*,
    [Kleisli arrows](https://hackage.haskell.org/package/base/docs/Control-Arrow.html#t:Kleisli),
    [*containers*](https://hackage.haskell.org/package/containers)
+
 3. [Gear Ratios](src/GearRatios.hs) ->
    [*matrix*](https://hackage.haskell.org/package/matrix),
    [*unordered-containers*](https://hackage.haskell.org/package/unordered-containers),
    more complex *megaparsec* parser combinators
+
 4. [Scratchcards](src/Scratchcards.hs) ->
    even more *megaparsec* exploration
+
 5. [If You Give A Seed A Fertilizer](src/IfYouGiveASeedAFertilizer.hs) ->
    [Functor instances](https://hackage.haskell.org/package/base/docs/Prelude.html#t:Functor),
    ranges calculations
+
 6. [Wait For It](src/WaitForIt.hs) ->
    simple closed form algebraic solutions
+
 7. [Camel Cards](src/CamelCards.hs) ->
    sum types and sorting
+
 8. [Haunted Wasteland](src/HauntedWasteland.hs) ->
    synchronizing cycles LCM
+
 9. [Mirage Maintenance](src/MirageMaintenance.hs) ->
     number successions
+
 10. [Pipe Maze](src/PipeMaze.hs) ->
     more *matrix* operations,
     loop in a "maze" traversal,
     [Pick's theorem](https://en.wikipedia.org/wiki/Pick%27s_theorem),
     [shoelace formula](https://en.wikipedia.org/wiki/Shoelace_formula)
+
 11. [Cosmic Expansion](src/CosmicExpansion.hs) ->
     [Manhattan distance](https://en.wikipedia.org/wiki/Taxicab_geometry),
     [*vector*](https://hackage.haskell.org/package/vector)
+
 12. [Hot Springs](src/HotSprings.hs) ->
     [dynamic programming](https://en.wikipedia.org/wiki/Dynamic_programming),
     [memoization](https://en.wikipedia.org/wiki/Memoization),
     [*array*](https://hackage.haskell.org/package/array),
     [*bytestring*](https://hackage.haskell.org/package/bytestring)
+
 13. [Point Of Incidence](src/PointOfIncidence.hs) ->
     visual matrix partial symmetry
+
 14. [Parabolic Reflector Dish](src/ParabolicReflectorDish.hs) ->
     2D tilting physics simulation,
     modular arithmetic
+
 15. [Lens Library](src/LensLibrary.hs) ->
     silly hashes,
     more *containers* and *bytestring*
+
 16. [The Floor Will Be Lava](src/TheFloorWillBeLava.hs) ->
     [BFS](https://en.wikipedia.org/wiki/Breadth-first_search),
     [*parallel*](https://hackage.haskell.org/package/parallel)
+
 17. [Clumsy Crucible](src/ClumsyCrucible.hs) ->
     [Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm),
     [*search-algorithms*](https://hackage.haskell.org/package/search-algorithms),
     cost functions
+
 18. [Lavaduct Lagoon](src/LavaductLagoon.hs) ->
     Pick's theorem and shoelace formula again
+
 19. [Aplenty](src/Aplenty.hs) ->
     [*lens*](https://hackage.haskell.org/package/lens) attempts,
     more complex parsing and ranges calculations
+
 20. [Pulse Propagation](src/PulsePropagation.hs) ->
     synchronizing cycles LCM again
+
 21. [Step Counter](src/StepCounter.hs) ->
     BFS again,
     [*hmatrix*](https://hackage.haskell.org/package/hmatrix),
@@ -88,14 +108,17 @@ I would like to list some of the most interesting and useful concepts I reviewed
     data [interpolation](https://en.wikipedia.org/wiki/Interpolation),
     [quadratic growth](https://en.wikipedia.org/wiki/Quadratic_growth),
     [linear equations systems](https://en.wikipedia.org/wiki/System_of_linear_equations)
+
 22. [Sand Slabs](src/SandSlabs.hs) ->
     [graph theory](https://en.wikipedia.org/wiki/Graph_theory),
     graph analysis,
     [graphviz](https://graphviz.org/)
+
 23. [A Long Walk](src/ALongWalk.hs) ->
     [longest path problem](https://en.wikipedia.org/wiki/Longest_path_problem),
     types of graphs,
     graph simplification by dead-end edge pruning
+
 24. [Never Tell Me The Odds](src/NeverTellMeTheOdds.hs) ->
     [line-line intersection](https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection),
     [linear optimization](https://en.wikipedia.org/wiki/Linear_programming),
@@ -104,6 +127,7 @@ I would like to list some of the most interesting and useful concepts I reviewed
     [satifiability modulo theories](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories),
     [cross product](https://en.wikipedia.org/wiki/Cross_product) properties
     for [computational geometry](https://en.wikipedia.org/wiki/Cross_product#Computational_geometry)
+
 25. [Snowverload](src/Snowverload.hs) ->
     [graph components](https://en.wikipedia.org/wiki/Component_(graph_theory)),
     [graph connectivity](https://en.wikipedia.org/wiki/Connectivity_(graph_theory)),
