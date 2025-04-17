@@ -23,7 +23,6 @@ Instead of going through each day and writing any sort of write-up,
 I would like to list some of the most interesting and useful concepts I reviewed and studied for the problems
 (if you're intrigued, you can always explore the repository and check out the code in detail).
 
-Very "dry" summary of days:
 1. [Trebuchet](src/Trebuchet.hs) ->
    [*megaparsec*](https://hackage.haskell.org/package/megaparsec) basics
 2. [Cube Conundrum](src/CubeConundrum.hs) ->
