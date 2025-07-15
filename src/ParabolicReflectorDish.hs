@@ -8,7 +8,6 @@ import Data.ByteString.Char8 (ByteString, count, elemIndices, intercalate, pack,
 import qualified Data.ByteString.Char8 as BSC8 (length, reverse)
 import Data.Function ((&))
 import Data.HashMap.Strict (HashMap, empty, insert, (!?))
-import Data.List (foldl')
 import RandomUtils (Pos)
 
 ------------------------------------------------------------------------------------------------

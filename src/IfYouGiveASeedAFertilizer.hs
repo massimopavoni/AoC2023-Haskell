@@ -6,7 +6,7 @@ module IfYouGiveASeedAFertilizer (nearestSeed, nearestSeedRange) where
 import Control.Applicative ((<|>))
 import Control.Category ((>>>))
 import Control.Monad (void)
-import Data.Foldable (find, foldl')
+import Data.Foldable (find)
 import Data.List (sort)
 import Data.List.Extra (chunksOf)
 import Data.Maybe (fromJust, isJust)

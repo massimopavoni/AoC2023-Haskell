@@ -3,7 +3,6 @@ module TheFloorWillBeLava (energizedTilesCount, maximumEnergizedTilesCountAllSta
 import Control.Arrow ((&&&))
 import Control.Category ((>>>))
 import Control.Parallel.Strategies (parMap, rseq)
-import Data.Foldable (foldl')
 import Data.HashMap.Strict (HashMap, insertWith, singleton, size)
 import qualified Data.HashMap.Strict as HsMS (lookup)
 import Data.Matrix (Matrix, fromLists, ncols, nrows, safeGet)

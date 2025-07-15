@@ -3,7 +3,7 @@ module PulsePropagation (cablesWarmUp, machineTurnOnClicks) where
 import Control.Applicative ((<|>))
 import Control.Arrow (first, second)
 import Control.Category ((>>>))
-import Data.Foldable (find, foldl')
+import Data.Foldable (find)
 import Data.Function ((&))
 import Data.Functor (($>))
 import Data.List (foldl1', iterate')

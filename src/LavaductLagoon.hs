@@ -4,7 +4,6 @@ module LavaductLagoon (lagoonArea, lagoonAreaFixed) where
 
 import Control.Arrow ((&&&))
 import Control.Category ((>>>))
-import Data.Foldable (foldl')
 import Data.Function ((&))
 import Data.Maybe (fromJust)
 import Data.Tuple.Extra (both)

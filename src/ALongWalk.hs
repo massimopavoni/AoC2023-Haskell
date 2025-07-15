@@ -4,7 +4,6 @@ module ALongWalk (walkLongestHike, walkLongestDryHike) where
 
 import Control.Applicative (liftA3)
 import Control.Category ((>>>))
-import Data.Foldable (foldl')
 import Data.Function ((&))
 import Data.HashMap.Strict (HashMap)
 import qualified Data.HashMap.Strict as HsMS (alter, empty, insert, toList, union, (!))

@@ -3,7 +3,6 @@
 module Snowverload (splitComponentSizesProduct) where
 
 import Control.Arrow ((&&&), (>>>))
-import Data.Foldable (foldl')
 import Data.HashMap.Strict (HashMap, alter, empty, size, (!))
 import Data.List.Split (splitOn)
 import Numeric.LinearAlgebra (Matrix, Vector, fromLists, toColumns, toList)
@@ -58,9 +57,9 @@ splitComponentSizesProduct =
                 if j `elem` (graph ! i) || i `elem` (graph ! j)
                   then -1
                   else 0
-            | j <- [1 .. maxV]
+          | j <- [1 .. maxV]
           ]
-          | i <- [1 .. maxV]
+        | i <- [1 .. maxV]
         ]
       where
         maxV :: Int
