@@ -22,7 +22,7 @@ import Text.Megaparsec.Char (char, letterChar, string)
 -- which I believe was the point here (remembering that cycles and LCM come together
 -- to greatly reduce the computation time, especially with very few common factors and all big primes).
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Data types
 
 data Pulse = Low | High
@@ -49,7 +49,7 @@ data Configuration = Config
   }
   deriving (Show)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part only needs to click button 1000 times and count the number of pulses in the entire network.
@@ -89,7 +89,7 @@ machineTurnOnClicks =
                   >>> keys . memory
               )
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Functions
 
 -- The single button click function is quite convoluted.
@@ -159,7 +159,7 @@ isConjuctionModule :: Module -> Bool
 isConjuctionModule Conjuction {} = True
 isConjuctionModule _ = False
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Parsers
 
 parseModules :: String -> Map String Module

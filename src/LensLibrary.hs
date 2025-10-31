@@ -16,7 +16,7 @@ import Data.Map.Ordered.Strict (OMap, assocs, delete, singleton)
 -- (because practically all of them are very well thought and fun to read),
 -- but because of the different data structures and packages I could use to make it work properly.
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part is very easy, as it's just about properly hashing the values.
@@ -61,7 +61,7 @@ lensBoxFocusingPowersSum =
         foldLens :: Int -> (Int, (ByteString, Int)) -> Int
         foldLens acc (lp, (_, lfl)) = acc + boxN * lp * lfl
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Functions
 
 -- Within the hash function, I can just use the normal bytestring fold,
@@ -69,7 +69,7 @@ lensBoxFocusingPowersSum =
 hash :: ByteString -> Int
 hash = BStr.foldl' (\h c -> ((h + fromIntegral c) * 17) `rem` 256) 0
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Parsers
 
 -- Init is for skipping the newline at the end of the input,

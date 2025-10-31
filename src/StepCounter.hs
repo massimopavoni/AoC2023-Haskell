@@ -22,7 +22,7 @@ import Safe (headErr)
 -- to avoid some of the things I would consider pitfalls,
 -- like slightly overfitting some parts of the puzzle to the peculiar input.
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part is easy enough, since it just involves a breadth-first search.
@@ -75,7 +75,7 @@ infiniteGardenReachablePlotsCount =
     variableQuadratic :: Int -> [Double]
     variableQuadratic = (<$> ([2, 1, 0] :: [Int])) . (^) . fromIntegral
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Functions
 
 -- The breadth-first-search itself is straightforward enough.

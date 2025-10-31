@@ -10,7 +10,7 @@ import qualified Data.Vector as Vect (all)
 import RandomUtils (Pos, manhattanDistance)
 import Safe (headErr, tailSafe)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part finds the shortest paths using an expanding factor of 2 for empty rows/columns.
@@ -27,7 +27,7 @@ hugeExpansionGalaxyPathsSum =
     >>> analyzeImage 1000000
     >>> sum
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Functions
 
 -- During the first part I had a much quicker solution, which just used the Manhattan distance after

@@ -16,7 +16,7 @@ import Data.Maybe (fromJust)
 import Data.Vector (elemIndex)
 import RandomUtils (Pos)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Data types
 
 -- We use a directed graph for input "compression",
@@ -26,7 +26,7 @@ type Graph = HashMap Pos [(Pos, Int)]
 data Forest = Forest Pos Pos Graph
   deriving (Show)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part considers the slopes as icy and not walkable the opposite direction.
@@ -37,7 +37,7 @@ walkLongestHike = findLongestHike False
 walkLongestDryHike :: String -> Int
 walkLongestDryHike = findLongestHike True
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Functions
 
 -- The solution strategy can be expressed with just a single function, although it's quite complicated.

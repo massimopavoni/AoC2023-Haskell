@@ -19,7 +19,7 @@ import Text.Megaparsec.Char.Lexer (decimal)
 -- This is one of my ugliest codebases, I'm sorry.
 -- (There are still some pretty nice functions and compositions, tho.)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Data types
 
 -- Tried using lenses with this one, didn't manage, will study the library at some point.
@@ -29,7 +29,7 @@ data Part a = Part {xValue :: a, mValue :: a, aValue :: a, sValue :: a}
 data WorkflowRange = WfRange {xmas :: Char, condition :: Ordering, branch :: Int, next :: String}
   deriving (Show)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part is easy enough: the number of parts to sort is not huge,
@@ -131,13 +131,13 @@ acceptedPartRatingCombinationsSum =
                     updatePart _ _ = error "Invalid xmas"
             followAccept _ _ = error "Invalid workflow"
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Functions
 
 partValueFunctions :: [Part a -> a]
 partValueFunctions = [xValue, mValue, aValue, sValue]
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Parsers
 
 -- The parsing functions are for sure the unsung heroes of the solutions,

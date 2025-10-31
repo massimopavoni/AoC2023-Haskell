@@ -10,13 +10,13 @@ import Text.Megaparsec (choice, eof, sepBy1, some)
 import Text.Megaparsec.Char (char, letterChar, string)
 import Text.Megaparsec.Char.Lexer (decimal)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Data types
 
 data CubeColor = Blue | Green | Red
   deriving (Eq, Ord, Read, Show)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part is very easy, once the parser for the input is properly set up.
@@ -52,7 +52,7 @@ fewestCubesPowerSetSum =
       )
     >>> sum
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Parsers
 
 -- I ended up using megaparsec again, because it seemed even more appropriate

@@ -6,7 +6,7 @@ import Text.Megaparsec (between, eof, sepBy1, some)
 import Text.Megaparsec.Char (digitChar, hspace1, newline, string)
 import Text.Megaparsec.Char.Lexer (decimal)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part maps the bounds size.
@@ -19,7 +19,7 @@ waysToRecordProduct = product . parseInput (racesParser False) (map inequationBo
 waysToRecordFullRace :: String -> Int
 waysToRecordFullRace = parseInput (racesParser True) $ inequationBoundsSize . headErr
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Functions
 
 -- The problem is very simply solved in a closed-form way by the inequation (t - x) * x > d.
@@ -35,7 +35,7 @@ inequationBoundsSize (t, d) =
     discriminant :: Double
     discriminant = sqrt (t' ** 2 - 4 * fromIntegral d)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Parsers
 
 -- I do know that a parser is overkill for many of these problem inputs,

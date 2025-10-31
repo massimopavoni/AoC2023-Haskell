@@ -10,7 +10,7 @@ import Data.Tuple.Extra (both)
 import RandomUtils (Direction (..), Pos, manhattanDistance, movePos)
 import Safe (headErr, tailSafe)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part uses the supposed good dig plan instructions.
@@ -21,7 +21,7 @@ lagoonArea = parseDigPlan >>> calculateArea
 lagoonAreaFixed :: String -> Int
 lagoonAreaFixed = parseDigPlanFixed >>> calculateArea
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Functions
 
 -- This problem is another with a closed form solution, finally. Not much obscure recursion here.
@@ -52,7 +52,7 @@ calculateArea =
     pickThickBoundary :: Int -> Int -> Int
     pickThickBoundary area boundary = area + boundary `div` 2 + 1
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Parsers
 
 parseDigPlan :: String -> [(Direction, Int)]

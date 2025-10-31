@@ -11,7 +11,7 @@ import Data.List.Split (splitOn)
 import Data.Vector (Vector, fromList)
 import qualified Data.Vector as Vect (concat, drop, length, uncons)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part is easy enough, once the dynamic programming problem is understood.
@@ -34,7 +34,7 @@ unfoldedPossibleCombinationsSum =
         Vect.concat $ replicate 5 udrs
       )
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Functions
 
 -- And the memoization here comes, but it's still not enough to make up for a quick solution
@@ -102,7 +102,7 @@ validArrangementsMemoized damagedRecord undamagedRecord = validArrangementsMemoi
           (Just ('?', drs), _) -> validArrangementsMemoized' drs vi + validArrangement (cons '#' drs) vi
           _ -> error "Invalid input"
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Parsers
 
 parseRecord :: String -> (ByteString, Vector Int)

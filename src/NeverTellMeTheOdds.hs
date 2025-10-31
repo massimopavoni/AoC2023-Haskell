@@ -11,7 +11,7 @@ import Text.Megaparsec (sepBy1, try)
 import Text.Megaparsec.Char (char, space, string)
 import Text.Megaparsec.Char.Lexer (decimal, signed)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Data types
 
 -- We use list of doubles for hailstone position and velocity
@@ -24,7 +24,7 @@ data Hailstone = Hailstone
 
 type VecTuple = (Vector Double, Vector Double)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part can be solved by finding all the collisions
@@ -130,7 +130,7 @@ perfectRockThrowCoordinatesSum =
        in (c1 - scale t1 rv, rv)
     findPerfectThrow _ = error "Expected exactly 3 hailstones"
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Parsers
 
 -- A very simple parser is used for hailstone information;

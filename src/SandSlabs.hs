@@ -16,7 +16,7 @@ import Data.List.Extra (zipFrom)
 import Data.List.Split (splitOn)
 import Safe (tailSafe)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Data types
 
 -- The Brick type has z coordinates first, so that we can sort bricks by height.
@@ -30,7 +30,7 @@ data Brick = Brick
   }
   deriving (Eq, Ord, Show)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part is easy (after figuring out the falling and graph making stuff),
@@ -80,7 +80,7 @@ unsafeBrickFallsCount =
             )
             rvs
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Functions
 
 -- This function is the main part, as once we have the bricks support dependencites organized in a graph,
@@ -146,7 +146,7 @@ findUnsafeBricks =
     >>> concat
     >>> fromList
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Parsers
 
 parseBricksSnapshot :: String -> [Brick]

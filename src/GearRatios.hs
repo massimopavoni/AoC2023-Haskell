@@ -21,7 +21,7 @@ import Text.Megaparsec.Char (digitChar, newline)
 -- It might not be the most elegant solution, but it's mine, I like it,
 -- it made me learn many more things, and it doesn't look too bad.
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part is the most important, as I had to find a way of dealing with the grid-like input.
@@ -32,7 +32,7 @@ partNumbersSum = sum . (enginePartsParser . fromLists . lines >>= (`parseInput` 
 gearRatiosSum :: String -> Int
 gearRatiosSum = sum . (engineGearsParser . fromLists . lines >>= (`parseInput` map product))
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Parsers
 
 -- I used megaparsec again, just because in my mind there was no way
@@ -103,7 +103,7 @@ betweenSymbols f =
     position :: Parser Pos
     position = both unPos . (sourceLine &&& sourceColumn) <$> getSourcePos
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Functions
 
 -- Neighbors is maybe the least complex function of all of this,

@@ -8,7 +8,7 @@ import Data.Maybe (fromMaybe)
 import Data.Tuple.Extra (both)
 import Safe (tailSafe)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part got changed after the second one, using a generic function.
@@ -25,7 +25,7 @@ mirrorSmudgeScoresSum =
     >>> map (reflectionLineScore 1)
     >>> sum
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Functions
 
 -- The main dataflow in the reflectionLineScore function is:

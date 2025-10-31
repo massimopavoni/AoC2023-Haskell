@@ -3,7 +3,7 @@ module RandomUtils (Parser, Pos, Direction (..), parseInput, oppositeDir, movePo
 import Data.Void (Void)
 import Text.Megaparsec (Parsec, errorBundlePretty, parse)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Data types
 
 type Parser = Parsec Void String
@@ -13,7 +13,7 @@ type Pos = (Int, Int)
 data Direction = S | E | N | W
   deriving (Bounded, Enum, Eq, Ord, Show)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Functions
 
 parseInput :: Parser a -> (a -> b) -> String -> b

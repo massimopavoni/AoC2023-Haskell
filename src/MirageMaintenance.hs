@@ -10,7 +10,7 @@ import Text.Megaparsec (eof, sepBy1)
 import Text.Megaparsec.Char (char)
 import Text.Megaparsec.Char.Lexer (decimal, signed)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part is quite simple, once the predictValue function recursion is understood.
@@ -28,7 +28,7 @@ initialValuePredictionsSum =
     >>> map (parseInput valueHistoryParser $ predictValue headErr (foldl1' (flip (-))))
     >>> sum
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Functions
 
 predictValue :: (Eq a, Num a) => ([a] -> a) -> ([a] -> a) -> [a] -> a
@@ -39,7 +39,7 @@ predictValue f r =
       (\(ls, xs) -> (f xs : ls, (zipWith (-) =<< tailSafe) xs))
     >>> r . fst
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Parsers
 
 valueHistoryParser :: Parser [Int]

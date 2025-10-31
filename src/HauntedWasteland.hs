@@ -10,7 +10,7 @@ import RandomUtils (Parser, parseInput)
 import Text.Megaparsec (count, eof, notFollowedBy, sepBy1, some, try)
 import Text.Megaparsec.Char (char, letterChar, newline, string)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Data types
 
 -- The Maps data type is a wrapper for a map of nodes and a list of instructions.
@@ -18,7 +18,7 @@ import Text.Megaparsec.Char (char, letterChar, newline, string)
 -- while the list of instructions is a list of functions that choose from those nodes.
 data Maps a b = Maps {maps :: Map a b, instructions :: [b -> a]}
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part uses the followInstructions function with the ZZZ node end condition, starting from AAA.
@@ -42,7 +42,7 @@ ghostEscapeTime =
       (filter ((== 'A') . last) . keys . maps)
       >>> foldl1' lcm
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Functions
 
 -- The followInstructions function folds over the maps' instructions starting from begin until end true.
@@ -65,7 +65,7 @@ followInstructions end (Maps ns is) begin =
     nextStep ((n, c), i : ris) = ((i $ ns ! n, c + 1), ris)
     nextStep _ = error "Instructions folding went wrong"
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Parsers
 
 -- This parser is slightly funnier compared to previous ones, as I wanted to try

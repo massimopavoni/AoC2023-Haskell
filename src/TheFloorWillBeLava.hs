@@ -17,13 +17,13 @@ import RandomUtils (Direction (..), Pos, movePos)
 -- and slap DP (?) on it, in such a way that I can share information between the multiple function applications.
 -- (Also, I just gotta say I'm so fed up with all of these grids problems, dammit.)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Data types
 
 data Tile = Empty | Mirror | AntiMirror | ColSplit | RowSplit
   deriving (Bounded, Enum, Eq, Show)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part just applies the followLightBeams function with the default starting position and direction.
@@ -60,7 +60,7 @@ maximumEnergizedTilesCountAllStarts =
             ++ [((nrs, y), N) | y <- cs]
             ++ [((x, ncs), W) | x <- rs]
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Functions
 
 -- The followLightBeams is the core, of course, and it uses a HashMap to keep track of the visited tiles,
@@ -104,7 +104,7 @@ followLightBeams ehm ts tm = followLightBeams' ehm ts
                 Just ColSplit -> if dir `elem` [E, W] then [S, N] else [dir]
                 Just RowSplit -> if dir `elem` [S, N] then [E, W] else [dir]
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Parsers
 
 parseContraption :: String -> Matrix Tile

@@ -8,7 +8,7 @@ import Text.Megaparsec.Char.Lexer (decimal)
 
 -- I guess I'm also taking this first Advent of Code instance of mine as a megaparsec exploration, lol.
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part is again quite straightforward, provided a good simple parser is written.
@@ -36,7 +36,7 @@ scratchcardCloneCountsSum =
     wins :: ([Int], [Int]) -> Int
     wins (ws, ns) = length $ filter (`elem` ws) ns
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Parsers
 
 scratchcardParser :: Parser ([Int], [Int])

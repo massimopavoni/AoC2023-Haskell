@@ -15,7 +15,7 @@ import Safe (headErr, tailSafe)
 
 -- This problem uses lots of obscure compositions, bear with me.
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Data types
 
 data Pipe = Ground | Start | NS | WE | NW | NE | SW | SE
@@ -29,7 +29,7 @@ instance Eq Position where
   (==) :: Position -> Position -> Bool
   (Pos p1 _) == (Pos p2 _) = p1 == p2
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part just needs to halve the length of the loop path to find the steps to the farthest pipe.
@@ -64,7 +64,7 @@ nestPipesCount =
         shifted :: [Pos]
         shifted = tailSafe . cycle $ pos <$> ps
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Functions
 
 -- The walkPipeLoop function is a very important one, as it's essentially the one that needs all
@@ -123,7 +123,7 @@ walkPipeLoop maze =
     movePos' :: Position -> Direction -> Position
     movePos' (Pos p _) dt = (`Pos` oppositeDir dt) $ movePos 1 p dt
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Parsers
 
 -- I finally avoided using megaparsec, ahah.

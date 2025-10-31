@@ -12,7 +12,7 @@ import Text.Megaparsec (count, eof, notFollowedBy, oneOf, sepBy1, try)
 import Text.Megaparsec.Char (char, newline)
 import Text.Megaparsec.Char.Lexer (decimal)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Data types
 
 data Hand = Hand {cards :: String, bid :: Int}
@@ -21,7 +21,7 @@ data Hand = Hand {cards :: String, bid :: Int}
 data HandType = HighCard | OnePair | TwoPair | ThreeOfAKind | FullHouse | FourOfAKind | FiveOfAKind
   deriving (Eq, Ord, Show)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part is simple because it's just about using the hand winnings function with
@@ -63,7 +63,7 @@ jokersHandWinningsSum = sum . handWinnings handTypeTransform "J23456789TQKA"
           FourOfAKind -> FiveOfAKind
           FiveOfAKind -> FiveOfAKind
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Functions
 
 -- The handWinnings function takes the cards order and a function that potentially changes the hand type,
@@ -124,7 +124,7 @@ handWinnings httf cso =
         cardValue :: Char -> Int
         cardValue = fromJust . (`lookup` zip cso [2 .. 14])
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Parsers
 
 handsParser :: Parser [Hand]

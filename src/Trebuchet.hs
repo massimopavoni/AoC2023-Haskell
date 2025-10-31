@@ -9,7 +9,7 @@ import RandomUtils (Parser, parseInput)
 import Text.Megaparsec (anySingle, choice, eof, getInput, lookAhead, manyTill, optional, setInput)
 import Text.Megaparsec.Char (digitChar, string)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part supports a basic solution, and a pretty self-explanatory one at that.
@@ -32,7 +32,7 @@ fixedCalibrationValuesSum =
     >>> map (parseInput valueParser id)
     >>> sum
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Parsers
 
 -- The value parser ended up using a quirky approach, finding the first digit,

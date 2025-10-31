@@ -19,7 +19,7 @@ import Text.Megaparsec.Char.Lexer (decimal)
 -- I found it so difficult, but it was so very worth it,
 -- for the immense satisfaction I felt after solving it.
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Data types
 
 data Range a = Range {start :: a, stop :: a}
@@ -41,7 +41,7 @@ instance (Eq a, Ord a) => Ord (Range a) where
 data MapRange a = MapRange {range :: Range a, offset :: a}
   deriving (Show)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part is actually very very simple, as the number of seeds is small,
@@ -145,7 +145,7 @@ nearestSeedRange =
           | c < a && d <= b = [Range a d, Range (d + 1) b]
           | otherwise = error "Range was supposed to be already mapped"
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Parsers
 
 -- The almanac parser is straightforward: it just parses seeds and maps.

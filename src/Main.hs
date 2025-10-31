@@ -42,7 +42,7 @@ import TheFloorWillBeLava (energizedTilesCount, maximumEnergizedTilesCountAllSta
 import Trebuchet (calibrationValuesSum, fixedCalibrationValuesSum)
 import WaitForIt (waysToRecordFullRace, waysToRecordProduct)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Resources
 resourcesDir :: [(FilePath, ByteString)]
 resourcesDir = $(embedDir "src/resources")
@@ -68,7 +68,7 @@ puzzleAnswers =
     listToPuzzleAnswer [p, a1, a2] = (p, (a1, a2))
     listToPuzzleAnswer _ = error "Invalid puzzle answers format"
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 main :: IO ()
 main = do
@@ -101,7 +101,7 @@ main = do
       prettySolution2 (25, "Snowverload") splitComponentSizesProduct (Nothing :: Maybe (a -> a))
     ]
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Functions
 prettySolution2 :: (Show a, Show b) => (Int, String) -> (String -> a) -> Maybe (String -> b) -> IO ()
 prettySolution2 (day, puzzle) solution1 maybeSolution2 = do

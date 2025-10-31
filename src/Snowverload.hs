@@ -19,14 +19,14 @@ import Safe (headErr, lastDef, tailSafe)
 -- taking into consideration the probability of finding the best min-cut when
 -- tweaking the number of vertices under which a contraction phase shouldn't fall.
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Data types
 
 type Vertex = Int
 
 type Graph = HashMap Vertex [Vertex]
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first (and only) part looks incredibly simple, and it's wonderful knowing it just works.
@@ -78,7 +78,7 @@ splitComponentSizesProduct =
         >>> id &&& (subtract 2 . length)
         >>> uncurry (!!)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Parsers
 
 -- The input parsing is a bit less straightforward than initially thought;

@@ -10,7 +10,7 @@ import Data.Function ((&))
 import Data.HashMap.Strict (HashMap, empty, insert, (!?))
 import RandomUtils (Pos)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part was very straightforward, and I was able to come up with a solution that

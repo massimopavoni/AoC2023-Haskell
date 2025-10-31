@@ -17,14 +17,14 @@ import RandomUtils (Direction (..), Pos, movePos)
 -- problems, as opposed to use already ready algorithms and libraries.
 -- Still had fun, though, and was able to get rid of counting the straight moves.
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Data types
 
 -- I don't actually know if using bang patterns improved anything throughout the solution.
 data Move = Move {pos :: !Pos, dir :: !Direction}
   deriving (Eq, Ord, Show)
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Exports
 
 -- The first part is using a minimum of 1 and a maximum of 3 straight moves.
@@ -39,7 +39,7 @@ minimumUltraCrucibleHeatLoss =
   parseCity
     >>> fst . fromJust . cityDijkstra 4 10
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Functions
 
 -- The cityDijkstra function takes a minimum and a maximum number of straight moves, and a matrix of weights.
@@ -100,7 +100,7 @@ cityDijkstra mins maxs !cm =
     cn :: Int
     cn = ncols cm
 
-------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 -- Parsers
 
 parseCity :: String -> Matrix Int
