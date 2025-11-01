@@ -106,15 +106,16 @@ main = do
 prettySolution2 :: (Show a, Show b) => (Int, String) -> (String -> a) -> Maybe (String -> b) -> IO ()
 prettySolution2 (day, puzzle) solution1 maybeSolution2 = do
   putStrLn (printf "Day %d: %s" day puzzle)
+  let input = getResource (puzzle ++ ".in")
   let (answer1, answer2) = puzzleAnswers HsMS.! puzzle
-  prettySolution puzzle 1 solution1 answer1
+  prettySolution puzzle 1 solution1 input answer1
   case maybeSolution2 of
-    Just solution2 -> prettySolution puzzle 2 solution2 answer2
+    Just solution2 -> prettySolution puzzle 2 solution2 input answer2
     Nothing -> putStr ""
   putStrLn ""
 
-prettySolution :: (Show a) => String -> Int -> (String -> a) -> String -> IO ()
-prettySolution puzzle part solution answer = do
+prettySolution :: (Show a) => String -> Int -> (String -> a) -> String -> String -> IO ()
+prettySolution puzzle part solution input answer = do
   putStr $ printf "%d -> " part
   print
     . liftA3
@@ -126,5 +127,4 @@ prettySolution puzzle part solution answer = do
       id
       ((== answer) . show)
     . solution
-    . getResource
-    $ (puzzle ++ ".in")
+    $ input
