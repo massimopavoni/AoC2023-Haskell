@@ -106,30 +106,25 @@ main = do
 prettySolution2 :: (Show a, Show b) => (Int, String) -> (String -> a) -> Maybe (String -> b) -> IO ()
 prettySolution2 (day, puzzle) solution1 maybeSolution2 = do
   putStrLn (printf "Day %d: %s" day puzzle)
-  prettySolution puzzle 1 solution1
+  let (answer1, answer2) = puzzleAnswers HsMS.! puzzle
+  prettySolution puzzle 1 solution1 answer1
   case maybeSolution2 of
-    Just solution2 -> prettySolution puzzle 2 solution2
+    Just solution2 -> prettySolution puzzle 2 solution2 answer2
     Nothing -> putStr ""
   putStrLn ""
 
-prettySolution :: forall a. (Show a) => String -> Int -> (String -> a) -> IO ()
-prettySolution puzzle part solution = do
+prettySolution :: (Show a) => String -> Int -> (String -> a) -> String -> IO ()
+prettySolution puzzle part solution answer = do
   putStr $ printf "%d -> " part
   print
     . liftA3
       bool
       ( error
-          . printf "Wrong solution for %s part %d: expected %s, but got %s" puzzle part (show expectedResult)
+          . printf "Wrong solution for %s part %d: expected %s, but got %s" puzzle part (show answer)
           . show
       )
       id
-      ((== expectedResult) . show)
+      ((== answer) . show)
     . solution
     . getResource
     $ (puzzle ++ ".in")
-  where
-    expectedResult :: String
-    expectedResult = case part of
-      1 -> fst $ puzzleAnswers HsMS.! puzzle
-      2 -> snd $ puzzleAnswers HsMS.! puzzle
-      _ -> error "Invalid puzzle part number"
