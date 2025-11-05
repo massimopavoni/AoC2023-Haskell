@@ -9,7 +9,7 @@ import Numeric.LinearAlgebra (Matrix, Vector, fromLists, toColumns, toList)
 import Numeric.LinearAlgebra.HMatrix (eigSH')
 import Safe (headErr, lastDef, tailSafe)
 
--- This ones was as annoying as it was interesting and rewarding.
+-- This one was as annoying as it was interesting and rewarding.
 -- I started by getting back into some graph theory and asking a past university course mate
 -- for insight about graph connectivity and partitioning, given his thesis topic (thanks, Marco).
 -- The first solution I implemented was making use of the Karger-Stein randomized algorithm to
