@@ -112,7 +112,7 @@ main = do
 prettySolution2 :: (Show a, Show b) => [Bool] -> (Int, String) -> (String -> a) -> Maybe (String -> b) -> IO ()
 prettySolution2 selectedPuzzles (day, puzzle) solution1 maybeSolution2 =
   if not (selectedPuzzles !! (day - 1))
-    then return ()
+    then pure ()
     else do
       putStrLn (printf "Day %d: %s" day puzzle)
       let input = getResource (puzzle ++ ".in")
