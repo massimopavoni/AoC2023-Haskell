@@ -17,10 +17,10 @@ import Text.Megaparsec.Char.Lexer (decimal, signed)
 -- We use list of doubles for hailstone position and velocity
 -- so that we can easily convert them to vectors later.
 data Hailstone = Hailstone
-  { position :: [Double],
-    velocity :: [Double]
-  }
-  deriving (Show)
+    { position :: [Double]
+    , velocity :: [Double]
+    }
+    deriving (Show)
 
 type VecTuple = (Vector Double, Vector Double)
 
@@ -34,18 +34,18 @@ type VecTuple = (Vector Double, Vector Double)
 -- that it happens within 0 and 1 nano-second from the starting position.
 hailstoneCollisionsCount :: String -> Int
 hailstoneCollisionsCount =
-  parseHailstones
-    >>> map hailstoneToLine2D
-    >>> join (zipIf (<))
-    >>> mapMaybe (uncurry linesIntersection)
-    >>> length
+    parseHailstones
+        >>> map hailstoneToLine2D
+        >>> join (zipIf (<))
+        >>> mapMaybe (uncurry linesIntersection)
+        >>> length
   where
     -- This part only deals in 2 dimensions.
     hailstoneToLine2D :: Hailstone -> VecTuple
     hailstoneToLine2D =
-      position &&& velocity
-        >>> both (vector . take 2)
-        >>> fst &&& uncurry (+)
+        position &&& velocity
+            >>> both (vector . take 2)
+            >>> fst &&& uncurry (+)
 
     zipIf :: (a -> b -> Bool) -> [a] -> [b] -> [(a, b)]
     zipIf condition xs ys = [(x, y) | x <- xs, y <- ys, condition x y]
@@ -55,20 +55,20 @@ hailstoneCollisionsCount =
     -- before actually calculating the intersection time and point.
     linesIntersection :: VecTuple -> VecTuple -> Maybe (Vector Double)
     linesIntersection (p1, p2) (p3, p4)
-      | den == 0
-          || signum tNum /= signum den
-          || signum uNum == signum den =
-          Nothing
-      | null $
-          find
-            ( liftA2
-                (||)
-                (< 200000000000000)
-                (400000000000000 <)
-            )
-            p =
-          Just p
-      | otherwise = Nothing
+        | den == 0
+            || signum tNum /= signum den
+            || signum uNum == signum den =
+            Nothing
+        | null $
+            find
+                ( liftA2
+                    (||)
+                    (< 200000000000000)
+                    (400000000000000 <)
+                )
+                p =
+            Just p
+        | otherwise = Nothing
       where
         p :: Vector Double
         p = let t = tNum / den in p1 + scale t (p2 - p1)
@@ -95,12 +95,12 @@ hailstoneCollisionsCount =
 -- Some more simple calculations lead to the initial position and velocity of the perfect rock throw.
 perfectRockThrowCoordinatesSum :: String -> Int
 perfectRockThrowCoordinatesSum =
-  parseHailstones
-    >>> take 3
-    >>> map hailstoneToPosVel3D
-    >>> findPerfectThrow
-    >>> both toList
-    >>> round . sum . fst
+    parseHailstones
+        >>> take 3
+        >>> map hailstoneToPosVel3D
+        >>> findPerfectThrow
+        >>> both toList
+        >>> round . sum . fst
   where
     -- And this part deals in 3 dimensions (plus the time).
     hailstoneToPosVel3D :: Hailstone -> VecTuple
@@ -108,26 +108,28 @@ perfectRockThrowCoordinatesSum =
 
     findPerfectThrow :: [VecTuple] -> VecTuple
     findPerfectThrow [h0, h1, h2] =
-      let -- Shifted frame of reference position and velocity vectors for the 2nd and 3rd hailstones
-          (p1, p2) = both (subtract (fst h0) . fst) (h1, h2)
-          (v1, v2) = both (subtract (snd h0) . snd) (h1, h2)
-          -- Useful cross products for calculating collision times.
-          p1p2 = cross p1 p2
-          (v1p2, p1v2) = both (uncurry cross) ((v1, p2), (p1, v2))
-          -- Collision times are found after cancelling the t1*t2 term in the the colinearity equation
-          -- (along one of the other ones) by multiplying by v2 and v1 respectively.
-          (t1, t2) =
-            both
-              (negate . uncurry (/) . ((dot p1p2 . snd) &&& uncurry dot))
-              ((v1p2, v2), (p1v2, v1))
-          -- The collision positions use the original frame of reference;
-          -- we can then use them to find the perfect rock throw velocity and starting position.
-          (c1, c2) =
-            both
-              (uncurry (+) . ((fst . snd) &&& (uncurry scale . second snd)))
-              ((t1, h1), (t2, h2))
-          rv = scale (1 / (t2 - t1)) (c2 - c1)
-       in (c1 - scale t1 rv, rv)
+        let
+            -- Shifted frame of reference position and velocity vectors for the 2nd and 3rd hailstones
+            (p1, p2) = both (subtract (fst h0) . fst) (h1, h2)
+            (v1, v2) = both (subtract (snd h0) . snd) (h1, h2)
+            -- Useful cross products for calculating collision times.
+            p1p2 = cross p1 p2
+            (v1p2, p1v2) = both (uncurry cross) ((v1, p2), (p1, v2))
+            -- Collision times are found after cancelling the t1*t2 term in the the colinearity equation
+            -- (along one of the other ones) by multiplying by v2 and v1 respectively.
+            (t1, t2) =
+                both
+                    (negate . uncurry (/) . ((dot p1p2 . snd) &&& uncurry dot))
+                    ((v1p2, v2), (p1v2, v1))
+            -- The collision positions use the original frame of reference;
+            -- we can then use them to find the perfect rock throw velocity and starting position.
+            (c1, c2) =
+                both
+                    (uncurry (+) . ((fst . snd) &&& (uncurry scale . second snd)))
+                    ((t1, h1), (t2, h2))
+            rv = scale (1 / (t2 - t1)) (c2 - c1)
+         in
+            (c1 - scale t1 rv, rv)
     findPerfectThrow _ = error "Expected exactly 3 hailstones"
 
 ---------------------------------------------------------------------------------------------------
@@ -139,15 +141,15 @@ perfectRockThrowCoordinatesSum =
 -- I wanted to try and recall a bit of what I had learned about Megaparsec.
 parseHailstones :: String -> [Hailstone]
 parseHailstones =
-  lines
-    >>> map (parseInput hailstoneParser id)
+    lines
+        >>> map (parseInput hailstoneParser id)
   where
     hailstoneParser :: Parser Hailstone
     hailstoneParser = Hailstone <$> vecParser <* string " @ " <*> vecParser
       where
         vecParser :: Parser [Double]
         vecParser =
-          map (fromIntegral :: Int -> Double)
-            <$> sepBy1
-              (signed (pure ()) decimal)
-              (try $ char ',' <* space)
+            map (fromIntegral :: Int -> Double)
+                <$> sepBy1
+                    (signed (pure ()) decimal)
+                    (try $ char ',' <* space)

@@ -30,18 +30,18 @@ lagoonAreaFixed = parseDigPlanFixed >>> calculateArea
 -- given by the sum of the Manhattan distances between any sequence of coordinates that respect the dig plan.
 calculateArea :: [(Direction, Int)] -> Int
 calculateArea =
-  foldl' (\ps (d, a) -> movePos a (headErr ps) d : ps) [(0, 0)]
-    >>> shoelaceArea &&& boundaryLength
-    >>> uncurry pickThickBoundary
+    foldl' (\ps (d, a) -> movePos a (headErr ps) d : ps) [(0, 0)]
+        >>> shoelaceArea &&& boundaryLength
+        >>> uncurry pickThickBoundary
   where
     shoelaceArea :: [Pos] -> Int
     shoelaceArea ps =
-      ps
-        & ( (,map snd shifted) . map fst &&& (,map fst shifted) . map snd
-              >>> both (sum . uncurry (zipWith (*)))
-              >>> uncurry (-)
-              >>> (`div` 2)
-          )
+        ps
+            & ( (,map snd shifted) . map fst &&& (,map fst shifted) . map snd
+                    >>> both (sum . uncurry (zipWith (*)))
+                    >>> uncurry (-)
+                    >>> (`div` 2)
+              )
       where
         shifted :: [Pos]
         shifted = tailSafe $ cycle ps
@@ -70,8 +70,8 @@ parseDigPlanFixed = map (hexToDirA . last . words) . lines
   where
     hexToDirA :: String -> (Direction, Int)
     hexToDirA =
-      take 6 . drop 2
-        >>> charToDir . last &&& read . ("0x" ++) . init
+        take 6 . drop 2
+            >>> charToDir . last &&& read . ("0x" ++) . init
 
     charToDir :: Char -> Direction
     charToDir = fromJust . (`lookup` zip "1032" [S ..])

@@ -14,7 +14,7 @@ import Text.Megaparsec.Char.Lexer (decimal)
 -- Data types
 
 data CubeColor = Blue | Green | Red
-  deriving (Eq, Ord, Read, Show)
+    deriving (Eq, Ord, Read, Show)
 
 ---------------------------------------------------------------------------------------------------
 -- Exports
@@ -22,15 +22,15 @@ data CubeColor = Blue | Green | Red
 -- The first part is very easy, once the parser for the input is properly set up.
 possibleGamesIdSum :: String -> Int
 possibleGamesIdSum =
-  lines
-    >>> mapMaybe
-      ( parseInput gameParser Just
-          >=> liftA2
-            (>>)
-            (guard . all possibleExtraction . snd)
-            (pure . fst)
-      )
-    >>> sum
+    lines
+        >>> mapMaybe
+            ( parseInput gameParser Just
+                >=> liftA2
+                    (>>)
+                    (guard . all possibleExtraction . snd)
+                    (pure . fst)
+            )
+        >>> sum
   where
     possibleExtraction :: (CubeColor, Int) -> Bool
     possibleExtraction (c, n) = fromJust (lookup c bag) >= n
@@ -41,16 +41,16 @@ possibleGamesIdSum =
 -- The second part of the problem is even simpler.
 fewestCubesPowerSetSum :: String -> Int
 fewestCubesPowerSetSum =
-  lines
-    >>> map
-      ( parseInput
-          gameParser
-          ( fromListWith max . snd
-              >>> assocs
-          )
-          >>> product . map snd
-      )
-    >>> sum
+    lines
+        >>> map
+            ( parseInput
+                gameParser
+                ( fromListWith max . snd
+                    >>> assocs
+                )
+                >>> product . map snd
+            )
+        >>> sum
 
 ---------------------------------------------------------------------------------------------------
 -- Parsers
@@ -60,14 +60,14 @@ fewestCubesPowerSetSum =
 -- probably partly because I'm learning more about the library as I go.
 gameParser :: Parser (Int, [(CubeColor, Int)])
 gameParser =
-  liftA2
-    (,)
-    (string "Game " *> decimal <* string ": ")
-    (sepBy1 extraction (choice [string ", ", string "; ", eof >> pure ""]))
+    liftA2
+        (,)
+        (string "Game " *> decimal <* string ": ")
+        (sepBy1 extraction (choice [string ", ", string "; ", eof >> pure ""]))
   where
     extraction :: Parser (CubeColor, Int)
     extraction =
-      liftA2
-        (flip (,))
-        (decimal <* char ' ')
-        (read . capitalise <$> some letterChar)
+        liftA2
+            (flip (,))
+            (decimal <* char ' ')
+            (read . capitalise <$> some letterChar)

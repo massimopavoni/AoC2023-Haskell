@@ -22,7 +22,7 @@ import RandomUtils (Direction (..), Pos, movePos)
 
 -- I don't actually know if using bang patterns improved anything throughout the solution.
 data Move = Move {pos :: !Pos, dir :: !Direction}
-  deriving (Eq, Ord, Show)
+    deriving (Eq, Ord, Show)
 
 ---------------------------------------------------------------------------------------------------
 -- Exports
@@ -30,14 +30,14 @@ data Move = Move {pos :: !Pos, dir :: !Direction}
 -- The first part is using a minimum of 1 and a maximum of 3 straight moves.
 minimumCrucibleHeatLoss :: String -> Int
 minimumCrucibleHeatLoss =
-  parseCity
-    >>> fst . fromJust . cityDijkstra 1 3
+    parseCity
+        >>> fst . fromJust . cityDijkstra 1 3
 
 -- The second part is using a minimum of 4 and a maximum of 10 straight moves.
 minimumUltraCrucibleHeatLoss :: String -> Int
 minimumUltraCrucibleHeatLoss =
-  parseCity
-    >>> fst . fromJust . cityDijkstra 4 10
+    parseCity
+        >>> fst . fromJust . cityDijkstra 4 10
 
 ---------------------------------------------------------------------------------------------------
 -- Functions
@@ -49,11 +49,11 @@ minimumUltraCrucibleHeatLoss =
 -- and could just as well end up making the solution even slower.
 cityDijkstra :: Int -> Int -> Matrix Int -> Maybe (Int, [Move])
 cityDijkstra mins maxs !cm =
-  dijkstra
-    (neighbors `pruning` (not . inMatrix))
-    moveCost
-    ((== (rn, cn)) . pos)
-    (Move (1, 1) E)
+    dijkstra
+        (neighbors `pruning` (not . inMatrix))
+        moveCost
+        ((== (rn, cn)) . pos)
+        (Move (1, 1) E)
   where
     -- The neighbors are different if it's the first move or not:
     -- either we can only move straight towards east, or south,
@@ -62,13 +62,12 @@ cityDijkstra mins maxs !cm =
     -- and leave the choice of the best straight move to the algorithm).
     neighbors :: Move -> [Move]
     neighbors m@(Move p d) =
-      moveMoves
-        m
-        ( if p == (1, 1)
-            then
-              [S, E]
-            else (if d == S || d == N then [E, W] else [S, N])
-        )
+        moveMoves
+            m
+            ( if p == (1, 1)
+                then [S, E]
+                else (if d == S || d == N then [E, W] else [S, N])
+            )
 
     moveMoves :: Move -> [Direction] -> [Move]
     moveMoves (Move p _) ds = [Move (movePos s p d') d' | s <- steps, d' <- ds]
@@ -86,13 +85,13 @@ cityDijkstra mins maxs !cm =
       where
         inBetween :: Pos -> Pos -> [Pos]
         inBetween (r1, c1) (r2, c2)
-          | r1 == r2 =
-              let (minc, maxc) = bool (c2, c1 - 1) (c1 + 1, c2) (c1 < c2)
-               in [(r1, c) | c <- [minc .. maxc]]
-          | c1 == c2 =
-              let (minr, maxr) = bool (r2, r1 - 1) (r1 + 1, r2) (r1 < r2)
-               in [(r, c1) | r <- [minr .. maxr]]
-          | otherwise = error "Not a straight line"
+            | r1 == r2 =
+                let (minc, maxc) = bool (c2, c1 - 1) (c1 + 1, c2) (c1 < c2)
+                 in [(r1, c) | c <- [minc .. maxc]]
+            | c1 == c2 =
+                let (minr, maxr) = bool (r2, r1 - 1) (r1 + 1, r2) (r1 < r2)
+                 in [(r, c1) | r <- [minr .. maxr]]
+            | otherwise = error "Not a straight line"
 
     rn :: Int
     rn = nrows cm

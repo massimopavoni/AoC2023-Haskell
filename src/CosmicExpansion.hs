@@ -16,16 +16,16 @@ import Safe (headErr, tailSafe)
 -- The first part finds the shortest paths using an expanding factor of 2 for empty rows/columns.
 shortestGalaxyPathsSum :: String -> Int
 shortestGalaxyPathsSum =
-  fromLists . lines
-    >>> analyzeImage 2
-    >>> sum
+    fromLists . lines
+        >>> analyzeImage 2
+        >>> sum
 
 -- The second part finds the shortest paths using an expanding factor of 1000000 for empty rows/columns.
 hugeExpansionGalaxyPathsSum :: String -> Int
 hugeExpansionGalaxyPathsSum =
-  fromLists . lines
-    >>> analyzeImage 1000000
-    >>> sum
+    fromLists . lines
+        >>> analyzeImage 1000000
+        >>> sum
 
 ---------------------------------------------------------------------------------------------------
 -- Functions
@@ -44,21 +44,21 @@ hugeExpansionGalaxyPathsSum =
 -- but I'm also having fun learning and doing almost entirely everything on my own.
 analyzeImage :: Int -> Matrix Char -> [Int]
 analyzeImage e m =
-  [(x, y) | x <- [1 .. nrows m], y <- [1 .. ncols m], unsafeGet x y m == '#']
-    & ( tails
-          >>> concatMap
-            ( liftA2 map ((,) . headErr) tailSafe
-                >>> map expandedManhattanDistance
-            )
-      )
+    [(x, y) | x <- [1 .. nrows m], y <- [1 .. ncols m], unsafeGet x y m == '#']
+        & ( tails
+                >>> concatMap
+                    ( liftA2 map ((,) . headErr) tailSafe
+                        >>> map expandedManhattanDistance
+                    )
+          )
   where
     expandedManhattanDistance :: (Pos, Pos) -> Int
     expandedManhattanDistance ((a, b), (c, d)) =
-      manhattanDistance (a, b) (c, d)
-        + (e - 1)
-          * ( unsafeGet (min a c) (max a c) spaceRowsDiffs
-                + unsafeGet (min b d) (max b d) spaceColsDiffs
-            )
+        manhattanDistance (a, b) (c, d)
+            + (e - 1)
+                * ( unsafeGet (min a c) (max a c) spaceRowsDiffs
+                        + unsafeGet (min b d) (max b d) spaceColsDiffs
+                  )
 
     spaceRowsDiffs :: Matrix Int
     spaceRowsDiffs = spaceDiffs nrows getRow
@@ -71,10 +71,10 @@ analyzeImage e m =
       where
         spacesCounts :: Vector Int
         spacesCounts =
-          scanl'
-            (\acc x -> acc + if x `elem` spaces then 1 else 0)
-            0
-            (fromList [1 .. sf m])
+            scanl'
+                (\acc x -> acc + if x `elem` spaces then 1 else 0)
+                0
+                (fromList [1 .. sf m])
 
         spaces :: [Int]
         spaces = filter (Vect.all (== '.') . (`gf` m)) [1 .. sf m]

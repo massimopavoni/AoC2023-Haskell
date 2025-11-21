@@ -35,12 +35,12 @@ camelEscapeTime = parseInput mapsParser $ flip (followInstructions (== "ZZZ")) "
 -- count the length of those paths, and then find the least common multiple of those lengths.
 ghostEscapeTime :: String -> Int
 ghostEscapeTime =
-  parseInput mapsParser $
-    liftA2
-      map
-      (followInstructions ((== 'Z') . last))
-      (filter ((== 'A') . last) . keys . maps)
-      >>> foldl1' lcm
+    parseInput mapsParser $
+        liftA2
+            map
+            (followInstructions ((== 'Z') . last))
+            (filter ((== 'A') . last) . keys . maps)
+            >>> foldl1' lcm
 
 ---------------------------------------------------------------------------------------------------
 -- Functions
@@ -55,11 +55,11 @@ ghostEscapeTime =
 -- as we need to count the amount of steps taken).
 followInstructions :: forall a b c. (Num a, Ord b) => (b -> Bool) -> Maps b c -> b -> a
 followInstructions end (Maps ns is) begin =
-  snd . fst $
-    until
-      (end . fst . fst)
-      nextStep
-      ((begin, 0), cycle is)
+    snd . fst $
+        until
+            (end . fst . fst)
+            nextStep
+            ((begin, 0), cycle is)
   where
     nextStep :: ((b, a), [c -> b]) -> ((b, a), [c -> b])
     nextStep ((n, c), i : ris) = ((i $ ns ! n, c + 1), ris)
@@ -73,19 +73,19 @@ followInstructions end (Maps ns is) begin =
 -- I know it probably still looks bizarre, but trust me, it's much nicer than with two nested liftA2s, lol.
 mapsParser :: Parser (Maps String (String, String))
 mapsParser = do
-  is <- some (fst <$ char 'L' <|> snd <$ char 'R') <* count 2 newline
-  ns <-
-    sepBy1
-      ( liftA3
-          (\n l r -> (n, (l, r)))
-          (node <* string " = ")
-          (char '(' *> node <* string ", ")
-          (node <* char ')')
-      )
-      (try $ newline <* notFollowedBy eof)
-      <* newline
-      <* eof
-  pure $ Maps {maps = fromList ns, instructions = is}
+    is <- some (fst <$ char 'L' <|> snd <$ char 'R') <* count 2 newline
+    ns <-
+        sepBy1
+            ( liftA3
+                (\n l r -> (n, (l, r)))
+                (node <* string " = ")
+                (char '(' *> node <* string ", ")
+                (node <* char ')')
+            )
+            (try $ newline <* notFollowedBy eof)
+            <* newline
+            <* eof
+    pure $ Maps{maps = fromList ns, instructions = is}
   where
     node :: Parser String
     node = count 3 letterChar

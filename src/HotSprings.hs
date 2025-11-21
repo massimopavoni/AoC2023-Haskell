@@ -17,22 +17,22 @@ import qualified Data.Vector as Vect (concat, drop, length, uncons)
 -- The first part is easy enough, once the dynamic programming problem is understood.
 possibleCombinationsSum :: String -> Int
 possibleCombinationsSum =
-  lines
-    >>> map (uncurry validArrangementsMemoized . parseRecord)
-    >>> sum
+    lines
+        >>> map (uncurry validArrangementsMemoized . parseRecord)
+        >>> sum
 
 -- The second part is instead quite much slower, and needing at least some memoization.
 unfoldedPossibleCombinationsSum :: String -> Int
 unfoldedPossibleCombinationsSum =
-  lines
-    >>> map (uncurry validArrangementsMemoized . unfold . parseRecord)
-    >>> sum
+    lines
+        >>> map (uncurry validArrangementsMemoized . unfold . parseRecord)
+        >>> sum
   where
     unfold :: (ByteString, Vector Int) -> (ByteString, Vector Int)
     unfold (drs, udrs) =
-      ( intercalate "?" $ replicate 5 drs,
-        Vect.concat $ replicate 5 udrs
-      )
+        ( intercalate "?" $ replicate 5 drs
+        , Vect.concat $ replicate 5 udrs
+        )
 
 ---------------------------------------------------------------------------------------------------
 -- Functions
@@ -58,12 +58,12 @@ validArrangementsMemoized damagedRecord undamagedRecord = validArrangementsMemoi
     -- And this is the memoized table itself, making use of Haskell's laziness to avoid loading the entire array.
     validArrangementsTable :: Array (Int, Int) Int
     validArrangementsTable =
-      array
-        ((0, 0), (drsl, udrsl))
-        [ ((d, u), validArrangement (BSC8.drop d damagedRecord) (Vect.drop u undamagedRecord))
-          | d <- [0 .. drsl],
-            u <- [0 .. udrsl]
-        ]
+        array
+            ((0, 0), (drsl, udrsl))
+            [ ((d, u), validArrangement (BSC8.drop d damagedRecord) (Vect.drop u undamagedRecord))
+            | d <- [0 .. drsl]
+            , u <- [0 .. udrsl]
+            ]
       where
         -- The function that finds the number of valid arrangements itself has 6 cases:
         -- 1. damaged record and undamaged record lists are both empty, which means that the analyzed arrangement is valid;
@@ -88,28 +88,28 @@ validArrangementsMemoized damagedRecord undamagedRecord = validArrangementsMemoi
         -- I know I probably didn't explain it very well, but I swear I know what's happening.
         validArrangement :: ByteString -> Vector Int -> Int
         validArrangement bs vi = case (BSC8.uncons bs, Vect.uncons vi) of
-          (Nothing, Nothing) -> 1
-          (Nothing, _) -> 0
-          (Just ('#', _), Nothing) -> 0
-          (Just ('.', drs), _) -> validArrangementsMemoized' drs vi
-          (Just ('#', _), Just (udr, udrs)) ->
-            let ldrs = BSC8.length bs
-             in if ldrs >= udr
-                  && '.' `BSC8.notElem` BSC8.take udr bs
-                  && (ldrs == udr || bs `index` udr /= '#')
-                  then validArrangementsMemoized' (BSC8.drop (udr + 1) bs) udrs
-                  else 0
-          (Just ('?', drs), _) -> validArrangementsMemoized' drs vi + validArrangement (cons '#' drs) vi
-          _ -> error "Invalid input"
+            (Nothing, Nothing) -> 1
+            (Nothing, _) -> 0
+            (Just ('#', _), Nothing) -> 0
+            (Just ('.', drs), _) -> validArrangementsMemoized' drs vi
+            (Just ('#', _), Just (udr, udrs)) ->
+                let ldrs = BSC8.length bs
+                 in if ldrs >= udr
+                        && '.' `BSC8.notElem` BSC8.take udr bs
+                        && (ldrs == udr || bs `index` udr /= '#')
+                        then validArrangementsMemoized' (BSC8.drop (udr + 1) bs) udrs
+                        else 0
+            (Just ('?', drs), _) -> validArrangementsMemoized' drs vi + validArrangement (cons '#' drs) vi
+            _ -> error "Invalid input"
 
 ---------------------------------------------------------------------------------------------------
 -- Parsers
 
 parseRecord :: String -> (ByteString, Vector Int)
 parseRecord =
-  words
-    >>> list2Tuple
-    >>> pack *** (fromList . map read . splitOn ",")
+    words
+        >>> list2Tuple
+        >>> pack *** (fromList . map read . splitOn ",")
   where
     list2Tuple :: [a] -> (a, a)
     list2Tuple [dr, udr] = (dr, udr)

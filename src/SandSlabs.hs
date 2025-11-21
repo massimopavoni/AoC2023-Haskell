@@ -21,14 +21,14 @@ import Safe (tailSafe)
 
 -- The Brick type has z coordinates first, so that we can sort bricks by height.
 data Brick = Brick
-  { firstZ :: Int,
-    secondZ :: Int,
-    firstX :: Int,
-    secondX :: Int,
-    firstY :: Int,
-    secondY :: Int
-  }
-  deriving (Eq, Ord, Show)
+    { firstZ :: Int
+    , secondZ :: Int
+    , firstX :: Int
+    , secondX :: Int
+    , firstY :: Int
+    , secondY :: Int
+    }
+    deriving (Eq, Ord, Show)
 
 ---------------------------------------------------------------------------------------------------
 -- Exports
@@ -37,20 +37,20 @@ data Brick = Brick
 -- as I can just count the unsafe bricks and subtract them from the total number of nodes.
 safeBricksCount :: String -> Int
 safeBricksCount =
-  parseBricksSnapshot
-    >>> fallBricksIntoGraph
-    >>> snd . bounds &&& HSet.size . findUnsafeBricks
-    >>> uncurry (-)
+    parseBricksSnapshot
+        >>> fallBricksIntoGraph
+        >>> snd . bounds &&& HSet.size . findUnsafeBricks
+        >>> uncurry (-)
 
 -- The second part is slightly more complicated: we have to count the number of bricks
 -- that would fall by removing every unsafe brick, one at a time.
 unsafeBrickFallsCount :: String -> Int
 unsafeBrickFallsCount =
-  parseBricksSnapshot
-    >>> fallBricksIntoGraph
-    >>> id &&& HSet.toList . findUnsafeBricks
-    >>> uncurry countFalls
-    >>> sum
+    parseBricksSnapshot
+        >>> fallBricksIntoGraph
+        >>> id &&& HSet.toList . findUnsafeBricks
+        >>> uncurry countFalls
+        >>> sum
   where
     -- To do that, we use the transposed graph (I'm not completely sure that transposing
     -- the entire graph is the best way, once fixed my graph approach) to get the reachable nodes
@@ -64,21 +64,21 @@ unsafeBrickFallsCount =
     -- 2. the first node is the unsafe brick itself.
     countFalls :: Graph -> [Vertex] -> [Int]
     countFalls graph =
-      let transposedGraph = transposeG graph
-       in map
-            ( pure &&& sort . tailSafe . reachable transposedGraph
-                >>> length . uncurry fallingBricks
-            )
+        let transposedGraph = transposeG graph
+         in map
+                ( pure &&& sort . tailSafe . reachable transposedGraph
+                    >>> length . uncurry fallingBricks
+                )
       where
         fallingBricks :: [Vertex] -> [Vertex] -> [Vertex]
         fallingBricks fvs [] = init fvs
         fallingBricks fvs (rv : rvs) =
-          fallingBricks
-            ( if all (`elem` fvs) (graph ! rv)
-                then rv : fvs
-                else fvs
-            )
-            rvs
+            fallingBricks
+                ( if all (`elem` fvs) (graph ! rv)
+                    then rv : fvs
+                    else fvs
+                )
+                rvs
 
 ---------------------------------------------------------------------------------------------------
 -- Functions
@@ -89,13 +89,13 @@ unsafeBrickFallsCount =
 -- memorizing the supports of each brick in the meantime, to then finally directly create the Graph Array.
 fallBricksIntoGraph :: [Brick] -> Graph
 fallBricksIntoGraph =
-  sort
-    >>> zipFrom 1
-    >>> foldl' fallingBrick HsMS.empty
-    >>> liftA2
-      array
-      ((1,) . size)
-      (foldlWithKey' (\a k v -> (k, snd v) : a) [])
+    sort
+        >>> zipFrom 1
+        >>> foldl' fallingBrick HsMS.empty
+        >>> liftA2
+            array
+            ((1,) . size)
+            (foldlWithKey' (\a k v -> (k, snd v) : a) [])
   where
     -- A falling brick can be in one of three states:
     -- 1. it's below the ground, it is not supported by any other brick, so we bring it up to level 1;
@@ -103,19 +103,19 @@ fallBricksIntoGraph =
     -- 3. it's intersecting other bricks, so we can bring it back up by one unit and let it rest on its supports.
     fallingBrick :: HashMap Vertex (Brick, [Vertex]) -> (Vertex, Brick) -> HashMap Vertex (Brick, [Vertex])
     fallingBrick tower (v, b@(Brick fz cz _ _ _ _))
-      | fz == 0 = HsMS.insert v (b {firstZ = 1, secondZ = cz + 1}, []) tower
-      | null intersections =
-          fallingBrick
-            tower
-            (v, b {firstZ = fz - maximumDeltaZ, secondZ = cz - maximumDeltaZ})
-      | otherwise = HsMS.insert v (b {firstZ = fz + 1, secondZ = cz + 1}, intersections) tower
+        | fz == 0 = HsMS.insert v (b{firstZ = 1, secondZ = cz + 1}, []) tower
+        | null intersections =
+            fallingBrick
+                tower
+                (v, b{firstZ = fz - maximumDeltaZ, secondZ = cz - maximumDeltaZ})
+        | otherwise = HsMS.insert v (b{firstZ = fz + 1, secondZ = cz + 1}, intersections) tower
       where
         intersections :: [Vertex]
         intersections = keys $ HsMS.filter (bricksIntersect b . fst) tower
           where
             bricksIntersect :: Brick -> Brick -> Bool
             bricksIntersect (Brick z1 _ x1 x2 y1 y2) (Brick _ z2 x3 x4 y3 y4) =
-              z1 == z2 && overlap x1 x2 x3 x4 && overlap y1 y2 y3 y4
+                z1 == z2 && overlap x1 x2 x3 x4 && overlap y1 y2 y3 y4
               where
                 overlap :: Int -> Int -> Int -> Int -> Bool
                 overlap a1 a2 b1 b2 = max a1 b1 <= min a2 b2
@@ -126,38 +126,38 @@ fallBricksIntoGraph =
         -- because that approach would imply traversing the list twice.)
         maximumDeltaZ :: Int
         maximumDeltaZ =
-          fz
-            - HsMS.foldl'
-              ( \acc b' ->
-                  let z2' = secondZ (fst b')
-                   in if z2' < fz
-                        then max acc z2'
-                        else acc
-              )
-              0
-              tower
+            fz
+                - HsMS.foldl'
+                    ( \acc b' ->
+                        let z2' = secondZ (fst b')
+                         in if z2' < fz
+                                then max acc z2'
+                                else acc
+                    )
+                    0
+                    tower
 
 -- To find the bricks that we cannot safely remove,
 -- we get the single child of every node with only one child.
 findUnsafeBricks :: Graph -> HashSet Vertex
 findUnsafeBricks =
-  DArr.elems
-    >>> filter ((== 1) . length)
-    >>> concat
-    >>> fromList
+    DArr.elems
+        >>> filter ((== 1) . length)
+        >>> concat
+        >>> fromList
 
 ---------------------------------------------------------------------------------------------------
 -- Parsers
 
 parseBricksSnapshot :: String -> [Brick]
 parseBricksSnapshot =
-  lines
-    >>> map
-      ( splitOn "~"
-          >>> concatMap (splitOn ",")
-          >>> map read
-          >>> listToBrick
-      )
+    lines
+        >>> map
+            ( splitOn "~"
+                >>> concatMap (splitOn ",")
+                >>> map read
+                >>> listToBrick
+            )
   where
     listToBrick :: [Int] -> Brick
     listToBrick [x1, y1, z1, x2, y2, z2] = Brick z1 z2 x1 x2 y1 y2

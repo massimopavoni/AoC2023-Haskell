@@ -18,20 +18,20 @@ import RandomUtils (Pos)
 -- then uses that information to find the indices to use for the loads summations.
 platformBeamLoadsSum :: String -> Int
 platformBeamLoadsSum =
-  map pack . lines
-    >>> northBeamLoads
-    >>> sum
+    map pack . lines
+        >>> northBeamLoads
+        >>> sum
   where
     northBeamLoads :: [ByteString] -> [Int]
     northBeamLoads ls =
-      let beamLength = length ls
-       in transpose ls
-            & map
-              ( splitWith (== '#')
-                  >>> map (BSC8.length &&& count 'O')
-                  >>> foldl' addLoad (beamLength, 0)
-                  >>> snd
-              )
+        let beamLength = length ls
+         in transpose ls
+                & map
+                    ( splitWith (== '#')
+                        >>> map (BSC8.length &&& count 'O')
+                        >>> foldl' addLoad (beamLength, 0)
+                        >>> snd
+                    )
       where
         addLoad :: Pos -> Pos -> Pos
         addLoad (rl, tl) (cl, oc) = (rl - cl - 1, tl + sum [rl - oc + 1 .. rl])
@@ -47,23 +47,23 @@ platformBeamLoadsSum =
 -- after the given number of cycles.
 spinningPlatformBeamLoadsSum :: String -> Int
 spinningPlatformBeamLoadsSum =
-  map pack . lines
-    >>> iterate spinOnce
-    >>> liftA2
-      (!!)
-      id
-      ((\(b, e) -> b + (1000000000 - b) `rem` (e - b)) . spinCycle empty 0)
-    >>> transpose
-    >>> map calculateLoad
-    >>> sum
+    map pack . lines
+        >>> iterate spinOnce
+        >>> liftA2
+            (!!)
+            id
+            ((\(b, e) -> b + (1000000000 - b) `rem` (e - b)) . spinCycle empty 0)
+        >>> transpose
+        >>> map calculateLoad
+        >>> sum
   where
     -- Once we find an already seen platform pattern, we can stop spinnning
     -- and just yield the indices of the first cycle.
     spinCycle :: HashMap [ByteString] Int -> Int -> [[ByteString]] -> Pos
     spinCycle _ _ [] = error "No spinning cycles"
     spinCycle m i (p : ps) = case m !? p of
-      Nothing -> spinCycle (insert p i m) (i + 1) ps
-      Just s -> (s, i)
+        Nothing -> spinCycle (insert p i m) (i + 1) ps
+        Just s -> (s, i)
 
     -- The tilting function is important but also the villain of all of it,
     -- as it's the function that takes the most to execute,
@@ -84,10 +84,10 @@ spinningPlatformBeamLoadsSum =
     -- does not provide a sortOn function.)
     spinOnce :: [ByteString] -> [ByteString]
     spinOnce =
-      transpose . tilt BSC8.reverse . transpose
-        >>> tilt BSC8.reverse
-        >>> transpose . tilt id . transpose
-        >>> tilt id
+        transpose . tilt BSC8.reverse . transpose
+            >>> tilt BSC8.reverse
+            >>> transpose . tilt id . transpose
+            >>> tilt id
       where
         tilt :: (ByteString -> ByteString) -> [ByteString] -> [ByteString]
         tilt bsTransform = map (bsTransform . intercalate "#" . map sort . splitWith (== '#') . bsTransform)
@@ -102,5 +102,5 @@ spinningPlatformBeamLoadsSum =
     -- understanding the funny story context of the reflector dish weird rock device.
     calculateLoad :: ByteString -> Int
     calculateLoad rs =
-      let l = BSC8.length rs
-       in sum [l - i | i <- elemIndices 'O' rs]
+        let l = BSC8.length rs
+         in sum [l - i | i <- elemIndices 'O' rs]

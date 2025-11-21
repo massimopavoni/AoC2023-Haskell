@@ -17,9 +17,9 @@
 #
 # snapshot: ./custom-snapshot.yaml
 # snapshot: https://example.com/snapshots/2024-01-01.yaml
-resolver: lts-24.19
+resolver: nightly-2025-11-21
 
-compiler: ghc-9.10.3
+compiler: ghc-9.12.2
 compiler-check: match-exact
 
 # User packages to be built.

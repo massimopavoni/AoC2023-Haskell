@@ -24,7 +24,7 @@ import RandomUtils (Pos)
 type Graph = HashMap Pos [(Pos, Int)]
 
 data Forest = Forest Pos Pos Graph
-  deriving (Show)
+    deriving (Show)
 
 ---------------------------------------------------------------------------------------------------
 -- Exports
@@ -43,10 +43,10 @@ walkLongestDryHike = findLongestHike True
 -- The solution strategy can be expressed with just a single function, although it's quite complicated.
 findLongestHike :: Bool -> String -> Int
 findLongestHike dry =
-  fromLists . lines
-    >>> matrixToForest
-    >>> (if dry then pruneDeadEnds else id)
-    >>> findLongest
+    fromLists . lines
+        >>> matrixToForest
+        >>> (if dry then pruneDeadEnds else id)
+        >>> findLongest
   where
     -- The solution itself is just a brute-force DFS, because of the NP-hard nature of the longest path problem
     -- on what's basically actually an undirected graph in this case
@@ -56,8 +56,8 @@ findLongestHike dry =
       where
         findLongest' :: HashSet Pos -> Int -> Pos -> Int
         findLongest' visited distance current
-          | current == exit = distance
-          | otherwise = longest
+            | current == exit = distance
+            | otherwise = longest
           where
             longest :: Int
             longest = maximum (0 : map (\(c, d) -> findLongest' seen' (distance + d) c) neighbors)
@@ -73,14 +73,14 @@ findLongestHike dry =
     -- the already tracked path, but since this makes sense only for the second part we skip it for the first.
     pruneDeadEnds :: Forest -> Forest
     pruneDeadEnds (Forest entrance exit graph) =
-      Forest entrance exit $
-        HsMS.union (perimeter HSet.empty HsMS.empty [(exit, 0)]) graph
+        Forest entrance exit $
+            HsMS.union (perimeter HSet.empty HsMS.empty [(exit, 0)]) graph
       where
         perimeter :: HashSet Pos -> Graph -> [(Pos, Int)] -> Graph
         perimeter _ _ [] = error "No nodes to visit"
         perimeter vs g ((n, _) : ns)
-          | n == entrance = g
-          | otherwise = perimeter (HSet.insert n vs) g' ns'
+            | n == entrance = g
+            | otherwise = perimeter (HSet.insert n vs) g' ns'
           where
             g' :: Graph
             g' = HsMS.insert n (fst nodesPartitions) g
@@ -94,15 +94,15 @@ findLongestHike dry =
             -- (these are essentially the perimeter nodes left of or above the current one).
             nodesPartitions :: ([(Pos, Int)], [(Pos, Int)])
             nodesPartitions =
-              graph HsMS.! n
-                & partition
-                  ( fst
-                      >>> liftA3
-                        (\a b c -> a || b || c)
-                        (== exit)
-                        (`HSet.member` vs)
-                        ((> 3) . length . (graph HsMS.!))
-                  )
+                graph HsMS.! n
+                    & partition
+                        ( fst
+                            >>> liftA3
+                                (\a b c -> a || b || c)
+                                (== exit)
+                                (`HSet.member` vs)
+                                ((> 3) . length . (graph HsMS.!))
+                        )
 
     -- The matrixToForest function is the least clean, and it's the most important one
     -- (together with pruning dead ends for the second part) for speeding up the longest path search.
@@ -116,16 +116,16 @@ findLongestHike dry =
 
         exit :: Pos
         exit =
-          let rn = nrows m
-           in (rn, 1 + fromJust (elemIndex '.' $ getRow rn m))
+            let rn = nrows m
+             in (rn, 1 + fromJust (elemIndex '.' $ getRow rn m))
 
         findCrossroadDistances :: HashSet Pos -> Graph -> [Pos] -> Graph
         findCrossroadDistances _ graph [] = graph
         findCrossroadDistances visited graph (n : next) =
-          findCrossroadDistances
-            (foldl' (flip HSet.insert) visited crossroads)
-            (HsMS.insert n nextCrossroads graph)
-            (next ++ crossroads)
+            findCrossroadDistances
+                (foldl' (flip HSet.insert) visited crossroads)
+                (HsMS.insert n nextCrossroads graph)
+                (next ++ crossroads)
           where
             crossroads :: [Pos]
             crossroads = foldl' (\cs (nc, _) -> if HSet.member nc visited then cs else nc : cs) [] nextCrossroads
@@ -136,16 +136,16 @@ findLongestHike dry =
                 findNextCrossroads :: HashSet Pos -> [(Pos, Int)] -> HashMap Pos Int -> HashMap Pos Int
                 findNextCrossroads _ [] found = found
                 findNextCrossroads seen ((c@(y, x), d) : ns) found
-                  | d > 0 && isCrossroad =
-                      findNextCrossroads
-                        seen
-                        ns
-                        (HsMS.alter (Just . maybe d (max d)) c found)
-                  | otherwise =
-                      findNextCrossroads
-                        (foldl' (flip HSet.insert) seen crossroadNeighbors)
-                        (ns ++ map (,d + 1) crossroadNeighbors)
-                        found
+                    | d > 0 && isCrossroad =
+                        findNextCrossroads
+                            seen
+                            ns
+                            (HsMS.alter (Just . maybe d (max d)) c found)
+                    | otherwise =
+                        findNextCrossroads
+                            (foldl' (flip HSet.insert) seen crossroadNeighbors)
+                            (ns ++ map (,d + 1) crossroadNeighbors)
+                            found
                   where
                     -- Entrance and exit are crossroads, as well as any node with more than 2 neighboring crossroads.
                     isCrossroad :: Bool
@@ -157,14 +157,14 @@ findLongestHike dry =
                     -- Neighbors are filtered based on dry or icy conditions, as well as walls and entrance/exit special cases.
                     neighbors :: [Pos]
                     neighbors
-                      | c == entrance = [(y + 1, x)]
-                      | c == exit = [(y - 1, x)]
-                      | otherwise =
-                          let allNeighbors = [(y - 1, x), (y + 1, x), (y, x - 1), (y, x + 1)]
-                           in filter ((/= '#') . (m DMat.!)) $
-                                if dry
-                                  then allNeighbors
-                                  else case m DMat.! c of
-                                    '>' -> [(y, x + 1)]
-                                    'v' -> [(y + 1, x)]
-                                    _ -> allNeighbors
+                        | c == entrance = [(y + 1, x)]
+                        | c == exit = [(y - 1, x)]
+                        | otherwise =
+                            let allNeighbors = [(y - 1, x), (y + 1, x), (y, x - 1), (y, x + 1)]
+                             in filter ((/= '#') . (m DMat.!)) $
+                                    if dry
+                                        then allNeighbors
+                                        else case m DMat.! c of
+                                            '>' -> [(y, x + 1)]
+                                            'v' -> [(y + 1, x)]
+                                            _ -> allNeighbors

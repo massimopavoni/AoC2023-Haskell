@@ -15,9 +15,9 @@ import Text.Megaparsec.Char (digitChar, string)
 -- The first part supports a basic solution, and a pretty self-explanatory one at that.
 calibrationValuesSum :: String -> Int
 calibrationValuesSum =
-  lines
-    >>> map (read . firstLast . filter isDigit)
-    >>> sum
+    lines
+        >>> map (read . firstLast . filter isDigit)
+        >>> sum
   where
     firstLast :: [a] -> [a]
     firstLast [] = []
@@ -28,9 +28,9 @@ calibrationValuesSum =
 -- But I ended up using a parsing library anyway, and still learned a lot in the process.
 fixedCalibrationValuesSum :: String -> Int
 fixedCalibrationValuesSum =
-  lines
-    >>> map (parseInput valueParser id)
-    >>> sum
+    lines
+        >>> map (parseInput valueParser id)
+        >>> sum
 
 ---------------------------------------------------------------------------------------------------
 -- Parsers
@@ -40,10 +40,10 @@ fixedCalibrationValuesSum =
 -- while accounting for inputs with only one available digit.
 valueParser :: Parser Int
 valueParser = do
-  tens <- manyTill anySingle (lookAhead forwardDigit) >> forwardDigit
-  getInput >>= setInput . reverse
-  units <- manyTill anySingle (lookAhead $ void reverseDigit <|> eof) >> optional reverseDigit
-  pure $ tens * 10 + fromMaybe tens units
+    tens <- manyTill anySingle (lookAhead forwardDigit) >> forwardDigit
+    getInput >>= setInput . reverse
+    units <- manyTill anySingle (lookAhead $ void reverseDigit <|> eof) >> optional reverseDigit
+    pure $ tens * 10 + fromMaybe tens units
   where
     forwardDigit :: Parser Int
     forwardDigit = digit digitWords

@@ -22,18 +22,18 @@ import Data.Map.Ordered.Strict (OMap, assocs, delete, singleton)
 -- The first part is very easy, as it's just about properly hashing the values.
 initSequenceHashesSum :: String -> Int
 initSequenceHashesSum =
-  parseInitSequence
-    >>> map hash
-    >>> sum
+    parseInitSequence
+        >>> map hash
+        >>> sum
 
 -- The second part was also quite easy, once the appropriate data structures are used.
 lensBoxFocusingPowersSum :: String -> Int
 lensBoxFocusingPowersSum =
-  parseInitSequence
-    >>> map parseLensOp
-    >>> List.foldl' updateBoxes empty
-    >>> map (uncurry boxFocusingPower) . ItMS.toList
-    >>> sum
+    parseInitSequence
+        >>> map parseLensOp
+        >>> List.foldl' updateBoxes empty
+        >>> map (uncurry boxFocusingPower) . ItMS.toList
+        >>> sum
   where
     -- In particular, we're using a Ordered Map for every box, as we need to keep the lenses sorted by insertion order,
     -- and we fortunately still have a alter function from the normal Ordered Map module,
@@ -49,8 +49,8 @@ lensBoxFocusingPowersSum =
         executeOp :: Maybe (OMap ByteString Int) -> Maybe (OMap ByteString Int)
         executeOp Nothing = if lfl == -1 then Nothing else Just $ singleton (lbl, lfl)
         executeOp (Just lsm) = case lfl of
-          -1 -> Just $ delete lbl lsm
-          _ -> Just $ MapO.alter (const $ Just lfl) lbl lsm
+            -1 -> Just $ delete lbl lsm
+            _ -> Just $ MapO.alter (const $ Just lfl) lbl lsm
 
     boxFocusingPower :: Int -> OMap ByteString Int -> Int
     boxFocusingPower bn = List.foldl' foldLens 0 . zipFrom 1 . assocs
@@ -85,9 +85,9 @@ parseInitSequence = splitWith (== ',') . BSC8.init . pack
 -- as well as the operation (-1 for removing, any digit for adding)).
 parseLensOp :: ByteString -> (Int, ByteString, Int)
 parseLensOp bs = case unsnoc bs of
-  Just (lbl, lfl) ->
-    let b = lfl == '-'
-        lbl' = bool BSC8.init id b lbl
-        lfl' = bool (read [lfl]) (-1) b
-     in (hash lbl', lbl', lfl')
-  Nothing -> error "Invalid lens operation"
+    Just (lbl, lfl) ->
+        let b = lfl == '-'
+            lbl' = bool BSC8.init id b lbl
+            lfl' = bool (read [lfl]) (-1) b
+         in (hash lbl', lbl', lfl')
+    Nothing -> error "Invalid lens operation"

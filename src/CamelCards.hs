@@ -16,10 +16,10 @@ import Text.Megaparsec.Char.Lexer (decimal)
 -- Data types
 
 data Hand = Hand {cards :: String, bid :: Int}
-  deriving (Show)
+    deriving (Show)
 
 data HandType = HighCard | OnePair | TwoPair | ThreeOfAKind | FullHouse | FourOfAKind | FiveOfAKind
-  deriving (Eq, Ord, Show)
+    deriving (Eq, Ord, Show)
 
 ---------------------------------------------------------------------------------------------------
 -- Exports
@@ -55,13 +55,13 @@ jokersHandWinningsSum = sum . handWinnings handTypeTransform "J23456789TQKA"
         -- 7. a five of a kind is always a five of a kind.
         improveHandType :: HandType
         improveHandType = case ht of
-          HighCard -> OnePair
-          OnePair -> ThreeOfAKind
-          TwoPair -> if length firstCardsGroup == 1 then FullHouse else FourOfAKind
-          ThreeOfAKind -> FourOfAKind
-          FullHouse -> FiveOfAKind
-          FourOfAKind -> FiveOfAKind
-          FiveOfAKind -> FiveOfAKind
+            HighCard -> OnePair
+            OnePair -> ThreeOfAKind
+            TwoPair -> if length firstCardsGroup == 1 then FullHouse else FourOfAKind
+            ThreeOfAKind -> FourOfAKind
+            FullHouse -> FiveOfAKind
+            FourOfAKind -> FiveOfAKind
+            FiveOfAKind -> FiveOfAKind
 
 ---------------------------------------------------------------------------------------------------
 -- Functions
@@ -72,10 +72,10 @@ jokersHandWinningsSum = sum . handWinnings handTypeTransform "J23456789TQKA"
 -- then we apply the transformation (which is sort of an id if we're not playing with jokers).
 handWinnings :: ((HandType, Hand, [String]) -> (HandType, Hand)) -> String -> String -> [Int]
 handWinnings httf cso =
-  parseInput handsParser $
-    map (httf . addHandType . addCardsGroups)
-      >>> map snd . sortBy compareRanks
-      >>> zipWithFrom (curry (liftA2 (*) fst (bid . snd))) 1
+    parseInput handsParser $
+        map (httf . addHandType . addCardsGroups)
+            >>> map snd . sortBy compareRanks
+            >>> zipWithFrom (curry (liftA2 (*) fst (bid . snd))) 1
   where
     addCardsGroups :: Hand -> (Hand, [String])
     addCardsGroups = id &&& group . sortBy compareCards . cards
@@ -91,22 +91,22 @@ handWinnings httf cso =
     -- 5. 1 means they're all the same, so it's a five of a kind.
     addHandType :: (Hand, [String]) -> (HandType, Hand, [String])
     addHandType (h, csg) =
-      let csgl = length <$> csg
-       in ( case length csg of
-              5 -> HighCard
-              4 -> OnePair
-              3 -> if 2 `elem` csgl then TwoPair else ThreeOfAKind
-              2 -> if 3 `elem` csgl then FullHouse else FourOfAKind
-              1 -> FiveOfAKind
-              _ -> error "Invalid hand",
-            h,
-            csg
-          )
+        let csgl = length <$> csg
+         in ( case length csg of
+                5 -> HighCard
+                4 -> OnePair
+                3 -> if 2 `elem` csgl then TwoPair else ThreeOfAKind
+                2 -> if 3 `elem` csgl then FullHouse else FourOfAKind
+                1 -> FiveOfAKind
+                _ -> error "Invalid hand"
+            , h
+            , csg
+            )
 
     compareRanks :: (HandType, Hand) -> (HandType, Hand) -> Ordering
     compareRanks (ht1, h1) (ht2, h2) = case compare ht1 ht2 of
-      EQ -> compareHands h1 h2
-      x -> x
+        EQ -> compareHands h1 h2
+        x -> x
       where
         -- Looking at mconcat had me trying to understand why we use a Monoid operation,
         -- and it reminded me of the algebra concepts I studied in university a few years ago,
@@ -129,8 +129,8 @@ handWinnings httf cso =
 
 handsParser :: Parser [Hand]
 handsParser =
-  sepBy1
-    (liftA2 Hand (count 5 $ oneOf "23456789TJQKA") (char ' ' *> decimal))
-    (try $ newline <* notFollowedBy eof)
-    <* newline
-    <* eof
+    sepBy1
+        (liftA2 Hand (count 5 $ oneOf "23456789TJQKA") (char ' ' *> decimal))
+        (try $ newline <* notFollowedBy eof)
+        <* newline
+        <* eof

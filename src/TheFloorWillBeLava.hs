@@ -21,7 +21,7 @@ import RandomUtils (Direction (..), Pos, movePos)
 -- Data types
 
 data Tile = Empty | Mirror | AntiMirror | ColSplit | RowSplit
-  deriving (Bounded, Enum, Eq, Show)
+    deriving (Bounded, Enum, Eq, Show)
 
 ---------------------------------------------------------------------------------------------------
 -- Exports
@@ -29,36 +29,36 @@ data Tile = Empty | Mirror | AntiMirror | ColSplit | RowSplit
 -- The first part just applies the followLightBeams function with the default starting position and direction.
 energizedTilesCount :: String -> Int
 energizedTilesCount =
-  let start = ((1, 1), E)
-   in parseContraption
-        >>> followLightBeams (liftA2 singleton fst (pure . snd) start) [start]
-        >>> size
+    let start = ((1, 1), E)
+     in parseContraption
+            >>> followLightBeams (liftA2 singleton fst (pure . snd) start) [start]
+            >>> size
 
 -- The second part instead has to use all the possible starting positions along the contraption's borders.
 maximumEnergizedTilesCountAllStarts :: String -> Int
 maximumEnergizedTilesCountAllStarts =
-  parseContraption
-    >>> (starts &&& id)
-    >>> ( \(ss, tm) ->
-            parMap
-              rseq
-              ( liftA2 singleton fst (pure . snd) &&& pure
-                  >>> flip (uncurry followLightBeams) tm
-                  >>> size
-              )
-              ss
-        )
-    >>> maximum
+    parseContraption
+        >>> (starts &&& id)
+        >>> ( \(ss, tm) ->
+                parMap
+                    rseq
+                    ( liftA2 singleton fst (pure . snd) &&& pure
+                        >>> flip (uncurry followLightBeams) tm
+                        >>> size
+                    )
+                    ss
+            )
+        >>> maximum
   where
     -- Just 4 list comprehensions, nothing to see here.
     starts :: Matrix Tile -> [(Pos, Direction)]
     starts tm =
-      let (nrs, ncs) = (nrows tm, ncols tm)
-          (rs, cs) = ([1 .. nrs], [1 .. ncs])
-       in [((1, y), S) | y <- cs]
-            ++ [((x, 1), E) | x <- rs]
-            ++ [((nrs, y), N) | y <- cs]
-            ++ [((x, ncs), W) | x <- rs]
+        let (nrs, ncs) = (nrows tm, ncols tm)
+            (rs, cs) = ([1 .. nrs], [1 .. ncs])
+         in [((1, y), S) | y <- cs]
+                ++ [((x, 1), E) | x <- rs]
+                ++ [((nrs, y), N) | y <- cs]
+                ++ [((x, ncs), W) | x <- rs]
 
 ---------------------------------------------------------------------------------------------------
 -- Functions
@@ -74,10 +74,10 @@ followLightBeams ehm ts tm = followLightBeams' ehm ts
   where
     followLightBeams' :: HashMap Pos [Direction] -> [(Pos, Direction)] -> HashMap Pos [Direction]
     followLightBeams' shm cts =
-      followLightBeams
-        (foldl' (\hm (pos, dir) -> insertWith (++) pos [dir] hm) shm nextTiles)
-        nextTiles
-        tm
+        followLightBeams
+            (foldl' (\hm (pos, dir) -> insertWith (++) pos [dir] hm) shm nextTiles)
+            nextTiles
+            tm
       where
         nextTiles :: [(Pos, Direction)]
         nextTiles = concatMap (filter unseen . uncurry nextTiles') cts
@@ -89,20 +89,20 @@ followLightBeams ehm ts tm = followLightBeams' ehm ts
             -- that loops and maybe other other special cases are not a problem thanks to this).
             unseen :: (Pos, Direction) -> Bool
             unseen (pos, dir) = case uncurry safeGet pos tm of
-              Nothing -> False
-              Just ct -> case HsMS.lookup pos ehm of
-                Just ds -> ct /= ColSplit && ct /= RowSplit && dir `notElem` ds
-                Nothing -> True
+                Nothing -> False
+                Just ct -> case HsMS.lookup pos ehm of
+                    Just ds -> ct /= ColSplit && ct /= RowSplit && dir `notElem` ds
+                    Nothing -> True
 
             nextTiles' :: Pos -> Direction -> [(Pos, Direction)]
             nextTiles' pos dir =
-              (movePos 1 pos &&& id) <$> case uncurry safeGet pos tm of
-                Nothing -> []
-                Just Empty -> [dir]
-                Just Mirror -> [[W, N, E, S] !! fromEnum dir]
-                Just AntiMirror -> [[E, S, W, N] !! fromEnum dir]
-                Just ColSplit -> if dir `elem` [E, W] then [S, N] else [dir]
-                Just RowSplit -> if dir `elem` [S, N] then [E, W] else [dir]
+                (movePos 1 pos &&& id) <$> case uncurry safeGet pos tm of
+                    Nothing -> []
+                    Just Empty -> [dir]
+                    Just Mirror -> [[W, N, E, S] !! fromEnum dir]
+                    Just AntiMirror -> [[E, S, W, N] !! fromEnum dir]
+                    Just ColSplit -> if dir `elem` [E, W] then [S, N] else [dir]
+                    Just RowSplit -> if dir `elem` [S, N] then [E, W] else [dir]
 
 ---------------------------------------------------------------------------------------------------
 -- Parsers

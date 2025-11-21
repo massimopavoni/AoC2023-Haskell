@@ -28,9 +28,9 @@ import Safe (headErr)
 -- The first part is easy enough, since it just involves a breadth-first search.
 gardenReachablePlotsCount :: String -> Int
 gardenReachablePlotsCount =
-  fromLists . lines
-    >>> findReachablePlots 64
-    >>> headErr
+    fromLists . lines
+        >>> findReachablePlots 64
+        >>> headErr
 
 -- The second part is the annoying thing I mentioned above.
 -- I don't care how ingenious the puzzle can be, it is not fun to solve it if it requires you
@@ -54,14 +54,14 @@ gardenReachablePlotsCount =
 -- the result precise for those numbers and an approximation to be rounded for different values).
 infiniteGardenReachablePlotsCount :: String -> Int
 infiniteGardenReachablePlotsCount =
-  fromLists . lines
-    >>> findReachablePlots sampleSteps
-    >>> (<$> map (sampleSteps -) stepPoints) . (!!)
-    >>> asColumn . vector . map fromIntegral
-    >>> linearSolve a
-    >>> toList . flatten . fromJust
-    >>> zipWith (*) (variableQuadratic 26501365)
-    >>> round . sum
+    fromLists . lines
+        >>> findReachablePlots sampleSteps
+        >>> (<$> map (sampleSteps -) stepPoints) . (!!)
+        >>> asColumn . vector . map fromIntegral
+        >>> linearSolve a
+        >>> toList . flatten . fromJust
+        >>> zipWith (*) (variableQuadratic 26501365)
+        >>> round . sum
   where
     sampleSteps :: Int
     sampleSteps = 327
@@ -88,31 +88,31 @@ findReachablePlots steps garden = bfsGardenPlotsCount (steps, singleton start) e
   where
     start :: Pos
     start =
-      fromJust $
-        find
-          ((== 'S') . (garden !))
-          [(x, y) | x <- [1 .. rowsCount], y <- [1 .. colsCount]]
+        fromJust $
+            find
+                ((== 'S') . (garden !))
+                [(x, y) | x <- [1 .. rowsCount], y <- [1 .. colsCount]]
 
     bfsGardenPlotsCount :: (Int, Set Pos) -> Set Pos -> [Int] -> [Int]
     bfsGardenPlotsCount (ss, cp) pp cs
-      | ss == 0 = cs'
-      | otherwise = bfsGardenPlotsCount (ss - 1, foldMap' nextPositions cp) cp cs'
+        | ss == 0 = cs'
+        | otherwise = bfsGardenPlotsCount (ss - 1, foldMap' nextPositions cp) cp cs'
       where
         nextPositions :: Pos -> Set Pos
         nextPositions =
-          (&)
-            >>> (<$> [first (subtract 1), second (subtract 1), first (+ 1), second (+ 1)])
-            >>> filter
-              ( liftA2
-                  (&&)
-                  (`notMember` pp)
-                  ( both (subtract 1)
-                      >>> (`mod` rowsCount) *** (`mod` colsCount)
-                      >>> both (+ 1)
-                      >>> (/= '#') . (garden !)
-                  )
-              )
-            >>> fromList
+            (&)
+                >>> (<$> [first (subtract 1), second (subtract 1), first (+ 1), second (+ 1)])
+                >>> filter
+                    ( liftA2
+                        (&&)
+                        (`notMember` pp)
+                        ( both (subtract 1)
+                            >>> (`mod` rowsCount) *** (`mod` colsCount)
+                            >>> both (+ 1)
+                            >>> (/= '#') . (garden !)
+                        )
+                    )
+                >>> fromList
 
         cs' :: [Int]
         cs' = (cs !! 1 + size cp) : cs

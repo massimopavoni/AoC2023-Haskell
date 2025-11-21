@@ -14,16 +14,16 @@ import Safe (tailSafe)
 -- The first part got changed after the second one, using a generic function.
 mirrorScoresSum :: String -> Int
 mirrorScoresSum =
-  splitOn "\n\n"
-    >>> map (reflectionLineScore 0)
-    >>> sum
+    splitOn "\n\n"
+        >>> map (reflectionLineScore 0)
+        >>> sum
 
 -- The second part introduces the possibility of mirrors with imperfect reflections (smudges).
 mirrorSmudgeScoresSum :: String -> Int
 mirrorSmudgeScoresSum =
-  splitOn "\n\n"
-    >>> map (reflectionLineScore 1)
-    >>> sum
+    splitOn "\n\n"
+        >>> map (reflectionLineScore 1)
+        >>> sum
 
 ---------------------------------------------------------------------------------------------------
 -- Functions
@@ -40,21 +40,21 @@ mirrorSmudgeScoresSum =
 -- 5. sum the tuple elements.
 reflectionLineScore :: Int -> String -> Int
 reflectionLineScore smudgeCount =
-  lines
-    >>> (id &&& transpose)
-    >>> both
-      ( map sum . transpose . map lineReflectionDifferences
-          >>> (+ 1) . fromMaybe (-1) . elemIndex smudgeCount
-      )
-    >>> second (* 100)
-    >>> uncurry (+)
+    lines
+        >>> (id &&& transpose)
+        >>> both
+            ( map sum . transpose . map lineReflectionDifferences
+                >>> (+ 1) . fromMaybe (-1) . elemIndex smudgeCount
+            )
+        >>> second (* 100)
+        >>> uncurry (+)
   where
     -- The function above makes use of lineReflectionDifferences to find the numbers of different symbols
     -- between the sub-lines left and right of the potential reflection line.
     lineReflectionDifferences :: String -> [Int]
     lineReflectionDifferences =
-      liftA2
-        (zipWith (zipWith (==)))
-        (map reverse . tailSafe . inits)
-        (init . tailSafe . tails)
-        >>> map (length . filter not)
+        liftA2
+            (zipWith (zipWith (==)))
+            (map reverse . tailSafe . inits)
+            (init . tailSafe . tails)
+            >>> map (length . filter not)

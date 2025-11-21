@@ -23,23 +23,23 @@ import Text.Megaparsec.Char.Lexer (decimal)
 -- Data types
 
 data Range a = Range {start :: a, stop :: a}
-  deriving (Eq, Show)
+    deriving (Eq, Show)
 
 -- The Range Functor wasn't really necessary,
 -- but it was a the first occasion I had to write an instance of it,
 -- and it looked nicer when used in the first case of the mapSeedRange function.
 -- (Also, I enabled instance signs because I prefer to have them in function contexts and, well, in instances.)
 instance Functor Range where
-  fmap :: (a -> b) -> Range a -> Range b
-  fmap f (Range s e) = Range (f s) (f e)
+    fmap :: (a -> b) -> Range a -> Range b
+    fmap f (Range s e) = Range (f s) (f e)
 
 -- The Ord instance is necessary to be able to sort ranges (and indeed it only compares based on the start).
 instance (Eq a, Ord a) => Ord (Range a) where
-  compare :: Range a -> Range a -> Ordering
-  compare (Range s1 _) (Range s2 _) = compare s1 s2
+    compare :: Range a -> Range a -> Ordering
+    compare (Range s1 _) (Range s2 _) = compare s1 s2
 
 data MapRange a = MapRange {range :: Range a, offset :: a}
-  deriving (Show)
+    deriving (Show)
 
 ---------------------------------------------------------------------------------------------------
 -- Exports
@@ -48,12 +48,12 @@ data MapRange a = MapRange {range :: Range a, offset :: a}
 -- and they can simply be passed through every almanac map without any slowdown.
 nearestSeed :: String -> Int
 nearestSeed =
-  parseInput (almanacParser id) $
-    liftA2
-      map
-      (flip (foldl' passSingleThroughRangeMap) . snd)
-      fst
-      >>> minimum
+    parseInput (almanacParser id) $
+        liftA2
+            map
+            (flip (foldl' passSingleThroughRangeMap) . snd)
+            fst
+            >>> minimum
   where
     -- Funny thing: this one function gave me the opportuninty to better understand
     -- how functions can become incredily beautiful in their point-free versions,
@@ -61,13 +61,13 @@ nearestSeed =
     -- in the context of Applicatives (also appreciating the evident connection between liftA2 and <*>).
     passSingleThroughRangeMap :: (Num a, Ord a) => a -> [MapRange a] -> a
     passSingleThroughRangeMap i =
-      find
-        ( liftA2
-            (&&)
-            ((<= i) . start . range)
-            ((i <=) . stop . range)
-        )
-        >>> maybe i ((+ i) . offset)
+        find
+            ( liftA2
+                (&&)
+                ((<= i) . start . range)
+                ((i <=) . stop . range)
+            )
+            >>> maybe i ((+ i) . offset)
 
 -- The second part was a nightmare at the beginning, but it eventually grew on me,
 -- and in the end solving it was, as I've already said, very satisfying.
@@ -76,10 +76,10 @@ nearestSeed =
 -- to then just pick the minimum of their starts, since that's always the smallest value in the range.
 nearestSeedRange :: String -> Int
 nearestSeedRange =
-  parseInput (almanacParser (map listToRange . chunksOf 2)) $
-    uncurry (foldl' passRangeThroughRangeMap)
-      >>> map start
-      >>> minimum
+    parseInput (almanacParser (map listToRange . chunksOf 2)) $
+        uncurry (foldl' passRangeThroughRangeMap)
+            >>> map start
+            >>> minimum
   where
     -- Using bounds-inclusive ranges makes it difficult to mess up range subtraction,
     -- but I guess I could have done something slightly different in the other functions so that
@@ -106,12 +106,12 @@ nearestSeedRange =
         -- we can just consider the last range as the next one to subtract from.
         mapSeedRange :: Range a -> [Range a]
         mapSeedRange sr
-          | isJust inRangeMap = [(+ offset (fromJust inRangeMap)) <$> sr]
-          | not $ null filteredOverlappingMapRanges =
-              concatMap mapSeedRange
-                . foldl' (\rs mr -> subtractRange (last rs) mr ++ init rs) [sr]
-                $ sort filteredOverlappingMapRanges
-          | otherwise = [sr]
+            | isJust inRangeMap = [(+ offset (fromJust inRangeMap)) <$> sr]
+            | not $ null filteredOverlappingMapRanges =
+                concatMap mapSeedRange
+                    . foldl' (\rs mr -> subtractRange (last rs) mr ++ init rs) [sr]
+                    $ sort filteredOverlappingMapRanges
+            | otherwise = [sr]
           where
             inRangeMap :: Maybe (MapRange a)
             inRangeMap = find ((`containsRange` sr) . range) mrs
@@ -122,9 +122,9 @@ nearestSeedRange =
         -- Range A is overlapping with range B if A contains B or if B contains any of A's bounds.
         overlappingRange :: Range a -> Range a -> Bool
         overlappingRange r1@(Range a b) r2 =
-          containsRange r1 r2
-            || (containsBound r2 a && not (containsBound r2 b))
-            || (not (containsBound r2 a) && containsBound r2 b)
+            containsRange r1 r2
+                || (containsBound r2 a && not (containsBound r2 b))
+                || (not (containsBound r2 a) && containsBound r2 b)
 
         containsRange :: Range a -> Range a -> Bool
         containsRange (Range a b) (Range c d) = a <= c && d <= b
@@ -140,10 +140,10 @@ nearestSeedRange =
         -- it should've already been mapped by the first case of mapSeedRange.
         subtractRange :: Range a -> Range a -> [Range a]
         subtractRange (Range a b) (Range c d)
-          | a <= c && d <= b = [Range a (c - 1), Range c d, Range (d + 1) b]
-          | a <= c && b < d = [Range a (c - 1), Range c b]
-          | c < a && d <= b = [Range a d, Range (d + 1) b]
-          | otherwise = error "Range was supposed to be already mapped"
+            | a <= c && d <= b = [Range a (c - 1), Range c d, Range (d + 1) b]
+            | a <= c && b < d = [Range a (c - 1), Range c b]
+            | c < a && d <= b = [Range a d, Range (d + 1) b]
+            | otherwise = error "Range was supposed to be already mapped"
 
 ---------------------------------------------------------------------------------------------------
 -- Parsers
@@ -151,17 +151,17 @@ nearestSeedRange =
 -- The almanac parser is straightforward: it just parses seeds and maps.
 almanacParser :: (Num a) => ([a] -> b) -> Parser (b, [[MapRange Int]])
 almanacParser st = do
-  ss <- st <$> between (string "seeds: ") (count 2 newline) (sepBy1 decimal (char ' '))
-  ms <- sepBy1End mapParser (count 2 newline) eof
-  pure (ss, ms)
+    ss <- st <$> between (string "seeds: ") (count 2 newline) (sepBy1 decimal (char ' '))
+    ms <- sepBy1End mapParser (count 2 newline) eof
+    pure (ss, ms)
   where
     mapParser :: Parser [MapRange Int]
     mapParser = do
-      _ <- someTill anySingle (string "map:" <* newline)
-      sepBy1End
-        (listToRange <$> sepBy1 decimal (char ' '))
-        newline
-        (void newline <|> eof)
+        _ <- someTill anySingle (string "map:" <* newline)
+        sepBy1End
+            (listToRange <$> sepBy1 decimal (char ' '))
+            newline
+            (void newline <|> eof)
 
     listToRange :: (Num a, Ord a) => [a] -> MapRange a
     listToRange [d, s, i] = MapRange (Range s (s + i - 1)) (d - s)

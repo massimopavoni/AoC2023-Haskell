@@ -26,28 +26,28 @@ import Text.Megaparsec.Char (char, letterChar, string)
 -- Data types
 
 data Pulse = Low | High
-  deriving (Eq, Show)
+    deriving (Eq, Show)
 
 -- A module can be a broadcaster, a flip-flop or a conjuction:
 -- the first one only has output connections, the second one also has a switch state
 -- (we represent off as Low and on as High), and the third one has memory instead
 -- (the last pulses received by the conjuction's inputs).
 data Module
-  = Broadcaster {outputs :: [String]}
-  | FlipFlop {switch :: Pulse, outputs :: [String]}
-  | Conjuction {memory :: Map String Pulse, outputs :: [String]}
-  deriving (Show)
+    = Broadcaster {outputs :: [String]}
+    | FlipFlop {switch :: Pulse, outputs :: [String]}
+    | Conjuction {memory :: Map String Pulse, outputs :: [String]}
+    deriving (Show)
 
 -- A configuration of the module network identifies a specific state of the network's module fields,
 -- the number of button clicks performed, the number of pulses that travelled through the cables so far,
 -- and the potential cycles found on the "rx" father conjuction module inputs.
 data Configuration = Config
-  { clicks :: Int,
-    pulses :: (Int, Int),
-    cycles :: Map String Int,
-    modules :: Map String Module
-  }
-  deriving (Show)
+    { clicks :: Int
+    , pulses :: (Int, Int)
+    , cycles :: Map String Int
+    , modules :: Map String Module
+    }
+    deriving (Show)
 
 ---------------------------------------------------------------------------------------------------
 -- Exports
@@ -55,13 +55,13 @@ data Configuration = Config
 -- The first part only needs to click button 1000 times and count the number of pulses in the entire network.
 cablesWarmUp :: String -> Int
 cablesWarmUp =
-  parseModules
-    >>> Config 0 (0, 0) empty
-    >>> iterate' singleButtonClick
-    >>> take 1000 . tailSafe
-    >>> unzip . map pulses
-    >>> both sum
-    >>> uncurry (*)
+    parseModules
+        >>> Config 0 (0, 0) empty
+        >>> iterate' singleButtonClick
+        >>> take 1000 . tailSafe
+        >>> unzip . map pulses
+        >>> both sum
+        >>> uncurry (*)
 
 -- The second part instead has to keep track of the status of certain conjunction modules which connect
 -- to a final module and that one connects to the "rx" module: by keeping track of the pulses sent
@@ -70,24 +70,24 @@ cablesWarmUp =
 -- by computing the least common multiple of the cycle durations found.
 machineTurnOnClicks :: String -> Int
 machineTurnOnClicks =
-  parseModules
-    >>> finishedCyclesConfiguration
-    >>> foldl1' lcm . elems . cycles
+    parseModules
+        >>> finishedCyclesConfiguration
+        >>> foldl1' lcm . elems . cycles
   where
     finishedCyclesConfiguration :: Map String Module -> Configuration
     finishedCyclesConfiguration ms =
-      iterate' singleButtonClick (Config 0 (0, 0) empty ms)
-        & fromJust . find rxInputsFound . tailSafe
+        iterate' singleButtonClick (Config 0 (0, 0) empty ms)
+            & fromJust . find rxInputsFound . tailSafe
       where
         rxInputsFound :: Configuration -> Bool
         rxInputsFound (Config _ _ cs _) = all (`elem` keys cs) rxInputs
 
         rxInputs :: [String]
         rxInputs =
-          elems ms
-            & ( fromJust . find (elem "rx" . outputs)
-                  >>> keys . memory
-              )
+            elems ms
+                & ( fromJust . find (elem "rx" . outputs)
+                        >>> keys . memory
+                  )
 
 ---------------------------------------------------------------------------------------------------
 -- Functions
@@ -114,15 +114,15 @@ singleButtonClick (Config cks _ cs ms) = updateConfig [("", "broadcaster", Low)]
     updateConfig :: [(String, String, Pulse)] -> Configuration -> Configuration
     updateConfig [] c = c
     updateConfig [(_, "broadcaster", Low)] c =
-      let bos = outputs $ modules c ! "broadcaster"
-       in updateConfig [("broadcaster", o, Low) | o <- bos] c {pulses = first (+ length bos) (pulses c)}
+        let bos = outputs $ modules c ! "broadcaster"
+         in updateConfig [("broadcaster", o, Low) | o <- bos] c{pulses = first (+ length bos) (pulses c)}
     updateConfig ((sm, mn, p) : mps) c
-      | notMember mn $ modules c = updateConfig mps c
-      | p == High && not (isConjuctionModule m) = updateConfig mps c {cycles = cycles'}
-      | otherwise =
-          updateConfig
-            (mps ++ [(mn, o, p') | o <- outputs m'])
-            c {pulses = updatedPulses, cycles = cycles', modules = adjust (const m') mn $ modules c}
+        | notMember mn $ modules c = updateConfig mps c
+        | p == High && not (isConjuctionModule m) = updateConfig mps c{cycles = cycles'}
+        | otherwise =
+            updateConfig
+                (mps ++ [(mn, o, p') | o <- outputs m'])
+                c{pulses = updatedPulses, cycles = cycles', modules = adjust (const m') mn $ modules c}
       where
         m :: Module
         m = modules c ! mn
@@ -132,31 +132,31 @@ singleButtonClick (Config cks _ cs ms) = updateConfig [("", "broadcaster", Low)]
 
         m' :: Module
         m' = case m of
-          Conjuction mem _ -> m {memory = adjust (const p) sm mem}
-          FlipFlop sw _ -> m {switch = if sw == Low then High else Low}
-          _ -> m
+            Conjuction mem _ -> m{memory = adjust (const p) sm mem}
+            FlipFlop sw _ -> m{switch = if sw == Low then High else Low}
+            _ -> m
 
         nextPulse :: Module -> Pulse
         nextPulse mm
-          | isConjuctionModule mm =
-              if all (== High) . elems $ memory mm
-                then Low
-                else High
-          | otherwise = switch mm
+            | isConjuctionModule mm =
+                if all (== High) . elems $ memory mm
+                    then Low
+                    else High
+            | otherwise = switch mm
 
         updatedPulses :: (Int, Int)
         updatedPulses =
-          (if p' == Low then first else second)
-            (+ length (outputs m'))
-            $ pulses c
+            (if p' == Low then first else second)
+                (+ length (outputs m'))
+                $ pulses c
 
         cycles' :: Map String Int
         cycles'
-          | p /= High || "rx" `notElem` outputs m = cycles c
-          | otherwise = insert sm (clicks c) $ cycles c
+            | p /= High || "rx" `notElem` outputs m = cycles c
+            | otherwise = insert sm (clicks c) $ cycles c
 
 isConjuctionModule :: Module -> Bool
-isConjuctionModule Conjuction {} = True
+isConjuctionModule Conjuction{} = True
 isConjuctionModule _ = False
 
 ---------------------------------------------------------------------------------------------------
@@ -164,20 +164,20 @@ isConjuctionModule _ = False
 
 parseModules :: String -> Map String Module
 parseModules =
-  lines
-    >>> fromList . map (parseInput moduleParser id)
-    >>> foldl' initMemories <*> keys
+    lines
+        >>> fromList . map (parseInput moduleParser id)
+        >>> foldl' initMemories <*> keys
   where
     moduleParser :: Parser (String, Module)
     moduleParser = do
-      (m, n) <-
-        string "broadcaster" $> (Broadcaster, "broadcaster")
-          <|> liftA2
-            (,)
-            ((char '%' $> FlipFlop Low) <|> (char '&' $> Conjuction empty))
-            idParser
-      os <- between (string " -> ") eof $ sepBy1 idParser (string ", ")
-      pure (n, m os)
+        (m, n) <-
+            string "broadcaster" $> (Broadcaster, "broadcaster")
+                <|> liftA2
+                    (,)
+                    ((char '%' $> FlipFlop Low) <|> (char '&' $> Conjuction empty))
+                    idParser
+        os <- between (string " -> ") eof $ sepBy1 idParser (string ", ")
+        pure (n, m os)
       where
         idParser :: Parser String
         idParser = some letterChar
@@ -189,12 +189,12 @@ parseModules =
     -- or the switch field of flip-flop modules, which can both be initialized right away.)
     initMemories :: Map String Module -> String -> Map String Module
     initMemories hm n =
-      foldl'
-        (flip $ adjust updateMemory)
-        hm
-        [out | out <- outputs (hm ! n), out `member` hm, isConjuctionModule (hm ! out)]
+        foldl'
+            (flip $ adjust updateMemory)
+            hm
+            [out | out <- outputs (hm ! n), out `member` hm, isConjuctionModule (hm ! out)]
       where
         updateMemory :: Module -> Module
         updateMemory m = case m of
-          Conjuction mem _ -> m {memory = insert n Low mem}
-          _ -> m
+            Conjuction mem _ -> m{memory = insert n Low mem}
+            _ -> m

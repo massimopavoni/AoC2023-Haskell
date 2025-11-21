@@ -25,9 +25,9 @@ waysToRecordFullRace = parseInput (racesParser True) $ inequationBoundsSize . he
 -- The problem is very simply solved in a closed-form way by the inequation (t - x) * x > d.
 inequationBoundsSize :: (Integral a) => (a, a) -> a
 inequationBoundsSize (t, d) =
-  1
-    + floor (1 / 2 * (t' + discriminant))
-    - ceiling (1 / 2 * (t' - discriminant))
+    1
+        + floor (1 / 2 * (t' + discriminant))
+        - ceiling (1 / 2 * (t' - discriminant))
   where
     t' :: (Floating a) => a
     t' = fromIntegral t
@@ -42,12 +42,12 @@ inequationBoundsSize (t, d) =
 -- but I don't care, it looks nicer, lol.
 racesParser :: Bool -> Parser [(Int, Int)]
 racesParser sr = do
-  tls <- between (string "Time:" <* hspace1) newline numbers
-  drs <- between (string "Distance:" <* hspace1) newline numbers <* eof
-  pure $ zip tls drs
+    tls <- between (string "Time:" <* hspace1) newline numbers
+    drs <- between (string "Distance:" <* hspace1) newline numbers <* eof
+    pure $ zip tls drs
   where
     numbers :: Parser [Int]
     numbers =
-      if sr
-        then pure . read . concat <$> sepBy1 (some digitChar) hspace1
-        else sepBy1 decimal hspace1
+        if sr
+            then pure . read . concat <$> sepBy1 (some digitChar) hspace1
+            else sepBy1 decimal hspace1

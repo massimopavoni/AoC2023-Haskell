@@ -24,10 +24,10 @@ import Text.Megaparsec.Char.Lexer (decimal)
 
 -- Tried using lenses with this one, didn't manage, will study the library at some point.
 data Part a = Part {xValue :: a, mValue :: a, aValue :: a, sValue :: a}
-  deriving (Show)
+    deriving (Show)
 
 data WorkflowRange = WfRange {xmas :: Char, condition :: Ordering, branch :: Int, next :: String}
-  deriving (Show)
+    deriving (Show)
 
 ---------------------------------------------------------------------------------------------------
 -- Exports
@@ -40,39 +40,39 @@ data WorkflowRange = WfRange {xmas :: Char, condition :: Ordering, branch :: Int
 -- the lazy evaluation of the find function over the list of mapped workflow conditions).
 acceptedPartRatingsSum :: String -> Int
 acceptedPartRatingsSum =
-  parseWorkflowsAndParts
-    >>> uncurry partsThroughWorkflows
-    >>> concatMap ((<$> partValueFunctions) . (&))
-    >>> sum
+    parseWorkflowsAndParts
+        >>> uncurry partsThroughWorkflows
+        >>> concatMap ((<$> partValueFunctions) . (&))
+        >>> sum
   where
     partsThroughWorkflows :: HashMap String [Part a -> String] -> [Part a] -> [Part a]
     partsThroughWorkflows hm =
-      mapMaybe
-        ( \p ->
-            bool
-              Nothing
-              (Just p)
-              ( until
-                  (liftA2 (||) (== "A") (== "R"))
-                  ( (hm !)
-                      >>> map ($ p)
-                      >>> fromJust . find (not . null)
-                  )
-                  "in"
-                  == "A"
-              )
-        )
+        mapMaybe
+            ( \p ->
+                bool
+                    Nothing
+                    (Just p)
+                    ( until
+                        (liftA2 (||) (== "A") (== "R"))
+                        ( (hm !)
+                            >>> map ($ p)
+                            >>> fromJust . find (not . null)
+                        )
+                        "in"
+                        == "A"
+                    )
+            )
 
 -- The second part is the main monster, and there's a lot to unpack:
 -- once we have all the accepted ranges for part ratings, we just multiply those to get all possible combinations...
 -- ...but how to we get the ranges?
 acceptedPartRatingCombinationsSum :: String -> Int
 acceptedPartRatingCombinationsSum =
-  parseWorkflows
-    >>> rangesThroughWorkflows
-    >>> map (map ((+ 1) . abs . uncurry (-)) . (<$> partValueFunctions) . (&))
-    >>> map product
-    >>> sum
+    parseWorkflows
+        >>> rangesThroughWorkflows
+        >>> map (map ((+ 1) . abs . uncurry (-)) . (<$> partValueFunctions) . (&))
+        >>> map product
+        >>> sum
   where
     -- We start from when input workflow and with all possible rating ranges.
     rangesThroughWorkflows :: HashMap String [WorkflowRange] -> [Part (Int, Int)]
@@ -94,11 +94,11 @@ acceptedPartRatingCombinationsSum =
             followAccept :: [WorkflowRange] -> Part (Int, Int) -> [Part (Int, Int)]
             followAccept [WfRange _ _ _ n] rs = rangesThroughWorkflows' n rs
             followAccept ((WfRange wx c b n) : wrs) p@(Part x m a s) = case wx of
-              'x' -> processRange x
-              'm' -> processRange m
-              'a' -> processRange a
-              's' -> processRange s
-              _ -> error "Invalid xmas"
+                'x' -> processRange x
+                'm' -> processRange m
+                'a' -> processRange a
+                's' -> processRange s
+                _ -> error "Invalid xmas"
               where
                 -- The splitting cases are:
                 -- 1. the entire range respects the condition (either appearing before or after the branching number),
@@ -110,24 +110,24 @@ acceptedPartRatingCombinationsSum =
                 -- and we have to follow both branches, one ending up on a new workflow, the other continuing on the current one.
                 processRange :: (Int, Int) -> [Part (Int, Int)]
                 processRange range = case splitRange c range of
-                  (_, (0, 0)) -> rangesThroughWorkflows' n p
-                  ((0, 0), _) -> followAccept wrs p
-                  (rr1, rr2) -> rangesThroughWorkflows' n (updatePart wx rr1) ++ followAccept wrs (updatePart wx rr2)
+                    (_, (0, 0)) -> rangesThroughWorkflows' n p
+                    ((0, 0), _) -> followAccept wrs p
+                    (rr1, rr2) -> rangesThroughWorkflows' n (updatePart wx rr1) ++ followAccept wrs (updatePart wx rr2)
                   where
                     splitRange :: Ordering -> (Int, Int) -> ((Int, Int), (Int, Int))
                     splitRange LT r@(r1, r2)
-                      | r1 < b = if r2 < b then (r, (0, 0)) else ((r1, b - 1), (b, r2))
-                      | otherwise = ((0, 0), r)
+                        | r1 < b = if r2 < b then (r, (0, 0)) else ((r1, b - 1), (b, r2))
+                        | otherwise = ((0, 0), r)
                     splitRange GT r@(r1, r2)
-                      | r2 > b = if r1 > b then (r, (0, 0)) else ((b + 1, r2), (r1, b))
-                      | otherwise = ((0, 0), r)
+                        | r2 > b = if r1 > b then (r, (0, 0)) else ((b + 1, r2), (r1, b))
+                        | otherwise = ((0, 0), r)
                     splitRange _ _ = error "Invalid range split"
 
                     updatePart :: Char -> (Int, Int) -> Part (Int, Int)
-                    updatePart 'x' rr = p {xValue = rr}
-                    updatePart 'm' rr = p {mValue = rr}
-                    updatePart 'a' rr = p {aValue = rr}
-                    updatePart 's' rr = p {sValue = rr}
+                    updatePart 'x' rr = p{xValue = rr}
+                    updatePart 'm' rr = p{mValue = rr}
+                    updatePart 'a' rr = p{aValue = rr}
+                    updatePart 's' rr = p{sValue = rr}
                     updatePart _ _ = error "Invalid xmas"
             followAccept _ _ = error "Invalid workflow"
 
@@ -145,63 +145,63 @@ partValueFunctions = [xValue, mValue, aValue, sValue]
 -- the rest of the functions they're straightforward and declarative enough to be understood easily.
 parseWorkflowsAndParts :: String -> (HashMap String [Part Int -> String], [Part Int])
 parseWorkflowsAndParts =
-  breakOn "\n\n"
-    >>> second (drop 2)
-    >>> both lines
-    >>> fromList . map (parseInput (workflowParser functionParser) id) *** map (parseInput partParser id)
+    breakOn "\n\n"
+        >>> second (drop 2)
+        >>> both lines
+        >>> fromList . map (parseInput (workflowParser functionParser) id) *** map (parseInput partParser id)
   where
     functionParser :: Parser (Part Int -> String)
     functionParser = do
-      f <-
-        optional . try $
-          liftA2
-            (>>>)
-            ( choice
-                [ char 'x' $> xValue,
-                  char 'm' $> mValue,
-                  char 'a' $> aValue,
-                  char 's' $> sValue
-                ]
-            )
-            ( liftA2
-                flip
-                ((char '<' $> (<)) <|> (char '>' $> (>)))
-                (decimal <* char ':')
-            )
-      s <- some letterChar
-      pure $ maybe (const s) (bool "" s .) f
+        f <-
+            optional . try $
+                liftA2
+                    (>>>)
+                    ( choice
+                        [ char 'x' $> xValue
+                        , char 'm' $> mValue
+                        , char 'a' $> aValue
+                        , char 's' $> sValue
+                        ]
+                    )
+                    ( liftA2
+                        flip
+                        ((char '<' $> (<)) <|> (char '>' $> (>)))
+                        (decimal <* char ':')
+                    )
+        s <- some letterChar
+        pure $ maybe (const s) (bool "" s .) f
 
     partParser :: Parser (Part Int)
     partParser = betweenCurly $ do
-      x <- string "x=" *> decimal
-      m <- string ",m=" *> decimal
-      a <- string ",a=" *> decimal
-      s <- string ",s=" *> decimal
-      pure $ Part x m a s
+        x <- string "x=" *> decimal
+        m <- string ",m=" *> decimal
+        a <- string ",a=" *> decimal
+        s <- string ",s=" *> decimal
+        pure $ Part x m a s
 
 parseWorkflows :: String -> HashMap String [WorkflowRange]
 parseWorkflows =
-  fst . breakOn "\n\n"
-    >>> lines
-    >>> fromList . map (parseInput (workflowParser workflowRangeParser) id)
+    fst . breakOn "\n\n"
+        >>> lines
+        >>> fromList . map (parseInput (workflowParser workflowRangeParser) id)
   where
     workflowRangeParser :: Parser WorkflowRange
     workflowRangeParser = do
-      r <-
-        optional . try $
-          liftA3
-            (,,)
-            (oneOf "xmas")
-            ((char '<' $> LT) <|> (char '>' $> GT))
-            (decimal <* char ':')
-      s <- some letterChar
-      pure $ maybe (WfRange '#' EQ 0 s) (flip (uncurry3 WfRange) s) r
+        r <-
+            optional . try $
+                liftA3
+                    (,,)
+                    (oneOf "xmas")
+                    ((char '<' $> LT) <|> (char '>' $> GT))
+                    (decimal <* char ':')
+        s <- some letterChar
+        pure $ maybe (WfRange '#' EQ 0 s) (flip (uncurry3 WfRange) s) r
 
 workflowParser :: Parser a -> Parser (String, [a])
 workflowParser wfParser = do
-  name <- takeWhileP Nothing (/= '{')
-  wfs <- betweenCurly $ sepBy1 wfParser (string ",")
-  pure (name, wfs)
+    name <- takeWhileP Nothing (/= '{')
+    wfs <- betweenCurly $ sepBy1 wfParser (string ",")
+    pure (name, wfs)
 
 betweenCurly :: Parser a -> Parser a
 betweenCurly = between (char '{') (char '}')

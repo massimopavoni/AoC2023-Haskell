@@ -34,33 +34,33 @@ type Graph = HashMap Vertex [Vertex]
 -- with what's called spectral partitioning/bisection (see spectral decomposition and spectral theorem).
 splitComponentSizesProduct :: String -> Int
 splitComponentSizesProduct =
-  parseWiringDiagram
-    >>> eigSH' . graphToLaplacian
-    >>> toList . chooseFiedlerVector
-    >>> foldl'
-      ( \(cs1, cs2) evx ->
-          if evx > 0
-            then (cs1 + 1, cs2)
-            else (cs1, cs2 + 1)
-      )
-      (0, 0)
-    >>> uncurry (*)
+    parseWiringDiagram
+        >>> eigSH' . graphToLaplacian
+        >>> toList . chooseFiedlerVector
+        >>> foldl'
+            ( \(cs1, cs2) evx ->
+                if evx > 0
+                    then (cs1 + 1, cs2)
+                    else (cs1, cs2 + 1)
+            )
+            (0, 0)
+        >>> uncurry (*)
   where
     -- The first step is to convert the graph into its Laplacian matrix representation.
     -- The time this takes is negligible compared to the next step operation: eigendecomposition.
     graphToLaplacian :: Graph -> Matrix Double
     graphToLaplacian graph =
-      fromLists
-        [ [ if i == j
-              then fromIntegral $ length (graph ! i)
-              else
-                if j `elem` (graph ! i) || i `elem` (graph ! j)
-                  then -1
-                  else 0
-          | j <- [1 .. maxV]
-          ]
-        | i <- [1 .. maxV]
-        ]
+        fromLists
+            [ [ if i == j
+                then fromIntegral $ length (graph ! i)
+                else
+                    if j `elem` (graph ! i) || i `elem` (graph ! j)
+                        then -1
+                        else 0
+              | j <- [1 .. maxV]
+              ]
+            | i <- [1 .. maxV]
+            ]
       where
         maxV :: Int
         maxV = size graph
@@ -73,10 +73,10 @@ splitComponentSizesProduct =
     -- (which happens to require 3 edges as a result of the tailored input).
     chooseFiedlerVector :: (Vector Double, Matrix Double) -> Vector Double
     chooseFiedlerVector =
-      snd
-        >>> toColumns
-        >>> id &&& (subtract 2 . length)
-        >>> uncurry (!!)
+        snd
+            >>> toColumns
+            >>> id &&& (subtract 2 . length)
+            >>> uncurry (!!)
 
 ---------------------------------------------------------------------------------------------------
 -- Parsers
@@ -85,21 +85,21 @@ splitComponentSizesProduct =
 -- nothing too complicate, but still annoying because of the need to represent undirected edges.
 parseWiringDiagram :: String -> Graph
 parseWiringDiagram =
-  lines
-    >>> fst . foldl' parseConnections (empty, empty)
+    lines
+        >>> fst . foldl' parseConnections (empty, empty)
   where
     parseConnections :: (Graph, HashMap String Vertex) -> String -> (Graph, HashMap String Vertex)
     parseConnections (g, vs) l = (updateGraph g, vs')
       where
         updateGraph :: Graph -> Graph
         updateGraph =
-          insertEdges (vertex <$> targets) (vertex source)
-            >>> flip (foldl' . flip $ insertEdges [vertex source] . vertex) targets
+            insertEdges (vertex <$> targets) (vertex source)
+                >>> flip (foldl' . flip $ insertEdges [vertex source] . vertex) targets
           where
             insertEdges :: [Vertex] -> Vertex -> Graph -> Graph
             insertEdges cs = alter $ \case
-              Nothing -> Just cs
-              Just es -> Just (cs ++ es)
+                Nothing -> Just cs
+                Just es -> Just (cs ++ es)
 
         splitLine :: [String]
         splitLine = splitOn ": " l

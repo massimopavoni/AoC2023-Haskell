@@ -47,11 +47,11 @@ enginePartsParser m = catMaybes <$> someTill (betweenSymbols nearSymbol) eof
   where
     nearSymbol :: Maybe [(Pos, Char)] -> Maybe Int
     nearSymbol =
-      maybe Nothing $
-        liftA2
-          (>>)
-          (guard . any (any symbolNeighbor . neighbors m . fst))
-          (Just . read . map snd)
+        maybe Nothing $
+            liftA2
+                (>>)
+                (guard . any (any symbolNeighbor . neighbors m . fst))
+                (Just . read . map snd)
 
     symbolNeighbor :: (Pos, Char) -> Bool
     symbolNeighbor = (`notElem` '\n' : '.' : ['0' .. '9']) . snd
@@ -69,29 +69,29 @@ enginePartsParser m = catMaybes <$> someTill (betweenSymbols nearSymbol) eof
 -- but a list of gear positions (to later use for grouping) and corresponding part numbers.
 engineGearsParser :: Matrix Char -> Parser [[Int]]
 engineGearsParser m =
-  someTill (betweenSymbols nearGear) eof
-    <&> ( catMaybes
-            >>> fromListWith (++) . map (fmap pure) . concat
-            >>> MapS.filter ((== 2) . length)
-            >>> elems
-        )
+    someTill (betweenSymbols nearGear) eof
+        <&> ( catMaybes
+                >>> fromListWith (++) . map (fmap pure) . concat
+                >>> MapS.filter ((== 2) . length)
+                >>> elems
+            )
   where
     nearGear :: Maybe [(Pos, Char)] -> Maybe [(Pos, Int)]
     nearGear = maybe Nothing $ \z -> do
-      let gears = gearNeighbors z
-      guard . not . null $ gears
-      Just $ (,read $ snd <$> z) <$> gears
+        let gears = gearNeighbors z
+        guard . not . null $ gears
+        Just $ (,read $ snd <$> z) <$> gears
 
     gearNeighbors :: [(Pos, Char)] -> [Pos]
     gearNeighbors =
-      concatMap (neighbors m . fst)
-        >>> toList . fromList
-        >>> map fst . filter ((== '*') . snd)
+        concatMap (neighbors m . fst)
+            >>> toList . fromList
+            >>> map fst . filter ((== '*') . snd)
 
 betweenSymbols :: (Maybe [(Pos, Char)] -> Maybe b) -> Parser (Maybe b)
 betweenSymbols f =
-  between (many noDigit) (many noDigit <* optional newline) $
-    f <$> optional (some $ liftA2 (,) position digitChar)
+    between (many noDigit) (many noDigit <* optional newline) $
+        f <$> optional (some $ liftA2 (,) position digitChar)
   where
     noDigit :: Parser Char
     noDigit = noneOf $ '\n' : ['0' .. '9']
